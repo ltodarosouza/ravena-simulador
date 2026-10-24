@@ -1,0 +1,9 @@
+11:26:06 - rodando as entradas da hipótese, no código do commit ce6a5de
+"1e3"        422 conta_invalida
+"1E3"        422 conta_invalida
+"0x10"       422 conta_invalida
+"Infinity"   422 conta_invalida
+"1_000"      422 conta_invalida
+"1e3 "       422 conta_invalida
+" 1e3"       422 conta_invalida
+"1000"       200 SIMULOU: investimento 20500
