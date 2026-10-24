@@ -1,0 +1,21 @@
+name: testes
+
+# Roda a suíte em todo pull request e em todo push no main, numa máquina limpa.
+# Pega o que o hook local não pega: o que só passa na máquina de quem editou, e commit feito sem hook.
+# Roda só no banco de teste (PGlite). Nada de chave do Supabase aqui.
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  testes:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm test
