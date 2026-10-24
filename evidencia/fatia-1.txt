@@ -132,3 +132,7 @@ retorno 2 anos e 10 meses; piso do critério: 3 anos -> REPROVA
   "criado_em": "2026-10-24T12:34:07.057Z"
 }
 resultado do pedido igual ao da tela: false
+
+NOTA (corrigida depois da revisão): os números acima são de teste, escolhidos por quem construiu a fatia.
+Por isso o "REPROVA" do C1 não diz nada sobre a promessa de 3 a 4 anos. O simulador de verdade lê os números
+do dono no banco (tabela numeros_calculo) e recusa calcular sem eles. Veja evidencia/fatia-1-testes.txt.

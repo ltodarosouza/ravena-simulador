@@ -2,7 +2,6 @@ const http = require("http");
 const fs = require("fs");
 const path = require("path");
 const { simular, SemValor } = require("./lib/calculo");
-const { abrir } = require("./lib/banco");
 
 const MENSAGENS = {
   conta_invalida: "Digite o valor da conta em reais.",
@@ -38,7 +37,9 @@ function criarServidor({ banco, numeros, hoje = () => new Date() }) {
       }
       if (req.method === "POST" && req.url === "/api/simular") {
         const { conta, cidade } = await lerCorpo(req);
-        const sim = simular({ conta: Number(conta), cidade }, numeros, hoje());
+        const agora = hoje();
+        const dosNumeros = typeof numeros === "function" ? await numeros(agora) : numeros;
+        const sim = simular({ conta: Number(conta), cidade }, dosNumeros, agora);
         if (sim.erro) return json(res, 422, { erro: sim.erro, mensagem: MENSAGENS[sim.erro] });
         const id = await banco.guardarSimulacao(sim);
         return json(res, 200, { simulacao_id: id, ...sim.exibido });
@@ -63,11 +64,13 @@ module.exports = { criarServidor };
 
 if (require.main === module) {
   (async () => {
-    const numeros = JSON.parse(fs.readFileSync(path.join(__dirname, "referencia", "numeros.json"), "utf8")).numeros;
     const supabase = require("./lib/banco-supabase");
-    const banco = supabase.configurado() ? supabase.abrir() : await abrir(path.join(__dirname, "dados-locais"));
-    console.log(supabase.configurado() ? "banco: Supabase" : "banco: PGlite local (sem .env.local)");
+    if (!supabase.configurado()) {
+      console.error("Sem SUPABASE_URL e SUPABASE_SECRET_KEY no .env.local: o simulador só roda com os números do dono, que moram no banco.");
+      process.exit(1);
+    }
+    const banco = supabase.abrir();
     const porta = Number(process.env.PORT) || 4300;
-    criarServidor({ banco, numeros }).listen(porta, () => console.log(`simulador em http://localhost:${porta}`));
+    criarServidor({ banco, numeros: (hoje) => banco.numerosVigentes(hoje) }).listen(porta, () => console.log(`simulador em http://localhost:${porta} (números do dono, no Supabase)`));
   })();
 }

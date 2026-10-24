@@ -54,6 +54,8 @@ A cidade do pedido é a do simulador e não é pedida de novo.
 - Os valores públicos (tarifa, Fio B, disponibilidade, irradiação) não estão no brief; o dono os digita no primeiro uso, com data e fonte.
 - A tarifa usada é a da CPFL Piratininga, a mesma nas quatro cidades.
 - Vendedor e dono se identificam por acesso individual; o mecanismo é decisão de construção, não desta spec.
+- O simulador usa o mesmo banco da landing (P1): o pedido é uma linha da tabela de simulações da P1, e a pessoa é o lead dela. A P1 exigia conta de R$ 450 ou mais também no banco; o simulador atende de R$ 100, e a faixa é número do dono, então o banco só exige conta positiva. A regra dos R$ 450 continua na própria página da landing, que é quem a aplica.
+- Números de teste nunca respondem a uma pessoa de verdade: o simulador lê os números do banco, e sem número vigente ele recusa.
 - Mesmo WhatsApp em 24 h conta como o mesmo pedido.
 - Estágios podem ser mudados em qualquer ordem, inclusive voltando; o histórico fica guardado.
 
@@ -61,7 +63,7 @@ A cidade do pedido é a do simulador e não é pedida de novo.
 
 Cada critério diz o estado de partida (Dado), a ação (Quando) e o resultado que se consulta (Então). Os números do "Dado" são os congelados num arquivo de referência, criado na primeira fatia; o dono editar um número no painel não muda o critério.
 
-**C1. Caso de referência: conta de R$ 600 em Sorocaba.** Dado os números congelados (tarifa, Fio B do ano, 115 kWh/kWp/mês, preço por kWp da faixa, painel de 550 W), quando a pessoa simula R$ 600 em Sorocaba, então o simulador mostra kWp com 1 casa, painéis, investimento na centena, conta depois, economia do primeiro ano e retorno em anos e meses, e esse retorno é maior ou igual a 3 anos. Esse 3 é o **piso da promessa** que o brief atribui à planilha ("entre três e quatro anos"), e não o que a planilha calcula: a conta do brief aplicada à letra (R$ 0,95 por kWh, 115 kWh/kWp/mês, retorno = investimento ÷ economia do primeiro ano) dá cerca de 2 anos. Se o simulador der menos que 3 anos, reprova. Quando o dono responder a pergunta da seção 11, o 3 é trocado pelo número da planilha dele. O mesmo vale para R$ 450 e R$ 1.800, porque o Fio B e o custo de disponibilidade pesam mais numa conta pequena do que numa grande.
+**C1. Caso de referência: conta de R$ 600 em Sorocaba.** Dado os números congelados (tarifa, Fio B do ano, 115 kWh/kWp/mês, preço por kWp da faixa, painel de 550 W), quando a pessoa simula R$ 600 em Sorocaba, então o simulador mostra kWp com 1 casa, painéis, investimento na centena, conta depois, economia do primeiro ano e retorno em anos e meses, e esse retorno é maior ou igual a 3 anos. Esse 3 é o **piso da promessa** que o brief atribui à planilha ("entre três e quatro anos"), e não o que a planilha calcula: a conta do brief aplicada à letra (R$ 0,95 por kWh, 115 kWh/kWp/mês, retorno = investimento ÷ economia do primeiro ano) dá cerca de 2 anos. Se o simulador der menos que 3 anos, reprova. Este critério só vale com os números do dono, com data e fonte: com números de teste o resultado não diz nada sobre a promessa, e por isso o teste fica pendente até o dono cadastrá-los. Quando o dono responder a pergunta da seção 11, o 3 é trocado pelo número da planilha dele. O mesmo vale para R$ 450 e R$ 1.800, porque o Fio B e o custo de disponibilidade pesam mais numa conta pequena do que numa grande.
 
 **C2. Conta baixa ouve que não compensa.** Dado uma conta de R$ 200 em qualquer das quatro cidades, quando a pessoa simula, então a tela diz que não compensa e por quê, não mostra botão de pedir simulação e nenhum dado pessoal é pedido. Se, com os números congelados, o retorno de R$ 200 não passar do limite de 6 anos, é o limite ou a faixa mínima desta spec que está errada, e se muda aqui antes do código.
 
@@ -87,7 +89,7 @@ Cada critério diz o estado de partida (Dado), a ação (Quando) e o resultado q
 
 A ordem é por risco, que é a chance de dar errado vezes o custo de dar errado.
 
-1. **Fatia vertical:** R$ 600 em Sorocaba com os números congelados, da tela até o pedido gravado no banco. Vem primeiro porque é onde a conta pode divergir da planilha sem ninguém notar, e atravessa até o banco para provar que o pedido guarda o que a pessoa viu (C1, C3).
+1. **Fatia vertical:** R$ 600 em Sorocaba, da tela até o pedido gravado no banco, com os números lidos do banco e a recusa de calcular enquanto o dono não os cadastrar (C6). Os números congelados só existem nos testes. Vem primeiro porque é onde a conta pode divergir da planilha sem ninguém notar, e atravessa até o banco para provar que o pedido guarda o que a pessoa viu (C1, C3, C6).
 2. **Aviso de privacidade e regra de dado pessoal:** o pedido já grava dados pessoais depois da fatia 1, então não pode ir ao ar sem eles (C5).
 3. **Tela de não compensa:** é o caso comum de conta baixa, e o custo de errar é confiança: a pessoa recebe uma simulação bonita e some (C2).
 4. **Tela de números do dono:** a chance de erro é baixa porque só o dono mexe, mas o custo é o maior, porque um número errado publicado vale para todos os pedidos de uma vez (C6).

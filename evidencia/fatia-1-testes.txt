@@ -1,31 +1,14 @@
-✖ C1: R$ 600 em Sorocaba mostra os seis resultados e o retorno não é menor que 3 anos (0.6765ms)
-✔ C1: os cálculos internos não são arredondados e o painel recebe o que a tela mostrou (0.09825ms)
-✔ sem valor vigente o simulador não responde (0.154583ms)
-✔ C3 (PGlite): o pedido tem o valor digitado, a cidade, os resultados como mostrados e os números usados (704.569625ms)
-✔ C3 (Supabase): o pedido tem o valor digitado, a cidade, os resultados como mostrados e os números usados (8486.021167ms)
-ℹ tests 5
+✔ C1: R$ 600 em Sorocaba mostra os seis resultados, na forma pedida (0.4415ms)
+✔ C1: com os números do dono, o retorno de R$ 600 em Sorocaba não é menor que 3 anos (0.0815ms) # pendente: rode com TESTAR_NO_SUPABASE=1 e com os números do dono no banco (seção 11 da spec)
+✔ C1: os cálculos internos não são arredondados e o painel recebe o que a tela mostrou (0.071334ms)
+✔ sem valor vigente o simulador não responde (0.151542ms)
+✔ C6: sem os números do dono, /api/simular recusa com aviso e não calcula (708.264459ms)
+✔ C3 (PGlite): o pedido tem o valor digitado, a cidade, os resultados como mostrados e os números usados (422.191417ms)
+ℹ tests 6
 ℹ suites 0
-ℹ pass 4
-ℹ fail 1
+ℹ pass 5
+ℹ fail 0
 ℹ cancelled 0
 ℹ skipped 0
-ℹ todo 0
-ℹ duration_ms 9307.383167
-
-✖ failing tests:
-
-test at test/criterios.test.js:13:1
-✖ C1: R$ 600 em Sorocaba mostra os seis resultados e o retorno não é menor que 3 anos (0.6765ms)
-  AssertionError [ERR_ASSERTION]: retorno de 2 anos e 10 meses é menor que 3 anos
-      at TestContext.<anonymous> (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/criterios.test.js:22:10)
-      at Test.runInAsyncScope (node:async_hooks:226:14)
-      at Test.run (node:internal/test_runner/test:1397:25)
-      at Test.start (node:internal/test_runner/test:1257:17)
-      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
-    generatedMessage: false,
-    code: 'ERR_ASSERTION',
-    actual: false,
-    expected: true,
-    operator: '==',
-    diff: 'simple'
-  }
+ℹ todo 1
+ℹ duration_ms 1229.818167
