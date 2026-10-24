@@ -61,7 +61,7 @@ A cidade do pedido é a do simulador e não é pedida de novo.
 
 Cada critério diz o estado de partida (Dado), a ação (Quando) e o resultado que se consulta (Então). Os números do "Dado" são os congelados num arquivo de referência, criado na primeira fatia; o dono editar um número no painel não muda o critério.
 
-**C1. Caso de referência: conta de R$ 600 em Sorocaba.** Dado os números congelados (tarifa, Fio B do ano, 115 kWh/kWp/mês, preço por kWp da faixa, painel de 550 W), quando a pessoa simula R$ 600 em Sorocaba, então o simulador mostra kWp com 1 casa, painéis, investimento na centena, conta depois, economia do primeiro ano e retorno em anos e meses, e esse retorno é maior ou igual a 3 anos, que é o piso do que a planilha do Carlos promete hoje ("entre três e quatro anos", segundo o brief). Se o simulador der menos que isso, reprova. **Pendente:** o número exato da planilha para esta conta. A conta do brief, aplicada à letra (R$ 0,95 por kWh, 115 kWh/kWp/mês, retorno = investimento ÷ economia do primeiro ano), dá cerca de 2 anos, e não 3 a 4, então a planilha real faz algo que o brief não descreve; quando o dono rodar a planilha dele para R$ 600, o piso de 3 anos é trocado pelo número dele. O mesmo vale para R$ 450 e R$ 1.800, porque o Fio B e o custo de disponibilidade pesam mais numa conta pequena do que numa grande.
+**C1. Caso de referência: conta de R$ 600 em Sorocaba.** Dado os números congelados (tarifa, Fio B do ano, 115 kWh/kWp/mês, preço por kWp da faixa, painel de 550 W), quando a pessoa simula R$ 600 em Sorocaba, então o simulador mostra kWp com 1 casa, painéis, investimento na centena, conta depois, economia do primeiro ano e retorno em anos e meses, e esse retorno é maior ou igual a 3 anos. Esse 3 é o **piso da promessa** que o brief atribui à planilha ("entre três e quatro anos"), e não o que a planilha calcula: a conta do brief aplicada à letra (R$ 0,95 por kWh, 115 kWh/kWp/mês, retorno = investimento ÷ economia do primeiro ano) dá cerca de 2 anos. Se o simulador der menos que 3 anos, reprova. Quando o dono responder a pergunta da seção 11, o 3 é trocado pelo número da planilha dele. O mesmo vale para R$ 450 e R$ 1.800, porque o Fio B e o custo de disponibilidade pesam mais numa conta pequena do que numa grande.
 
 **C2. Conta baixa ouve que não compensa.** Dado uma conta de R$ 200 em qualquer das quatro cidades, quando a pessoa simula, então a tela diz que não compensa e por quê, não mostra botão de pedir simulação e nenhum dado pessoal é pedido. Se, com os números congelados, o retorno de R$ 200 não passar do limite de 6 anos, é o limite ou a faixa mínima desta spec que está errada, e se muda aqui antes do código.
 
@@ -101,3 +101,8 @@ Alguém abre a página, digita R$ 600, escolhe Sorocaba e vê o resultado. Pede 
 ## 10. Regra de mudança
 
 Se uma decisão muda no meio da construção, a spec muda antes do código, e confere-se que a decisão nova ainda fecha com o resto da spec antes de pedir o ajuste ao agente.
+
+## 11. Perguntas abertas ao dono
+
+1. Quanto a planilha do Carlos dá de retorno para uma conta de R$ 600 em Sorocaba, em anos e meses?
+2. Como a planilha chega na economia do primeiro ano? O brief diz que ela ignora bandeira, Fio B e iluminação, mas a conta descrita dá cerca de 2 anos, não os 3 a 4 que ele diz prometer.

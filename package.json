@@ -1,0 +1,30 @@
+{
+  "name": "ravena-simulador",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "node --test test/criterios.test.js",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ltodarosouza/ravena-simulador.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/ltodarosouza/ravena-simulador/issues"
+  },
+  "homepage": "https://github.com/ltodarosouza/ravena-simulador#readme",
+  "private": "true",
+  "dependencies": {
+    "@electric-sql/pglite": "^0.5.11"
+  }
+}

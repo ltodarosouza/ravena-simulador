@@ -1,0 +1,25 @@
+{
+  "aviso": "VALORES DE REFERÊNCIA PARA TESTE, congelados para os critérios C1 a C3. Não são os números oficiais: o dono digita os oficiais, com data e fonte, na tela de números (fatia 4). Onde a fonte diz 'valor de teste', o número foi escolhido por quem construiu a fatia, não buscado na ANEEL.",
+  "numeros": {
+    "tarifa_kwh": { "valor": 0.95, "vigencia": "2026-01-01", "fonte": "valor que a planilha do Carlos usa (brief); não é a tarifa homologada da CPFL Piratininga" },
+    "iluminacao_publica": { "valor": { "Sorocaba": 25, "Votorantim": 25, "Itu": 25, "Salto": 25 }, "vigencia": "2026-01-01", "fonte": "valor de teste, R$ por mês" },
+    "fio_b_kwh": { "valor": 0.30, "vigencia": "2026-01-01", "fonte": "valor de teste, R$ por kWh de energia compensada, com impostos" },
+    "fio_b_percentual_por_ano": { "valor": { "2026": 0.60, "2027": 0.75, "2028": 0.90, "2029": 1.00 }, "vigencia": "2026-01-01", "fonte": "cronograma da Lei 14.300/2022" },
+    "disponibilidade_kwh_bifasica": { "valor": 50, "vigencia": "2026-01-01", "fonte": "regra da ANEEL para ligação bifásica (50 kWh)" },
+    "geracao_kwh_por_kwp_mes": { "valor": 115, "vigencia": "2026-01-01", "fonte": "planilha do Carlos (brief)" },
+    "potencia_painel_kwp": { "valor": 0.55, "vigencia": "2026-01-01", "fonte": "painel de 550 W (brief)" },
+    "preco_kwp_faixas": {
+      "valor": [
+        { "ate_kwp": 4, "preco": 2900 },
+        { "ate_kwp": 8, "preco": 2547 },
+        { "ate_kwp": null, "preco": 2300 }
+      ],
+      "vigencia": "2026-01-01",
+      "fonte": "faixas de teste dentro de R$ 2.300 a R$ 2.900 por kWp (brief); 6,4 kWp x R$ 2.547 = cerca de R$ 16.300, o ticket do brief"
+    },
+    "limite_retorno_anos": { "valor": 6, "vigencia": "2026-01-01", "fonte": "decisão da spec, seção 3" },
+    "reajuste_tarifa_anual": { "valor": 0, "vigencia": "2026-01-01", "fonte": "decisão da spec, seção 3 (errar contra nós)" },
+    "conta_minima": { "valor": 100, "vigencia": "2026-01-01", "fonte": "decisão da spec, seção 2" },
+    "conta_maxima": { "valor": 2000, "vigencia": "2026-01-01", "fonte": "decisão da spec, seção 2" }
+  }
+}
