@@ -8,7 +8,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "node --test test/criterios.test.js",
+    "test": "node --test test/criterios.test.js test/dado-pessoal.test.js",
     "start": "node server.js"
   },
   "repository": {

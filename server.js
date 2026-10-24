@@ -8,6 +8,7 @@ const MENSAGENS = {
   cidade_invalida: "Escolha uma das quatro cidades.",
   fora_da_faixa: "Esse valor está fora do que o simulador atende.",
   nome_vazio: "Digite seu nome.",
+  nome_com_cpf: "Digite só o seu nome. Não pedimos CPF.",
   whatsapp_invalido: "Digite um WhatsApp com DDD.",
   simulacao_inexistente: "Faça a simulação de novo.",
 };

@@ -1,0 +1,95 @@
+✔ C5, controle: nome normal cria o pedido (702.012125ms)
+✖ C5: CPF válido no campo nome (com pontos e traço) é recusado e não entra em tabela nem log (407.821167ms)
+✖ C5: CPF válido no campo nome (só dígitos) é recusado e não entra em tabela nem log (399.826417ms)
+✖ C5: CPF válido no campo nome (no meio de uma frase) é recusado e não entra em tabela nem log (379.242291ms)
+✖ C5: CPF válido no campo nome (separado por espaços) é recusado e não entra em tabela nem log (379.442917ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 1
+ℹ fail 4
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2337.270792
+
+✖ failing tests:
+
+test at test/dado-pessoal.test.js:41:3
+✖ C5: CPF válido no campo nome (com pontos e traço) é recusado e não entra em tabela nem log (407.821167ms)
+  AssertionError [ERR_ASSERTION]: o pedido tem de ser recusado
+  
+  201 !== 422
+  
+      at /Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/dado-pessoal.test.js:51:14
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async comServidor (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/dado-pessoal.test.js:21:9)
+      at async TestContext.<anonymous> (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/dado-pessoal.test.js:42:5)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 201,
+    expected: 422,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/dado-pessoal.test.js:41:3
+✖ C5: CPF válido no campo nome (só dígitos) é recusado e não entra em tabela nem log (399.826417ms)
+  AssertionError [ERR_ASSERTION]: o pedido tem de ser recusado
+  
+  201 !== 422
+  
+      at /Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/dado-pessoal.test.js:51:14
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async comServidor (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/dado-pessoal.test.js:21:9)
+      at async TestContext.<anonymous> (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/dado-pessoal.test.js:42:5)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 201,
+    expected: 422,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/dado-pessoal.test.js:41:3
+✖ C5: CPF válido no campo nome (no meio de uma frase) é recusado e não entra em tabela nem log (379.242291ms)
+  AssertionError [ERR_ASSERTION]: o pedido tem de ser recusado
+  
+  201 !== 422
+  
+      at /Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/dado-pessoal.test.js:51:14
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async comServidor (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/dado-pessoal.test.js:21:9)
+      at async TestContext.<anonymous> (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/dado-pessoal.test.js:42:5)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 201,
+    expected: 422,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/dado-pessoal.test.js:41:3
+✖ C5: CPF válido no campo nome (separado por espaços) é recusado e não entra em tabela nem log (379.442917ms)
+  AssertionError [ERR_ASSERTION]: o pedido tem de ser recusado
+  
+  201 !== 422
+  
+      at /Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/dado-pessoal.test.js:51:14
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async comServidor (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/dado-pessoal.test.js:21:9)
+      at async TestContext.<anonymous> (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/dado-pessoal.test.js:42:5)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 201,
+    expected: 422,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

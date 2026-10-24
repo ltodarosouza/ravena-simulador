@@ -1,0 +1,13 @@
+✔ C5, controle: nome normal cria o pedido (782.005708ms)
+✔ C5: CPF válido no campo nome (com pontos e traço) é recusado e não entra em tabela nem log (477.125333ms)
+✔ C5: CPF válido no campo nome (só dígitos) é recusado e não entra em tabela nem log (444.659125ms)
+✔ C5: CPF válido no campo nome (no meio de uma frase) é recusado e não entra em tabela nem log (433.788ms)
+✔ C5: CPF válido no campo nome (separado por espaços) é recusado e não entra em tabela nem log (427.914458ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2637.258666
