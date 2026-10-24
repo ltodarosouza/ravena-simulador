@@ -45,7 +45,7 @@ A cidade do pedido é a do simulador e não é pedida de novo.
 
 ## 5. Premissas
 
-- Estas decisões foram delegadas pelo dono ("pode escolher"): corte descrito acima, critério de "não compensa" pelo retorno (limite 6 anos), retorno ano a ano com reajuste 0%, iluminação entra e bandeira não, retenção de 12 meses para pedidos que não fecharam (os que fecharam ficam enquanto houver relação comercial), kWh fora, faixa R$ 100–2.000, cidade herdada do simulador, números manuais com data e fonte, arredondamentos da seção 3.
+- Decisões que o brief deixava em aberto e que esta spec fecha assim: corte descrito acima, critério de "não compensa" pelo retorno (limite 6 anos), retorno ano a ano com reajuste 0%, iluminação entra e bandeira não, retenção de 12 meses para pedidos que não fecharam (os que fecharam ficam enquanto houver relação comercial), kWh fora, faixa R$ 100–2.000, cidade herdada do simulador, números manuais com data e fonte, arredondamentos da seção 3.
 - Ligação bifásica para todos (maioria das casas); o custo de disponibilidade vem do número configurado.
 - Sistema dimensionado para cobrir o consumo, a partir de 115 kWh/kWp/mês (valor atual da planilha, editável); painel de 550 W.
 - Preço por kWp entre R$ 2.300 e R$ 2.900, menor nos sistemas maiores, calibrado para dar cerca de R$ 16.300 em 6,4 kWp; as faixas exatas são do dono.
