@@ -1,0 +1,25 @@
+Evidência crua da hipótese do campo da página (depuracao/HIPOTESE-campo-da-pagina.md, commit 3d6078a).
+Medida em 2026-10-24, navegador do app (navigator.language = en-US), página servida por um servidor de teste na porta 4301,
+código do commit 3d6078a, sem nenhuma mudança. O texto foi posto no campo por script (campo.value = texto) e o botão
+"Ver quanto economizo" clicado; um interceptador de fetch registrou o que a página enviou. NÃO foi digitado à mão,
+e NÃO foi testado em navegador em português.
+
+Campo: <input id="conta" name="conta" type="number" inputmode="decimal" min="0" step="any" required>
+
+texto "1234,56"      -> valor do campo: ""  | formulário válido: false | requisições enviadas: 0 | mensagem do navegador: "Please fill out this field."
+texto "1.234,56"     -> valor do campo: ""  | formulário válido: false | requisições enviadas: 0 | mensagem do navegador: "Please fill out this field."
+texto "R$ 1.234,56"  -> valor do campo: ""  | formulário válido: false | requisições enviadas: 0 | mensagem do navegador: "Please fill out this field."
+texto "1234.56"      -> valor do campo: "1234.56" | formulário válido: true | requisições enviadas: 1 | corpo: {"conta":"1234.56","cidade":"Sorocaba"}
+
+Saída bruta do script (JSON):
+{"navegador":"en-US","tipoDoCampo":"number","saida":[
+ {"texto":"1234,56","valorDoCampo":"\"\"","badInput":false,"valueMissing":true,"formularioValido":false,"requisicoesEnviadas":0,"corpoEnviado":null,"mensagemNaTela":"(nenhuma)","mensagemNativaDoNavegador":"Please fill out this field."},
+ {"texto":"1.234,56","valorDoCampo":"\"\"","badInput":false,"valueMissing":true,"formularioValido":false,"requisicoesEnviadas":0,"corpoEnviado":null,"mensagemNaTela":"(nenhuma)","mensagemNativaDoNavegador":"Please fill out this field."},
+ {"texto":"R$ 1.234,56","valorDoCampo":"\"\"","badInput":false,"valueMissing":true,"formularioValido":false,"requisicoesEnviadas":0,"corpoEnviado":null,"mensagemNaTela":"(nenhuma)","mensagemNativaDoNavegador":"Please fill out this field."},
+ {"texto":"1234.56","valorDoCampo":"\"1234.56\"","badInput":false,"valueMissing":false,"formularioValido":true,"requisicoesEnviadas":1,"corpoEnviado":"{\"conta\":\"1234.56\",\"cidade\":\"Sorocaba\"}","mensagemNaTela":"(nenhuma)","mensagemNativaDoNavegador":"(nenhuma)"}]}
+
+LEITURA (do agente que mediu): a previsão 1 da hipótese estava ERRADA no detalhe. Ela dizia que o corpo enviado traria conta: "".
+Na verdade NENHUMA requisição sai: o navegador trava o envio do formulário (campo "required" fica vazio, ou, digitando à mão, com texto inválido
+num campo de número) e mostra a própria mensagem dele, não a do simulador ("Digite o valor da conta em reais" nunca aparece).
+A causa apontada (o tipo do campo) se confirma; o caminho até o sintoma era outro.
+Fica em aberto: o comportamento em navegador em português (aqui só en-US) e a digitação à mão (aqui, por script).
