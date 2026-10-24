@@ -64,7 +64,9 @@ module.exports = { criarServidor };
 if (require.main === module) {
   (async () => {
     const numeros = JSON.parse(fs.readFileSync(path.join(__dirname, "referencia", "numeros.json"), "utf8")).numeros;
-    const banco = await abrir(path.join(__dirname, "dados-locais"));
+    const supabase = require("./lib/banco-supabase");
+    const banco = supabase.configurado() ? supabase.abrir() : await abrir(path.join(__dirname, "dados-locais"));
+    console.log(supabase.configurado() ? "banco: Supabase" : "banco: PGlite local (sem .env.local)");
     const porta = Number(process.env.PORT) || 4300;
     criarServidor({ banco, numeros }).listen(porta, () => console.log(`simulador em http://localhost:${porta}`));
   })();

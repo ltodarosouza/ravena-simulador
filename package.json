@@ -25,6 +25,7 @@
   "homepage": "https://github.com/ltodarosouza/ravena-simulador#readme",
   "private": "true",
   "dependencies": {
-    "@electric-sql/pglite": "^0.5.11"
+    "@electric-sql/pglite": "^0.5.11",
+    "@supabase/supabase-js": "^2.118.0"
   }
 }

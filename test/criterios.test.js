@@ -33,52 +33,64 @@ test("sem valor vigente o simulador não responde", () => {
   assert.throws(() => simular({ conta: 600, cidade: "Sorocaba" }, sem, HOJE), /sem valor vigente/);
 });
 
-// C3. O pedido guarda o que a pessoa viu.
-test("C3: o pedido tem o valor digitado, a cidade, os resultados como mostrados e os números usados", async () => {
-  const banco = await abrir();
-  const srv = criarServidor({ banco, numeros, hoje: () => HOJE });
-  await new Promise((ok) => srv.listen(0, ok));
-  const base = `http://localhost:${srv.address().port}`;
-  const post = async (rota, corpo) => {
-    const r = await fetch(base + rota, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(corpo) });
-    return { status: r.status, corpo: await r.json() };
-  };
-  try {
-    const tela = await post("/api/simular", { conta: 600, cidade: "Sorocaba" });
-    assert.equal(tela.status, 200);
-    const { simulacao_id, ...visto } = tela.corpo;
+// C3. O pedido guarda o que a pessoa viu. Roda no banco de teste (PGlite) e, se houver chave, no Supabase de verdade.
+const supabase = require("../lib/banco-supabase");
+const bancos = [["PGlite", () => abrir()]];
+if (supabase.configurado()) bancos.push(["Supabase", async () => supabase.abrir()]);
 
-    const enviado = await post("/api/pedido", { simulacao_id, nome: "Maria Souza", whatsapp: "(15) 99876-5432" });
-    assert.equal(enviado.status, 201);
+for (const [nomeBanco, abrirBanco] of bancos) {
+  test(`C3 (${nomeBanco}): o pedido tem o valor digitado, a cidade, os resultados como mostrados e os números usados`, async () => {
+    const banco = await abrirBanco();
+    const srv = criarServidor({ banco, numeros, hoje: () => HOJE });
+    await new Promise((ok) => srv.listen(0, ok));
+    const base = `http://localhost:${srv.address().port}`;
+    const post = async (rota, corpo) => {
+      const r = await fetch(base + rota, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(corpo) });
+      return { status: r.status, corpo: await r.json() };
+    };
+    // WhatsApp inventado para não esbarrar em dado real; os testes apagam o que criaram
+    const zap = "11900000" + String(Math.floor(Math.random() * 900) + 100);
+    const calculos = [];
+    try {
+      const tela = await post("/api/simular", { conta: 600, cidade: "Sorocaba" });
+      assert.equal(tela.status, 200);
+      const { simulacao_id, ...visto } = tela.corpo;
+      calculos.push(simulacao_id);
 
-    const linha = await banco.pedido(enviado.corpo.id);
-    assert.equal(Number(linha.conta), 600);
-    assert.equal(linha.cidade, "Sorocaba");
-    assert.equal(linha.whatsapp, "15998765432");
-    assert.deepEqual(linha.resultado, visto, "resultados exatamente como mostrados");
-    for (const [chave, n] of Object.entries(linha.numeros)) {
-      assert.ok(n.valor !== undefined && n.vigencia && n.fonte, `${chave} com valor, data e fonte`);
+      const enviado = await post("/api/pedido", { simulacao_id, nome: "Maria Teste", whatsapp: zap });
+      assert.equal(enviado.status, 201);
+
+      const linha = await banco.pedido(enviado.corpo.id);
+      assert.equal(Number(linha.conta), 600);
+      assert.equal(linha.cidade, "Sorocaba");
+      assert.equal(linha.whatsapp, zap);
+      assert.deepEqual(linha.resultado, visto, "resultados exatamente como mostrados");
+      for (const [chave, n] of Object.entries(linha.numeros)) {
+        assert.ok(n.valor !== undefined && n.vigencia && n.fonte, `${chave} com valor, data e fonte`);
+      }
+      assert.ok(linha.numeros.tarifa_kwh && linha.numeros.fio_b_percentual_por_ano);
+
+      // mesmo WhatsApp em 24 h: não nasce pedido novo
+      const outra = await post("/api/simular", { conta: 800, cidade: "Itu" });
+      calculos.push(outra.corpo.simulacao_id);
+      const repetido = await post("/api/pedido", { simulacao_id: outra.corpo.simulacao_id, nome: "Maria Teste", whatsapp: zap });
+      assert.equal(repetido.corpo.duplicado, true);
+      assert.match(repetido.corpo.mensagem, /Já recebemos/);
+      assert.equal(await banco.contarPedidos(zap), 1);
+
+      // depois de 24 h o mesmo WhatsApp vale de novo
+      await banco.envelhecerPedidos(zap, 25);
+      const depois = await post("/api/pedido", { simulacao_id: outra.corpo.simulacao_id, nome: "Maria Teste", whatsapp: zap });
+      assert.equal(depois.status, 201);
+      assert.equal(await banco.contarPedidos(zap), 2);
+
+      // nome vazio e WhatsApp inválido não criam pedido
+      assert.equal((await post("/api/pedido", { simulacao_id, nome: " ", whatsapp: zap })).corpo.erro, "nome_vazio");
+      assert.equal((await post("/api/pedido", { simulacao_id, nome: "Ana Teste", whatsapp: "123" })).corpo.erro, "whatsapp_invalido");
+    } finally {
+      srv.close();
+      await banco.limpar(zap, calculos);
+      await banco.fechar();
     }
-    assert.ok(linha.numeros.tarifa_kwh && linha.numeros.fio_b_percentual_por_ano);
-
-    // mesmo WhatsApp em 24 h: não nasce pedido novo
-    const outra = await post("/api/simular", { conta: 800, cidade: "Itu" });
-    const repetido = await post("/api/pedido", { simulacao_id: outra.corpo.simulacao_id, nome: "Maria", whatsapp: "15998765432" });
-    assert.equal(repetido.corpo.duplicado, true);
-    assert.match(repetido.corpo.mensagem, /Já recebemos/);
-    const total = await banco.db.query("select count(*)::int as n from pedidos");
-    assert.equal(total.rows[0].n, 1);
-
-    // depois de 24 h o mesmo WhatsApp vale de novo
-    await banco.db.query("update pedidos set criado_em = now() - interval '25 hours'");
-    const depois = await post("/api/pedido", { simulacao_id: outra.corpo.simulacao_id, nome: "Maria", whatsapp: "15998765432" });
-    assert.equal(depois.status, 201);
-
-    // nome vazio e WhatsApp inválido não criam pedido
-    assert.equal((await post("/api/pedido", { simulacao_id, nome: " ", whatsapp: "15998765432" })).corpo.erro, "nome_vazio");
-    assert.equal((await post("/api/pedido", { simulacao_id, nome: "Ana", whatsapp: "123" })).corpo.erro, "whatsapp_invalido");
-  } finally {
-    srv.close();
-    await banco.fechar();
-  }
-});
+  });
+}

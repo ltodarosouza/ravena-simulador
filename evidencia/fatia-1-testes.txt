@@ -1,0 +1,31 @@
+✖ C1: R$ 600 em Sorocaba mostra os seis resultados e o retorno não é menor que 3 anos (0.6765ms)
+✔ C1: os cálculos internos não são arredondados e o painel recebe o que a tela mostrou (0.09825ms)
+✔ sem valor vigente o simulador não responde (0.154583ms)
+✔ C3 (PGlite): o pedido tem o valor digitado, a cidade, os resultados como mostrados e os números usados (704.569625ms)
+✔ C3 (Supabase): o pedido tem o valor digitado, a cidade, os resultados como mostrados e os números usados (8486.021167ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 4
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 9307.383167
+
+✖ failing tests:
+
+test at test/criterios.test.js:13:1
+✖ C1: R$ 600 em Sorocaba mostra os seis resultados e o retorno não é menor que 3 anos (0.6765ms)
+  AssertionError [ERR_ASSERTION]: retorno de 2 anos e 10 meses é menor que 3 anos
+      at TestContext.<anonymous> (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/criterios.test.js:22:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1397:25)
+      at Test.start (node:internal/test_runner/test:1257:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
