@@ -27,7 +27,8 @@ A cidade do pedido é a do simulador e não é pedida de novo.
 - Retorno: "X anos e Y meses", projetado ano a ano (Fio B sobe pelo cronograma da Lei 14.300; reajuste da tarifa padrão = 0%, para errar contra nós).
 - Aviso curto: é estimativa, a proposta vem depois da visita técnica.
 - Se o retorno passar do limite configurado (inicial: 6 anos) ou não houver retorno: mensagem clara de que não compensa e por quê, sem botão de pedir simulação.
-- Aviso de privacidade na tela do pedido: dados pedidos, para quê e por quanto tempo, com como pedir exclusão.
+- Aviso de privacidade na tela do pedido: dados pedidos, para quê e por quanto tempo, com como pedir exclusão; sem caixa pré-marcada.
+- Os cálculos internos usam os valores sem arredondar; o arredondamento só vale na hora de mostrar, e o número que vai ao painel é o mesmo que a pessoa viu, já arredondado.
 
 **Pedido (vai ao painel):** nome, WhatsApp, cidade, valor digitado, todos os resultados acima exatamente como mostrados, e os números usados no cálculo (cada um com valor, data e fonte). Nunca é recalculado depois.
 
