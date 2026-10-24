@@ -10,6 +10,7 @@ const MENSAGENS = {
   nome_vazio: "Digite seu nome.",
   nome_com_cpf: "Digite só o seu nome. Não pedimos CPF.",
   whatsapp_invalido: "Digite um WhatsApp com DDD.",
+  whatsapp_parece_cpf: "Esse número parece um CPF. Digite o seu WhatsApp com DDD.",
   simulacao_inexistente: "Faça a simulação de novo.",
 };
 

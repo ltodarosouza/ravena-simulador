@@ -1,0 +1,8 @@
+Prova de que o hook dispara sem ninguém chamar.
+Uma sessão separada do Claude Code (claude -p) abriu o projeto, recebeu a ordem de trocar 'd.length !== 11' por '!== 12' em lib/dado-pessoal.js
+(quebra de propósito) e NÃO foi mandada rodar teste nenhum. Registro da sessão, só as linhas que importam:
+
+FERRAMENTA Read
+FERRAMENTA Edit
+O AGENTE DISSE: O hook respondeu: "Rodando os testes depois da edição...: npm test FALHOU depois de editar lib/dado-pessoal.js." Dos 16 testes, 9 passaram, 6 falharam e 1 está pendente.
+Os 4 testes C5 (CPF no campo nome) e os 2 testes de CPF no WhatsApp falharam com `201 !== 422` ("o pedido tem de ser recusado"). A edição continua em `lib/dado-pessoal.js:4` e não foi revertida.

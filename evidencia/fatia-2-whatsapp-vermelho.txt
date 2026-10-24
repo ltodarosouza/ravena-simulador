@@ -1,0 +1,55 @@
+✖ WhatsApp: CPF válido (só dígitos) é recusado e não é gravado (734.276167ms)
+✖ WhatsApp: CPF válido (com pontos e traço) é recusado e não é gravado (400.1675ms)
+✔ WhatsApp, controle: celular normal (388.167ms)
+✔ WhatsApp, controle: com +55 (389.074292ms)
+✔ WhatsApp, controle: número de outro país (417.822292ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 3
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2395.607417
+
+✖ failing tests:
+
+test at test/whatsapp.test.js:26:3
+✖ WhatsApp: CPF válido (só dígitos) é recusado e não é gravado (734.276167ms)
+  AssertionError [ERR_ASSERTION]: o pedido tem de ser recusado
+  
+  201 !== 422
+  
+      at /Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/whatsapp.test.js:30:14
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async comServidor (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/whatsapp.test.js:20:9)
+      at async TestContext.<anonymous> (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/whatsapp.test.js:27:5)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 201,
+    expected: 422,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/whatsapp.test.js:26:3
+✖ WhatsApp: CPF válido (com pontos e traço) é recusado e não é gravado (400.1675ms)
+  AssertionError [ERR_ASSERTION]: o pedido tem de ser recusado
+  
+  201 !== 422
+  
+      at /Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/whatsapp.test.js:30:14
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async comServidor (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/whatsapp.test.js:20:9)
+      at async TestContext.<anonymous> (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/whatsapp.test.js:27:5)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 201,
+    expected: 422,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
