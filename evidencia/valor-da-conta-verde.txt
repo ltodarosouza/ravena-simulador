@@ -1,0 +1,11 @@
+✔ conta escrita no jeito brasileiro dá a mesma simulação que o número puro (726.212ms)
+✔ conta que não é número continua recusada (401.547459ms)
+✔ conta no formato já aceito continua valendo (390.398375ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1586.813166

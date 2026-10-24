@@ -2,6 +2,7 @@ const http = require("http");
 const fs = require("fs");
 const path = require("path");
 const { simular, SemValor } = require("./lib/calculo");
+const { lerConta } = require("./lib/valor-da-conta");
 
 const MENSAGENS = {
   conta_invalida: "Digite o valor da conta em reais.",
@@ -41,7 +42,7 @@ function criarServidor({ banco, numeros, hoje = () => new Date() }) {
         const { conta, cidade } = await lerCorpo(req);
         const agora = hoje();
         const dosNumeros = typeof numeros === "function" ? await numeros(agora) : numeros;
-        const sim = simular({ conta: Number(conta), cidade }, dosNumeros, agora);
+        const sim = simular({ conta: lerConta(conta), cidade }, dosNumeros, agora);
         if (sim.erro) return json(res, 422, { erro: sim.erro, mensagem: MENSAGENS[sim.erro] });
         const id = await banco.guardarSimulacao(sim);
         return json(res, 200, { simulacao_id: id, ...sim.exibido });

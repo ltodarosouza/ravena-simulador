@@ -8,7 +8,7 @@ Permitir que a dona de casa de Sorocaba, Votorantim, Itu ou Salto veja, só com 
 
 | Entrada | Formato | Quem fornece | Se vier errada ou faltar |
 |---|---|---|---|
-| Valor da conta mensal | Reais, número positivo | Pessoa, no site | Vazio, texto, zero ou negativo: pede de novo. Fora da faixa configurada (inicial R$ 100 a R$ 2.000): explica o motivo e não calcula nem pede dados pessoais (acima = comércio/sistema grande, que não atendemos). |
+| Valor da conta mensal | Reais, número positivo, escrito como a pessoa escreve no Brasil ("R$ 1.234,56", "1234,56", "1.234" e "1234.56" valem; "1e3" e "1,2,3" não) | Pessoa, no site | Vazio, texto, zero ou negativo: pede de novo. Fora da faixa configurada (inicial R$ 100 a R$ 2.000): explica o motivo e não calcula nem pede dados pessoais (acima = comércio/sistema grande, que não atendemos). |
 | Cidade | Uma de 4: Sorocaba, Votorantim, Itu, Salto (lista fechada) | Pessoa | Sem cidade: não calcula. Outra cidade não existe como opção. |
 | Nome | Texto livre | Pessoa, ao pedir simulação detalhada | Vazio: o pedido não é enviado. |
 | WhatsApp | Telefone brasileiro com DDD | Pessoa, ao pedir | Inválido ou vazio: o pedido não é enviado. Mesmo WhatsApp com pedido nas últimas 24 h: não cria pedido novo, mostra "já recebemos". |
