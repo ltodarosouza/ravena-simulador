@@ -21,7 +21,7 @@ async function comServidor(fn) {
 }
 
 // Cenário 6: CPF válido no campo WhatsApp é recusado como "isso não é um telefone" e não é gravado.
-// 52998224725 tem 11 dígitos e o terceiro é 9, então hoje passa como celular com DDD 52.
+// 52998224725 é o CPF de exemplo público (de tutorial), não de uma pessoa conhecida. Tem 11 dígitos e o terceiro é 9, então hoje passa como celular com DDD 52.
 for (const [rotulo, zap] of [["só dígitos", "52998224725"], ["com pontos e traço", "529.982.247-25"]]) {
   test(`WhatsApp: CPF válido (${rotulo}) é recusado e não é gravado`, async () => {
     await comServidor(async ({ banco, post }) => {

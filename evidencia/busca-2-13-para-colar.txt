@@ -1,0 +1,147 @@
+=== 1. Testes, logs e arquivos do simulador (ravena-simulador, main em 3494859) ===
+
+$ grep -rnoE "[0-9]{3}\.[0-9]{3}\.[0-9]{3}-[0-9]{2}" test scripts lib server.js public README.md SPEC.md brief.md cenarios depuracao revisao referencia
+test/dado-pessoal.test.js:11:529.982.247-25
+test/whatsapp.test.js:25:529.982.247-25
+cenarios/fatia-2.md:13:529.982.247-25
+(código de saída 0)
+
+$ grep -rnoE "(^|[^0-9])[0-9]{11}([^0-9]|$)" test scripts lib server.js public README.md SPEC.md brief.md cenarios depuracao revisao referencia
+test/whatsapp.test.js:24: 52998224725 
+test/whatsapp.test.js:25:"52998224725"
+test/whatsapp.test.js:40:/52998224725/
+test/revisao.test.js:96:"15998765432"
+test/revisao.test.js:100:"15998765432"
+test/revisao.test.js:107:"15998765432"
+test/dado-pessoal.test.js:29:"15998765432"
+test/dado-pessoal.test.js:31:"15998765432"
+test/dado-pessoal.test.js:38:"52998224725"
+test/dado-pessoal.test.js:49:"15998765432"
+test/dado-pessoal.test.js:55:"15998765432"
+test/seguranca.test.js:11:"52998224725"
+test/seguranca.test.js:45:"15998765432"
+test/seguranca.test.js:55:"15998765432"
+test/seguranca.test.js:59:"15998765432"
+test/seguranca.test.js:68:"15998765432"
+test/seguranca.test.js:69:"15998765432"
+test/seguranca.test.js:84:"15998765432"
+test/seguranca.test.js:100:"15998765432"
+test/seguranca.test.js:138:"15998765432"
+cenarios/fatia-2.md:14: 15998765432;
+revisao/seguranca-lista-bruta.md:49: 52998224725`
+(código de saída 0)
+
+$ grep -rnoE "\(?[0-9]{2}\)? ?9?[0-9]{4}-[0-9]{4}" test scripts lib server.js public README.md SPEC.md brief.md cenarios depuracao revisao referencia
+test/whatsapp.test.js:48:(15) 99876-5432
+test/whatsapp.test.js:49:(15) 99876-5432
+scripts/evidencia.js:19:(15) 99876-5432
+cenarios/fatia-2.md:14:(15) 99876-5432
+(código de saída 0)
+
+$ grep -rnoE "(nome|whatsapp): ?\"[^\"]*\"" test scripts | sort -u
+scripts/evidencia.js:19:nome: "Maria Souza"
+scripts/evidencia.js:19:whatsapp: "(15) 99876-5432"
+test/criterios.test.js:107:nome: "Maria Teste"
+test/criterios.test.js:114:nome: "Maria Teste"
+test/criterios.test.js:119:nome: " "
+test/criterios.test.js:120:nome: "Ana Teste"
+test/criterios.test.js:120:whatsapp: "123"
+test/criterios.test.js:91:nome: "Maria Teste"
+test/dado-pessoal.test.js:29:nome: "Maria Souza"
+test/dado-pessoal.test.js:29:whatsapp: "15998765432"
+test/dado-pessoal.test.js:49:whatsapp: "15998765432"
+test/revisao.test.js:107:nome: "Maria Souza"
+test/revisao.test.js:107:whatsapp: "15998765432"
+test/revisao.test.js:96:nome: "Maria Souza"
+test/revisao.test.js:96:whatsapp: "15998765432"
+test/seguranca.test.js:100:whatsapp: "15998765432"
+test/seguranca.test.js:112:nome: "Maria Souza"
+test/seguranca.test.js:138:nome: "Maria Souza"
+test/seguranca.test.js:138:whatsapp: "15998765432"
+test/seguranca.test.js:45:nome: "A"
+test/seguranca.test.js:45:whatsapp: "15998765432"
+test/seguranca.test.js:55:nome: "A"
+test/seguranca.test.js:55:whatsapp: "15998765432"
+test/seguranca.test.js:59:nome: "A"
+test/seguranca.test.js:59:whatsapp: "15998765432"
+test/seguranca.test.js:68:nome: "Maria Souza"
+test/seguranca.test.js:68:whatsapp: "15998765432"
+test/seguranca.test.js:69:nome: "Outra Pessoa"
+test/seguranca.test.js:69:whatsapp: "15998765432"
+test/seguranca.test.js:84:nome: "Maria Souza"
+test/seguranca.test.js:84:whatsapp: "15998765432"
+test/whatsapp.test.js:33:nome: "Maria Souza"
+test/whatsapp.test.js:55:nome: "Maria Souza"
+(código de saída 0)
+
+$ grep -rn "11900000" test
+test/criterios.test.js:83:    const zap = "11900000" + String(Math.floor(Math.random() * 900) + 100);
+(código de saída 0)
+
+$ find . -name "*.log" -not -path "./node_modules/*" -not -path "./.git/*"
+(código de saída 0)
+
+=== 2. Imagem ou PDF versionado, em qualquer commit ===
+
+$ git log --all --name-only --pretty=format: | grep -iE "\.(png|jpe?g|pdf|heic|webp|gif)$" | sort -u
+(código de saída 0)
+
+=== 3. Chave no histórico inteiro ===
+
+$ git rev-list --all | wc -l
+      26
+(código de saída 0)
+
+$ git grep -I -n -E "sb_secret_[A-Za-z0-9]|sb_publishable_[A-Za-z0-9]|eyJ[A-Za-z0-9_-]{20,}\.[A-Za-z0-9_-]{20,}|service_role" $(git rev-list --all)
+34948596ef298fd24b55a82492bb85192140698c:evidencia/dado-real-busca.txt:95:$ git grep -I -l -E "sb_secret_[A-Za-z0-9]|eyJ[A-Za-z0-9_-]{20,}\.[A-Za-z0-9_-]{20,}|service_role" $(git rev-list --all)   # chave em todo o histórico do simulador (só nomes de arquivo)
+(código de saída 0)
+
+$ git log --all --oneline -- .env .env.local | wc -l
+       0
+(código de saída 0)
+
+=== 4. Mesma busca na landing-solar (todos os branches) ===
+
+$ git rev-list --all | wc -l
+      35
+(código de saída 0)
+
+$ git grep -I -n -E "sb_secret_[A-Za-z0-9]|sb_publishable_[A-Za-z0-9]|eyJ[A-Za-z0-9_-]{20,}\.[A-Za-z0-9_-]{20,}" $(git rev-list --all)
+39862d654a9d9e8d225532ca298753953c5e2f4d:scripts/teste-banco.cjs:5:const CHAVE = "sb_publishable_CHAVE_DE_TESTE_1234567890";
+a8778b13af1b256e1e8ec2da5aebc519cc859d3d:scripts/teste-banco.cjs:5:const CHAVE = "sb_publishable_CHAVE_DE_TESTE_1234567890";
+32e06d73fa4d974c401440ba1002a6d5498da864:scripts/teste-banco.cjs:5:const CHAVE = "sb_publishable_CHAVE_DE_TESTE_1234567890";
+(código de saída 0)
+
+$ git grep -I -h -n "service_role" $(git rev-list --all) | cut -c1-220 | sort | uniq -c
+   8 1:# Chaves do Supabase. A pública (publishable) pode ir para o navegador; a de administrador (secret/service_role) NUNCA entra aqui nem no git.
+  11 20:# `postgres` are reachable through the Data API roles (`anon`, `authenticated`, `service_role`)
+   3 324:const padraoSegredo = /sb_(publishable|secret)_[A-Za-z0-9_-]{20,}|eyJ[A-Za-z0-9_-]{15,}\.[A-Za-z0-9_-]{15,}\.[A-Za-z0-9_-]{10,}/; // valor com cara de chave; a palavra service_role sozinha é só o nome de um papel (
+(código de saída 0)
+
+$ git log --all --name-only --pretty=format: | grep -iE "\.(png|jpe?g|pdf|heic|webp|gif)$" | sort -u
+evidencia/ceu/bom.png
+evidencia/ceu/corta.png
+evidencia/ceu/limite.png
+evidencia/ceu/mudo.png
+evidencia/ceu/publico-bom.png
+evidencia/ceu/publico-rota-cai.png
+evidencia/ceu/publico-rota-demora.png
+evidencia/ceu/rota-cai.png
+evidencia/conversao-next/antes-celular-390.png
+evidencia/conversao-next/antes-desktop-1280.png
+evidencia/conversao-next/antes-tablet-768.png
+evidencia/conversao-next/depois-celular-390.png
+evidencia/conversao-next/depois-desktop-1280.png
+evidencia/conversao-next/depois-tablet-768.png
+evidencia/conversao-next/formulario-publico/1-conta-200-recusada-no-navegador.png
+evidencia/conversao-next/formulario-publico/2-cidade-outra-recusada-no-navegador.png
+evidencia/conversao-next/formulario-publico/3-pedido-valido-aceito.png
+evidencia/conversao-next/formulario-publico/4-servidor-recusa-com-422.png
+evidencia/conversao-next/formulario/1-conta-200-recusada-no-navegador.png
+evidencia/conversao-next/formulario/2-cidade-outra-recusada-no-navegador.png
+evidencia/conversao-next/formulario/3-pedido-valido-aceito.png
+evidencia/conversao-next/formulario/4-servidor-recusa-com-422.png
+evidencia/desfazer/quebrada-desktop-1280.png
+evidencia/desfazer/restaurada-desktop-1280.png
+material/logo.png
+(código de saída 0)

@@ -7,6 +7,7 @@ const { criarServidor } = require("../server");
 
 const numerosReferencia = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "referencia", "numeros.json"), "utf8")).numeros;
 const HOJE = new Date("2026-10-24T12:00:00-03:00");
+// O mesmo CPF de exemplo público de test/dado-pessoal.test.js, escrito em três tipos de algarismo.
 const CPF_ASCII = "52998224725";
 const CPF_LARGURA_TOTAL = "５２９９８２２４７２５";
 const CPF_ARABE = "٥٢٩٩٨٢٢٤٧٢٥";

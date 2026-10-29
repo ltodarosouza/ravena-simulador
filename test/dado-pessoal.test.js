@@ -7,7 +7,8 @@ const { criarServidor } = require("../server");
 
 const numeros = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "referencia", "numeros.json"), "utf8")).numeros;
 const HOJE = new Date("2026-10-24T12:00:00-03:00");
-const CPF = "529.982.247-25"; // CPF de teste com dígitos verificadores válidos
+// CPF de exemplo público, o mesmo de tutoriais e geradores de CPF. Não é de ninguém que a gente conheça. Os dígitos verificadores são válidos de propósito: o filtro só recusa CPF que passa na conta.
+const CPF = "529.982.247-25";
 
 async function comServidor(fn) {
   const banco = await abrir();
