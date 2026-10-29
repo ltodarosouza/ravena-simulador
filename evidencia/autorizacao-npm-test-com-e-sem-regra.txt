@@ -1,0 +1,543 @@
+$ grep "\"test\"" package.json
+    "test": "test"
+    "test": "node --test test/criterios.test.js test/dado-pessoal.test.js test/whatsapp.test.js test/valor-da-conta.test.js test/revisao.test.js test/seguranca.test.js test/autorizacao.test.js",
+
+$ git rev-parse --short HEAD
+e500b3d
+
+=== 1. COM a regra no WHERE ===
+$ grep -n "cidade = any" lib/banco.js
+71:      : await db.query("select * from pedidos where id = $1 and cidade = any($2::text[])", [id, cidades]);
+
+$ npm test
+
+> ravena-simulador@1.0.0 test
+> node --test test/criterios.test.js test/dado-pessoal.test.js test/whatsapp.test.js test/valor-da-conta.test.js test/revisao.test.js test/seguranca.test.js test/autorizacao.test.js
+
+✔ C4: o Carlos vê Sorocaba e Votorantim, e não vê Itu nem Salto (3550.77975ms)
+✔ C4: a Renata vê Itu e Salto, e não vê Sorocaba nem Votorantim (2051.489875ms)
+✔ C4: o dono vê os quatro (1171.00325ms)
+✔ C4: quem não entrou não vê nada, e vendedor desconhecido também não (695.448125ms)
+✔ C4: o pedido de outra cidade responde igual a um pedido que nunca existiu (870.632917ms)
+✔ C1: R$ 600 em Sorocaba mostra os seis resultados, na forma pedida (0.555375ms)
+✔ C1: com os números do dono, o retorno de R$ 600 em Sorocaba não é menor que 3 anos (0.171083ms) # pendente: rode com TESTAR_NO_SUPABASE=1 e com os números do dono no banco (seção 11 da spec)
+✔ C1: os cálculos internos não são arredondados e o painel recebe o que a tela mostrou (0.300625ms)
+✔ sem valor vigente o simulador não responde (0.31975ms)
+✔ C6: sem os números do dono, /api/simular recusa com aviso e não calcula (3504.2415ms)
+✔ C3 (PGlite): o pedido tem o valor digitado, a cidade, os resultados como mostrados e os números usados (1565.141125ms)
+✔ C5, controle: nome normal cria o pedido (3611.944417ms)
+✔ C5: CPF válido no campo nome (com pontos e traço) é recusado e não entra em tabela nem log (2126.122125ms)
+✔ C5: CPF válido no campo nome (só dígitos) é recusado e não entra em tabela nem log (1129.01625ms)
+✔ C5: CPF válido no campo nome (no meio de uma frase) é recusado e não entra em tabela nem log (820.08725ms)
+✔ C5: CPF válido no campo nome (separado por espaços) é recusado e não entra em tabela nem log (826.01ms)
+✔ a faixa de R$ 100 a R$ 2.000: fora dela não calcula, nas pontas calcula (0.801041ms)
+✔ cidade fora da lista, vazia ou ausente não calcula (0.129542ms)
+✔ R$ 600 em Sorocaba dá os números feitos à mão (0.755125ms)
+✔ o ano muda o Fio B e, com ele, o retorno (a conta é projetada ano a ano) (0.173167ms)
+✔ R$ 100 passa do limite de retorno e é marcado como não compensa (0.122917ms)
+✔ número cadastrado errado (tarifa zero): o simulador não responde e não grava conta (3515.725ms)
+✔ número cadastrado errado (tarifa negativa): o simulador não responde e não grava conta (1864.710542ms)
+✔ número cadastrado errado (geração por kWp zero): o simulador não responde e não grava conta (1147.016334ms)
+✔ número cadastrado errado (potência do painel zero): o simulador não responde e não grava conta (880.604125ms)
+✔ número cadastrado errado (Fio B acima de 100%): o simulador não responde e não grava conta (850.193167ms)
+✔ número cadastrado errado (tarifa que não é número): o simulador não responde e não grava conta (526.0535ms)
+✔ simulação que não compensa: o servidor recusa o pedido e não grava a pessoa (394.912375ms)
+✔ simulação que compensa continua podendo virar pedido (403.963291ms)
+✔ a página trata nao_compensa: mostra a mensagem e esconde o formulário de pedido (0.238ms)
+✔ o campo da conta aceita texto (R$ 1.234,56), não só número (0.091958ms)
+✔ Segurança 1: corpo grande é recusado e nada é gravado (3618.630083ms)
+✔ Segurança 1: nome de 101 caracteres é recusado, de 100 passa (2181.521ms)
+✔ Segurança 2: pedido repetido tem a mesma resposta de um pedido novo (1104.625666ms)
+✔ Segurança 3: sem número vigente o pedido não é gravado, mesmo de simulação antiga (825.422042ms)
+✔ Segurança 4: CPF no nome (largura total) é recusado e não é gravado (797.776708ms)
+✔ Segurança 4: CPF no nome (algarismos árabes) é recusado e não é gravado (417.793375ms)
+✔ Segurança 4: CPF no nome (controle ASCII) é recusado e não é gravado (402.982875ms)
+✔ Segurança 4: CPF em largura total no WhatsApp também é recusado (383.304375ms)
+✔ Segurança 5: null em /api/pedido dá 400, não 500 (359.579417ms)
+✔ Segurança 5: null em /api/simular dá 400, não 500 (353.691375ms)
+✔ Segurança 5: lista em /api/pedido dá 400, não 500 (355.686584ms)
+✔ Segurança 5: texto em /api/simular dá 400, não 500 (354.912833ms)
+✔ Segurança 5: número em /api/pedido dá 400, não 500 (347.588875ms)
+✔ Segurança 5: simulacao_id texto qualquer dá "faça de novo", não 500 (347.897333ms)
+✔ Segurança 5: simulacao_id objeto dá "faça de novo", não 500 (352.502834ms)
+✔ Segurança 5: simulacao_id número dá "faça de novo", não 500 (352.172542ms)
+✔ conta escrita no jeito brasileiro dá a mesma simulação que o número puro (3621.484ms)
+✔ conta que não é número continua recusada (1909.583667ms)
+✔ conta no formato já aceito continua valendo (1181.982292ms)
+✔ WhatsApp: CPF válido (só dígitos) é recusado e não é gravado (3543.221042ms)
+✔ WhatsApp: CPF válido (com pontos e traço) é recusado e não é gravado (2008.2205ms)
+✔ WhatsApp, controle: celular normal (1255.387667ms)
+✔ WhatsApp, controle: com +55 (870.288375ms)
+✔ WhatsApp, controle: número de outro país (806.413458ms)
+ℹ tests 55
+ℹ suites 0
+ℹ pass 54
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 1
+ℹ duration_ms 12648.867584
+(código de saída 0)
+
+
+=== 2. SEM a regra no WHERE (tirada de propósito, só para esta prova) ===
+$ grep -n "cidade = any" lib/banco.js
+(código de saída 1; 1 = a regra não está mais lá)
+
+$ npm test
+
+> ravena-simulador@1.0.0 test
+> node --test test/criterios.test.js test/dado-pessoal.test.js test/whatsapp.test.js test/valor-da-conta.test.js test/revisao.test.js test/seguranca.test.js test/autorizacao.test.js
+
+✖ C4: o Carlos vê Sorocaba e Votorantim, e não vê Itu nem Salto (2217.616125ms)
+✖ C4: a Renata vê Itu e Salto, e não vê Sorocaba nem Votorantim (1255.403667ms)
+✔ C4: o dono vê os quatro (1675.136083ms)
+✔ C4: quem não entrou não vê nada, e vendedor desconhecido também não (1272.669459ms)
+✖ C4: o pedido de outra cidade responde igual a um pedido que nunca existiu (989.455583ms)
+✔ C1: R$ 600 em Sorocaba mostra os seis resultados, na forma pedida (0.525958ms)
+✔ C1: com os números do dono, o retorno de R$ 600 em Sorocaba não é menor que 3 anos (0.080833ms) # pendente: rode com TESTAR_NO_SUPABASE=1 e com os números do dono no banco (seção 11 da spec)
+✔ C1: os cálculos internos não são arredondados e o painel recebe o que a tela mostrou (0.079167ms)
+✔ sem valor vigente o simulador não responde (0.168542ms)
+✔ C6: sem os números do dono, /api/simular recusa com aviso e não calcula (2346.9675ms)
+✔ C3 (PGlite): o pedido tem o valor digitado, a cidade, os resultados como mostrados e os números usados (1604.500708ms)
+✔ C5, controle: nome normal cria o pedido (2157.769125ms)
+✔ C5: CPF válido no campo nome (com pontos e traço) é recusado e não entra em tabela nem log (1259.837875ms)
+✔ C5: CPF válido no campo nome (só dígitos) é recusado e não entra em tabela nem log (1271.694292ms)
+✔ C5: CPF válido no campo nome (no meio de uma frase) é recusado e não entra em tabela nem log (1223.52675ms)
+✔ C5: CPF válido no campo nome (separado por espaços) é recusado e não entra em tabela nem log (954.8535ms)
+✔ a faixa de R$ 100 a R$ 2.000: fora dela não calcula, nas pontas calcula (0.618833ms)
+✔ cidade fora da lista, vazia ou ausente não calcula (0.128416ms)
+✔ R$ 600 em Sorocaba dá os números feitos à mão (0.299709ms)
+✔ o ano muda o Fio B e, com ele, o retorno (a conta é projetada ano a ano) (0.062709ms)
+✔ R$ 100 passa do limite de retorno e é marcado como não compensa (0.049125ms)
+✔ número cadastrado errado (tarifa zero): o simulador não responde e não grava conta (2304.558625ms)
+✔ número cadastrado errado (tarifa negativa): o simulador não responde e não grava conta (1446.808625ms)
+✔ número cadastrado errado (geração por kWp zero): o simulador não responde e não grava conta (1397.737125ms)
+✔ número cadastrado errado (potência do painel zero): o simulador não responde e não grava conta (1353.493917ms)
+✔ número cadastrado errado (Fio B acima de 100%): o simulador não responde e não grava conta (930.716333ms)
+✔ número cadastrado errado (tarifa que não é número): o simulador não responde e não grava conta (524.554459ms)
+✔ simulação que não compensa: o servidor recusa o pedido e não grava a pessoa (521.043ms)
+✔ simulação que compensa continua podendo virar pedido (536.695166ms)
+✔ a página trata nao_compensa: mostra a mensagem e esconde o formulário de pedido (0.269042ms)
+✔ o campo da conta aceita texto (R$ 1.234,56), não só número (0.078625ms)
+✔ Segurança 1: corpo grande é recusado e nada é gravado (2324.786042ms)
+✔ Segurança 1: nome de 101 caracteres é recusado, de 100 passa (1279.842875ms)
+✔ Segurança 2: pedido repetido tem a mesma resposta de um pedido novo (1595.03825ms)
+✔ Segurança 3: sem número vigente o pedido não é gravado, mesmo de simulação antiga (1121.537125ms)
+✔ Segurança 4: CPF no nome (largura total) é recusado e não é gravado (870.423583ms)
+✔ Segurança 4: CPF no nome (algarismos árabes) é recusado e não é gravado (673.94125ms)
+✔ Segurança 4: CPF no nome (controle ASCII) é recusado e não é gravado (530.820459ms)
+✔ Segurança 4: CPF em largura total no WhatsApp também é recusado (531.730833ms)
+✔ Segurança 5: null em /api/pedido dá 400, não 500 (473.166125ms)
+✔ Segurança 5: null em /api/simular dá 400, não 500 (380.936666ms)
+✔ Segurança 5: lista em /api/pedido dá 400, não 500 (362.065791ms)
+✔ Segurança 5: texto em /api/simular dá 400, não 500 (375.698041ms)
+✔ Segurança 5: número em /api/pedido dá 400, não 500 (363.177583ms)
+✔ Segurança 5: simulacao_id texto qualquer dá "faça de novo", não 500 (370.95125ms)
+✔ Segurança 5: simulacao_id objeto dá "faça de novo", não 500 (360.514208ms)
+✔ Segurança 5: simulacao_id número dá "faça de novo", não 500 (370.521292ms)
+✔ conta escrita no jeito brasileiro dá a mesma simulação que o número puro (2444.138917ms)
+✔ conta que não é número continua recusada (1749.312083ms)
+✔ conta no formato já aceito continua valendo (1433.462417ms)
+✔ WhatsApp: CPF válido (só dígitos) é recusado e não é gravado (2359.204917ms)
+✔ WhatsApp: CPF válido (com pontos e traço) é recusado e não é gravado (1642.032708ms)
+✔ WhatsApp, controle: celular normal (1475.389416ms)
+✔ WhatsApp, controle: com +55 (1018.893208ms)
+✔ WhatsApp, controle: número de outro país (986.779625ms)
+ℹ tests 55
+ℹ suites 0
+ℹ pass 51
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 1
+ℹ duration_ms 12063.73425
+
+✖ failing tests:
+
+test at test/autorizacao.test.js:34:1
+✖ C4: o Carlos vê Sorocaba e Votorantim, e não vê Itu nem Salto (2217.616125ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + {
+  +   cidade: 'Itu',
+  +   conta: '600',
+  +   estagio: 'chegou',
+  +   id: 'da45d190-97d8-47b0-9518-a591e234379c',
+  +   nome: 'Pessoa de Itu',
+  +   numeros: {
+  +     conta_maxima: {
+  +       fonte: 'decisão da spec, seção 2',
+  +       valor: 2000,
+  +       vigencia: '2026-01-01'
+  +     },
+  +     conta_minima: {
+  +       fonte: 'decisão da spec, seção 2',
+  +       valor: 100,
+  +       vigencia: '2026-01-01'
+  +     },
+  +     disponibilidade_kwh_bifasica: {
+  +       fonte: 'regra da ANEEL para ligação bifásica (50 kWh)',
+  +       valor: 50,
+  +       vigencia: '2026-01-01'
+  +     },
+  +     fio_b_kwh: {
+  +       fonte: 'valor de teste, R$ por kWh de energia compensada, com impostos',
+  +       valor: 0.3,
+  +       vigencia: '2026-01-01'
+  +     },
+  +     fio_b_percentual_por_ano: {
+  +       fonte: 'cronograma da Lei 14.300/2022',
+  +       valor: {
+  +         '2026': 0.6,
+  +         '2027': 0.75,
+  +         '2028': 0.9,
+  +         '2029': 1
+  +       },
+  +       vigencia: '2026-01-01'
+  +     },
+  +     geracao_kwh_por_kwp_mes: {
+  +       fonte: 'planilha do Carlos (brief)',
+  +       valor: 115,
+  +       vigencia: '2026-01-01'
+  +     },
+  +     iluminacao_publica: {
+  +       fonte: 'valor de teste, R$ por mês',
+  +       valor: {
+  +         Itu: 25,
+  +         Salto: 25,
+  +         Sorocaba: 25,
+  +         Votorantim: 25
+  +       },
+  +       vigencia: '2026-01-01'
+  +     },
+  +     limite_retorno_anos: {
+  +       fonte: 'decisão da spec, seção 3',
+  +       valor: 6,
+  +       vigencia: '2026-01-01'
+  +     },
+  +     potencia_painel_kwp: {
+  +       fonte: 'painel de 550 W (brief)',
+  +       valor: 0.55,
+  +       vigencia: '2026-01-01'
+  +     },
+  +     preco_kwp_faixas: {
+  +       fonte: 'faixas de teste dentro de R$ 2.300 a R$ 2.900 por kWp (brief); 6,4 kWp x R$ 2.547 = cerca de R$ 16.300, o ticket do brief',
+  +       valor: [
+  +         {
+  +           ate_kwp: 4,
+  +           preco: 2900
+  +         },
+  +         {
+  +           ate_kwp: 8,
+  +           preco: 2547
+  +         },
+  +         {
+  +           ate_kwp: null,
+  +           preco: 2300
+  +         }
+  +       ],
+  +       vigencia: '2026-01-01'
+  +     },
+  +     reajuste_tarifa_anual: {
+  +       fonte: 'decisão da spec, seção 3 (errar contra nós)',
+  +       valor: 0,
+  +       vigencia: '2026-01-01'
+  +     },
+  +     tarifa_kwh: {
+  +       fonte: 'valor que a planilha do Carlos usa (brief); não é a tarifa homologada da CPFL Piratininga',
+  +       valor: 0.95,
+  +       vigencia: '2026-01-01'
+  +     }
+  +   },
+  +   resultado: {
+  +     conta_depois: 172,
+  +     economia_ano1: 5131,
+  +     investimento: 13400,
+  +     kwp: 5.3,
+  +     nao_compensa: false,
+  +     paineis: 10,
+  +     retorno: {
+  +       anos: 2,
+  +       meses: 10,
+  +       total_meses: 34
+  +     }
+  +   },
+  +   whatsapp: '15998760003'
+  + }
+  - null
+  
+      at /Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/autorizacao.test.js:38:12
+      at async comPedidos (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/autorizacao.test.js:30:5)
+      at async TestContext.<anonymous> (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/autorizacao.test.js:35:3)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: { id: 'da45d190-97d8-47b0-9518-a591e234379c', nome: 'Pessoa de Itu', whatsapp: '15998760003', cidade: 'Itu', conta: '600', resultado: { kwp: 5.3, paineis: 10, retorno: [Object], conta_depois: 172, investimento: 13400, nao_compensa: false, economia_ano1: 5131 }, numeros: { fio_b_kwh: [Object], tarifa_kwh: [Object], conta_maxima: [Object], conta_minima: [Object], preco_kwp_faixas: [Object], iluminacao_publica: [Object], limite_retorno_anos: [Object], potencia_painel_kwp: [Object], reajuste_tarifa_anual: [Object], geracao_kwh_por_kwp_mes: [Object], fio_b_percentual_por_ano: [Object], disponibilidade_kwh_bifasica: [Object] }, estagio: 'chegou' },
+    expected: null,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/autorizacao.test.js:43:1
+✖ C4: a Renata vê Itu e Salto, e não vê Sorocaba nem Votorantim (1255.403667ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + {
+  +   cidade: 'Sorocaba',
+  +   conta: '600',
+  +   estagio: 'chegou',
+  +   id: '73a7eb4b-bec5-4815-a8b9-2a92e6c2726e',
+  +   nome: 'Pessoa de Sorocaba',
+  +   numeros: {
+  +     conta_maxima: {
+  +       fonte: 'decisão da spec, seção 2',
+  +       valor: 2000,
+  +       vigencia: '2026-01-01'
+  +     },
+  +     conta_minima: {
+  +       fonte: 'decisão da spec, seção 2',
+  +       valor: 100,
+  +       vigencia: '2026-01-01'
+  +     },
+  +     disponibilidade_kwh_bifasica: {
+  +       fonte: 'regra da ANEEL para ligação bifásica (50 kWh)',
+  +       valor: 50,
+  +       vigencia: '2026-01-01'
+  +     },
+  +     fio_b_kwh: {
+  +       fonte: 'valor de teste, R$ por kWh de energia compensada, com impostos',
+  +       valor: 0.3,
+  +       vigencia: '2026-01-01'
+  +     },
+  +     fio_b_percentual_por_ano: {
+  +       fonte: 'cronograma da Lei 14.300/2022',
+  +       valor: {
+  +         '2026': 0.6,
+  +         '2027': 0.75,
+  +         '2028': 0.9,
+  +         '2029': 1
+  +       },
+  +       vigencia: '2026-01-01'
+  +     },
+  +     geracao_kwh_por_kwp_mes: {
+  +       fonte: 'planilha do Carlos (brief)',
+  +       valor: 115,
+  +       vigencia: '2026-01-01'
+  +     },
+  +     iluminacao_publica: {
+  +       fonte: 'valor de teste, R$ por mês',
+  +       valor: {
+  +         Itu: 25,
+  +         Salto: 25,
+  +         Sorocaba: 25,
+  +         Votorantim: 25
+  +       },
+  +       vigencia: '2026-01-01'
+  +     },
+  +     limite_retorno_anos: {
+  +       fonte: 'decisão da spec, seção 3',
+  +       valor: 6,
+  +       vigencia: '2026-01-01'
+  +     },
+  +     potencia_painel_kwp: {
+  +       fonte: 'painel de 550 W (brief)',
+  +       valor: 0.55,
+  +       vigencia: '2026-01-01'
+  +     },
+  +     preco_kwp_faixas: {
+  +       fonte: 'faixas de teste dentro de R$ 2.300 a R$ 2.900 por kWp (brief); 6,4 kWp x R$ 2.547 = cerca de R$ 16.300, o ticket do brief',
+  +       valor: [
+  +         {
+  +           ate_kwp: 4,
+  +           preco: 2900
+  +         },
+  +         {
+  +           ate_kwp: 8,
+  +           preco: 2547
+  +         },
+  +         {
+  +           ate_kwp: null,
+  +           preco: 2300
+  +         }
+  +       ],
+  +       vigencia: '2026-01-01'
+  +     },
+  +     reajuste_tarifa_anual: {
+  +       fonte: 'decisão da spec, seção 3 (errar contra nós)',
+  +       valor: 0,
+  +       vigencia: '2026-01-01'
+  +     },
+  +     tarifa_kwh: {
+  +       fonte: 'valor que a planilha do Carlos usa (brief); não é a tarifa homologada da CPFL Piratininga',
+  +       valor: 0.95,
+  +       vigencia: '2026-01-01'
+  +     }
+  +   },
+  +   resultado: {
+  +     conta_depois: 172,
+  +     economia_ano1: 5131,
+  +     investimento: 13400,
+  +     kwp: 5.3,
+  +     nao_compensa: false,
+  +     paineis: 10,
+  +     retorno: {
+  +       anos: 2,
+  +       meses: 10,
+  +       total_meses: 34
+  +     }
+  +   },
+  +   whatsapp: '15998760001'
+  + }
+  - null
+  
+      at /Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/autorizacao.test.js:47:12
+      at async comPedidos (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/autorizacao.test.js:30:5)
+      at async TestContext.<anonymous> (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/autorizacao.test.js:44:3)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: { id: '73a7eb4b-bec5-4815-a8b9-2a92e6c2726e', nome: 'Pessoa de Sorocaba', whatsapp: '15998760001', cidade: 'Sorocaba', conta: '600', resultado: { kwp: 5.3, paineis: 10, retorno: [Object], conta_depois: 172, investimento: 13400, nao_compensa: false, economia_ano1: 5131 }, numeros: { fio_b_kwh: [Object], tarifa_kwh: [Object], conta_maxima: [Object], conta_minima: [Object], preco_kwp_faixas: [Object], iluminacao_publica: [Object], limite_retorno_anos: [Object], potencia_painel_kwp: [Object], reajuste_tarifa_anual: [Object], geracao_kwh_por_kwp_mes: [Object], fio_b_percentual_por_ano: [Object], disponibilidade_kwh_bifasica: [Object] }, estagio: 'chegou' },
+    expected: null,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/autorizacao.test.js:71:1
+✖ C4: o pedido de outra cidade responde igual a um pedido que nunca existiu (989.455583ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + {
+  +   cidade: 'Itu',
+  +   conta: '600',
+  +   estagio: 'chegou',
+  +   id: 'a984147e-a557-4928-a035-a1cd4f346c26',
+  +   nome: 'Pessoa de Itu',
+  +   numeros: {
+  +     conta_maxima: {
+  +       fonte: 'decisão da spec, seção 2',
+  +       valor: 2000,
+  +       vigencia: '2026-01-01'
+  +     },
+  +     conta_minima: {
+  +       fonte: 'decisão da spec, seção 2',
+  +       valor: 100,
+  +       vigencia: '2026-01-01'
+  +     },
+  +     disponibilidade_kwh_bifasica: {
+  +       fonte: 'regra da ANEEL para ligação bifásica (50 kWh)',
+  +       valor: 50,
+  +       vigencia: '2026-01-01'
+  +     },
+  +     fio_b_kwh: {
+  +       fonte: 'valor de teste, R$ por kWh de energia compensada, com impostos',
+  +       valor: 0.3,
+  +       vigencia: '2026-01-01'
+  +     },
+  +     fio_b_percentual_por_ano: {
+  +       fonte: 'cronograma da Lei 14.300/2022',
+  +       valor: {
+  +         '2026': 0.6,
+  +         '2027': 0.75,
+  +         '2028': 0.9,
+  +         '2029': 1
+  +       },
+  +       vigencia: '2026-01-01'
+  +     },
+  +     geracao_kwh_por_kwp_mes: {
+  +       fonte: 'planilha do Carlos (brief)',
+  +       valor: 115,
+  +       vigencia: '2026-01-01'
+  +     },
+  +     iluminacao_publica: {
+  +       fonte: 'valor de teste, R$ por mês',
+  +       valor: {
+  +         Itu: 25,
+  +         Salto: 25,
+  +         Sorocaba: 25,
+  +         Votorantim: 25
+  +       },
+  +       vigencia: '2026-01-01'
+  +     },
+  +     limite_retorno_anos: {
+  +       fonte: 'decisão da spec, seção 3',
+  +       valor: 6,
+  +       vigencia: '2026-01-01'
+  +     },
+  +     potencia_painel_kwp: {
+  +       fonte: 'painel de 550 W (brief)',
+  +       valor: 0.55,
+  +       vigencia: '2026-01-01'
+  +     },
+  +     preco_kwp_faixas: {
+  +       fonte: 'faixas de teste dentro de R$ 2.300 a R$ 2.900 por kWp (brief); 6,4 kWp x R$ 2.547 = cerca de R$ 16.300, o ticket do brief',
+  +       valor: [
+  +         {
+  +           ate_kwp: 4,
+  +           preco: 2900
+  +         },
+  +         {
+  +           ate_kwp: 8,
+  +           preco: 2547
+  +         },
+  +         {
+  +           ate_kwp: null,
+  +           preco: 2300
+  +         }
+  +       ],
+  +       vigencia: '2026-01-01'
+  +     },
+  +     reajuste_tarifa_anual: {
+  +       fonte: 'decisão da spec, seção 3 (errar contra nós)',
+  +       valor: 0,
+  +       vigencia: '2026-01-01'
+  +     },
+  +     tarifa_kwh: {
+  +       fonte: 'valor que a planilha do Carlos usa (brief); não é a tarifa homologada da CPFL Piratininga',
+  +       valor: 0.95,
+  +       vigencia: '2026-01-01'
+  +     }
+  +   },
+  +   resultado: {
+  +     conta_depois: 172,
+  +     economia_ano1: 5131,
+  +     investimento: 13400,
+  +     kwp: 5.3,
+  +     nao_compensa: false,
+  +     paineis: 10,
+  +     retorno: {
+  +       anos: 2,
+  +       meses: 10,
+  +       total_meses: 34
+  +     }
+  +   },
+  +   whatsapp: '15998760003'
+  + }
+  - null
+  
+      at /Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/autorizacao.test.js:75:12
+      at async comPedidos (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/autorizacao.test.js:30:5)
+      at async TestContext.<anonymous> (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/autorizacao.test.js:72:3)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: { id: 'a984147e-a557-4928-a035-a1cd4f346c26', nome: 'Pessoa de Itu', whatsapp: '15998760003', cidade: 'Itu', conta: '600', resultado: { kwp: 5.3, paineis: 10, retorno: [Object], conta_depois: 172, investimento: 13400, nao_compensa: false, economia_ano1: 5131 }, numeros: { fio_b_kwh: [Object], tarifa_kwh: [Object], conta_maxima: [Object], conta_minima: [Object], preco_kwp_faixas: [Object], iluminacao_publica: [Object], limite_retorno_anos: [Object], potencia_painel_kwp: [Object], reajuste_tarifa_anual: [Object], geracao_kwh_por_kwp_mes: [Object], fio_b_percentual_por_ano: [Object], disponibilidade_kwh_bifasica: [Object] }, estagio: 'chegou' },
+    expected: null,
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+(código de saída 1)
+
+
+=== 3. Regra devolvida ===
+$ git diff --stat lib/banco.js
+(vazio = lib/banco.js igual ao commit)
+
+$ grep -n "cidade = any" lib/banco.js
+71:      : await db.query("select * from pedidos where id = $1 and cidade = any($2::text[])", [id, cidades]);
