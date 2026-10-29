@@ -41,14 +41,24 @@ O servidor só responde com números cadastrados na tabela `numeros_calculo`, co
 
 ## Dados pessoais que o sistema guarda
 
-| Dado | Onde | Para quê | Retenção e exclusão |
-|---|---|---|---|
-| Nome | tabela `leads` | O vendedor da cidade saber a quem responder | Prevista: 12 meses para quem não fechar, com pedido de exclusão. **Não implementada ainda.** |
-| WhatsApp (só dígitos, com DDD) | tabela `leads` | Contato e regra de 24 horas | Igual ao nome. |
-| Cidade e valor da conta | `simulacoes` (e `calculos`, sem pessoa) | Definir quem atende e como a conta foi calculada | Igual ao nome; `calculos` não tem dado pessoal. |
-| Resultado mostrado e números usados | `simulacoes` | O vendedor ver exatamente o que a pessoa viu | Igual ao nome. |
+**Decisões do Lucas em 2026-10-29.** As opções (6, 12 ou 24 meses; apagar tudo ou só nome e WhatsApp; 30 dias, para sempre ou nada para a simulação sem pedido) foram montadas pelo agente, e o Lucas escolheu entre elas. A lista dos dados e a coluna "quem vê" vêm da spec e do brief.
 
-Não guarda: CPF, endereço, número da instalação, foto ou PDF da conta. CPF digitado é recusado antes de gravar. **O aviso de privacidade ainda não aparece na tela**, então hoje o sistema grava nome e WhatsApp sem avisar finalidade, prazo nem como excluir. Isso precisa existir antes de qualquer publicação.
+| Dado | Onde | Para quê | Quem vê | Quanto tempo | O que ficou decidido |
+|---|---|---|---|---|---|
+| Nome | `leads` | O vendedor saber a quem responder | O vendedor da cidade do pedido e o dono | **12 meses** para quem não fechou; para quem fechou, enquanto houver relação comercial | Guarda, porque o vendedor precisa. Limite de 100 caracteres. CPF no nome é recusado. |
+| WhatsApp (só dígitos, com DDD) | `leads` | Contato e a regra de 24 horas | Igual ao nome | Igual ao nome | Guarda, porque é o canal do vendedor. CPF no campo é recusado. |
+| Cidade e valor da conta do pedido | `simulacoes` | Decidir qual vendedor atende e como a conta foi feita | Igual ao nome | Apagados junto com o pedido | Guarda: sem a cidade o pedido não chega ao vendedor certo. |
+| Resultado mostrado e números usados | `simulacoes` | O vendedor ver exatamente o que a pessoa viu | Igual ao nome | Apagados junto com o pedido | Guarda: é o que o C3 exige. |
+| Simulação de quem **não pediu contato** (sem nome nem WhatsApp) | `calculos` | Deixar o pedido nascer da simulação que a pessoa viu | O dono | **30 dias** | Decidido apagar depois de 30 dias, para o banco não encher de simulação que ninguém usou. |
+| Pedido de exclusão | `leads` e `simulacoes` | A pessoa pode pedir | O dono executa | Na hora | **Apaga tudo dela**: o lead e todas as simulações ligadas a ele. Não sobra nada que a identifique nem que ligue a ela. |
+
+**Decidido não guardar:** CPF (recusado antes de gravar, nome e WhatsApp), endereço, número da instalação, foto ou PDF da conta. Motivo: a foto da conta traz CPF, endereço e 12 meses de consumo, e o simulador não precisa de nada disso para calcular. Nenhum dado de pedido vai para log (o teste confere).
+
+**Ainda não feito (decidido, não implementado):** o aviso de privacidade na tela do pedido, a limpeza automática aos 12 meses e aos 30 dias, e o pedido de exclusão. Hoje o sistema grava nome e WhatsApp sem avisar finalidade, prazo nem como excluir. Isso precisa existir antes de qualquer publicação.
+
+## Quem vê o quê (C4)
+
+A regra de acesso mora **na própria consulta ao banco** (`pedidoPara` em `lib/banco.js`, com a cidade do vendedor no `WHERE`). O Carlos vê Sorocaba e Votorantim, a Renata vê Itu e Salto, o dono vê tudo, e quem não se identificou ou não é conhecido não vê nada. Quem não pode ver recebe a mesma resposta de um pedido que nunca existiu. O painel ainda não existe, então o teste (`test/autorizacao.test.js`, 5 testes) pergunta direto ao banco como cada papel. **Provado só no banco de teste (PGlite):** a versão do Supabase (`lib/banco-supabase.js`) tem a mesma regra, lida e não executada. Tirar a regra do `WHERE` de propósito faz 3 dos 5 testes falharem (`evidencia/autorizacao-2-sem-a-regra.txt`). Quando o painel for feito, ele tem de chamar essa consulta e ganhar o próprio teste de ponta a ponta.
 
 ## O que ficou de fora e por quê
 

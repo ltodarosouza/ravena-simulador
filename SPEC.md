@@ -60,6 +60,8 @@ A cidade do pedido é a do simulador e não é pedida de novo.
 - Mesmo WhatsApp em 24 h conta como o mesmo pedido.
 - O sistema não prova que o WhatsApp é de quem pede (pergunta 4 da seção 11). O limite de pedidos por origem depende de onde o sistema for hospedado e fica para quando a hospedagem existir (pergunta 5).
 - Estágios podem ser mudados em qualquer ordem, inclusive voltando; o histórico fica guardado.
+- Retenção, decidida em 2026-10-29: pedido que não fechou, 12 meses; pedido que fechou, enquanto houver relação comercial; simulação de quem não pediu contato (sem nome nem WhatsApp), 30 dias. Quem pede exclusão tem apagados o lead e todas as simulações dele; não sobra nada ligado a ela.
+- A regra de acesso (C4) mora na própria consulta ao banco: a pergunta é feita em nome de quem pergunta (dono, vendedor com as suas cidades, ou ninguém), e quem não pode ver recebe a mesma resposta de um pedido que nunca existiu. Ela é testada no banco, antes de o painel existir; o painel depois chama a mesma consulta.
 
 ## 6. Critérios de aceitação
 

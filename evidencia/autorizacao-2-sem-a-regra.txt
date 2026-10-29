@@ -1,0 +1,393 @@
+✖ C4: o Carlos vê Sorocaba e Votorantim, e não vê Itu nem Salto (597.576125ms)
+✖ C4: a Renata vê Itu e Salto, e não vê Sorocaba nem Votorantim (412.767708ms)
+✔ C4: o dono vê os quatro (378.54625ms)
+✔ C4: quem não entrou não vê nada, e vendedor desconhecido também não (376.107666ms)
+✖ C4: o pedido de outra cidade responde igual a um pedido que nunca existiu (370.956583ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 2
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2203.304875
+
+✖ failing tests:
+
+test at test/autorizacao.test.js:34:1
+✖ C4: o Carlos vê Sorocaba e Votorantim, e não vê Itu nem Salto (597.576125ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + {
+  +   cidade: 'Itu',
+  +   conta: '600',
+  +   estagio: 'chegou',
+  +   id: 'caddbeab-beb4-4dda-9476-b2d61b9056c3',
+  +   nome: 'Pessoa de Itu',
+  +   numeros: {
+  +     conta_maxima: {
+  +       fonte: 'decisão da spec, seção 2',
+  +       valor: 2000,
+  +       vigencia: '2026-01-01'
+  +     },
+  +     conta_minima: {
+  +       fonte: 'decisão da spec, seção 2',
+  +       valor: 100,
+  +       vigencia: '2026-01-01'
+  +     },
+  +     disponibilidade_kwh_bifasica: {
+  +       fonte: 'regra da ANEEL para ligação bifásica (50 kWh)',
+  +       valor: 50,
+  +       vigencia: '2026-01-01'
+  +     },
+  +     fio_b_kwh: {
+  +       fonte: 'valor de teste, R$ por kWh de energia compensada, com impostos',
+  +       valor: 0.3,
+  +       vigencia: '2026-01-01'
+  +     },
+  +     fio_b_percentual_por_ano: {
+  +       fonte: 'cronograma da Lei 14.300/2022',
+  +       valor: {
+  +         '2026': 0.6,
+  +         '2027': 0.75,
+  +         '2028': 0.9,
+  +         '2029': 1
+  +       },
+  +       vigencia: '2026-01-01'
+  +     },
+  +     geracao_kwh_por_kwp_mes: {
+  +       fonte: 'planilha do Carlos (brief)',
+  +       valor: 115,
+  +       vigencia: '2026-01-01'
+  +     },
+  +     iluminacao_publica: {
+  +       fonte: 'valor de teste, R$ por mês',
+  +       valor: {
+  +         Itu: 25,
+  +         Salto: 25,
+  +         Sorocaba: 25,
+  +         Votorantim: 25
+  +       },
+  +       vigencia: '2026-01-01'
+  +     },
+  +     limite_retorno_anos: {
+  +       fonte: 'decisão da spec, seção 3',
+  +       valor: 6,
+  +       vigencia: '2026-01-01'
+  +     },
+  +     potencia_painel_kwp: {
+  +       fonte: 'painel de 550 W (brief)',
+  +       valor: 0.55,
+  +       vigencia: '2026-01-01'
+  +     },
+  +     preco_kwp_faixas: {
+  +       fonte: 'faixas de teste dentro de R$ 2.300 a R$ 2.900 por kWp (brief); 6,4 kWp x R$ 2.547 = cerca de R$ 16.300, o ticket do brief',
+  +       valor: [
+  +         {
+  +           ate_kwp: 4,
+  +           preco: 2900
+  +         },
+  +         {
+  +           ate_kwp: 8,
+  +           preco: 2547
+  +         },
+  +         {
+  +           ate_kwp: null,
+  +           preco: 2300
+  +         }
+  +       ],
+  +       vigencia: '2026-01-01'
+  +     },
+  +     reajuste_tarifa_anual: {
+  +       fonte: 'decisão da spec, seção 3 (errar contra nós)',
+  +       valor: 0,
+  +       vigencia: '2026-01-01'
+  +     },
+  +     tarifa_kwh: {
+  +       fonte: 'valor que a planilha do Carlos usa (brief); não é a tarifa homologada da CPFL Piratininga',
+  +       valor: 0.95,
+  +       vigencia: '2026-01-01'
+  +     }
+  +   },
+  +   resultado: {
+  +     conta_depois: 172,
+  +     economia_ano1: 5131,
+  +     investimento: 13400,
+  +     kwp: 5.3,
+  +     nao_compensa: false,
+  +     paineis: 10,
+  +     retorno: {
+  +       anos: 2,
+  +       meses: 10,
+  +       total_meses: 34
+  +     }
+  +   },
+  +   whatsapp: '15998760003'
+  + }
+  - null
+  
+      at /Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/autorizacao.test.js:38:12
+      at async comPedidos (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/autorizacao.test.js:30:5)
+      at async TestContext.<anonymous> (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/autorizacao.test.js:35:3)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: { id: 'caddbeab-beb4-4dda-9476-b2d61b9056c3', nome: 'Pessoa de Itu', whatsapp: '15998760003', cidade: 'Itu', conta: '600', resultado: { kwp: 5.3, paineis: 10, retorno: [Object], conta_depois: 172, investimento: 13400, nao_compensa: false, economia_ano1: 5131 }, numeros: { fio_b_kwh: [Object], tarifa_kwh: [Object], conta_maxima: [Object], conta_minima: [Object], preco_kwp_faixas: [Object], iluminacao_publica: [Object], limite_retorno_anos: [Object], potencia_painel_kwp: [Object], reajuste_tarifa_anual: [Object], geracao_kwh_por_kwp_mes: [Object], fio_b_percentual_por_ano: [Object], disponibilidade_kwh_bifasica: [Object] }, estagio: 'chegou' },
+    expected: null,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/autorizacao.test.js:43:1
+✖ C4: a Renata vê Itu e Salto, e não vê Sorocaba nem Votorantim (412.767708ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + {
+  +   cidade: 'Sorocaba',
+  +   conta: '600',
+  +   estagio: 'chegou',
+  +   id: '640baf9c-b800-47aa-a14f-b657e2393aa2',
+  +   nome: 'Pessoa de Sorocaba',
+  +   numeros: {
+  +     conta_maxima: {
+  +       fonte: 'decisão da spec, seção 2',
+  +       valor: 2000,
+  +       vigencia: '2026-01-01'
+  +     },
+  +     conta_minima: {
+  +       fonte: 'decisão da spec, seção 2',
+  +       valor: 100,
+  +       vigencia: '2026-01-01'
+  +     },
+  +     disponibilidade_kwh_bifasica: {
+  +       fonte: 'regra da ANEEL para ligação bifásica (50 kWh)',
+  +       valor: 50,
+  +       vigencia: '2026-01-01'
+  +     },
+  +     fio_b_kwh: {
+  +       fonte: 'valor de teste, R$ por kWh de energia compensada, com impostos',
+  +       valor: 0.3,
+  +       vigencia: '2026-01-01'
+  +     },
+  +     fio_b_percentual_por_ano: {
+  +       fonte: 'cronograma da Lei 14.300/2022',
+  +       valor: {
+  +         '2026': 0.6,
+  +         '2027': 0.75,
+  +         '2028': 0.9,
+  +         '2029': 1
+  +       },
+  +       vigencia: '2026-01-01'
+  +     },
+  +     geracao_kwh_por_kwp_mes: {
+  +       fonte: 'planilha do Carlos (brief)',
+  +       valor: 115,
+  +       vigencia: '2026-01-01'
+  +     },
+  +     iluminacao_publica: {
+  +       fonte: 'valor de teste, R$ por mês',
+  +       valor: {
+  +         Itu: 25,
+  +         Salto: 25,
+  +         Sorocaba: 25,
+  +         Votorantim: 25
+  +       },
+  +       vigencia: '2026-01-01'
+  +     },
+  +     limite_retorno_anos: {
+  +       fonte: 'decisão da spec, seção 3',
+  +       valor: 6,
+  +       vigencia: '2026-01-01'
+  +     },
+  +     potencia_painel_kwp: {
+  +       fonte: 'painel de 550 W (brief)',
+  +       valor: 0.55,
+  +       vigencia: '2026-01-01'
+  +     },
+  +     preco_kwp_faixas: {
+  +       fonte: 'faixas de teste dentro de R$ 2.300 a R$ 2.900 por kWp (brief); 6,4 kWp x R$ 2.547 = cerca de R$ 16.300, o ticket do brief',
+  +       valor: [
+  +         {
+  +           ate_kwp: 4,
+  +           preco: 2900
+  +         },
+  +         {
+  +           ate_kwp: 8,
+  +           preco: 2547
+  +         },
+  +         {
+  +           ate_kwp: null,
+  +           preco: 2300
+  +         }
+  +       ],
+  +       vigencia: '2026-01-01'
+  +     },
+  +     reajuste_tarifa_anual: {
+  +       fonte: 'decisão da spec, seção 3 (errar contra nós)',
+  +       valor: 0,
+  +       vigencia: '2026-01-01'
+  +     },
+  +     tarifa_kwh: {
+  +       fonte: 'valor que a planilha do Carlos usa (brief); não é a tarifa homologada da CPFL Piratininga',
+  +       valor: 0.95,
+  +       vigencia: '2026-01-01'
+  +     }
+  +   },
+  +   resultado: {
+  +     conta_depois: 172,
+  +     economia_ano1: 5131,
+  +     investimento: 13400,
+  +     kwp: 5.3,
+  +     nao_compensa: false,
+  +     paineis: 10,
+  +     retorno: {
+  +       anos: 2,
+  +       meses: 10,
+  +       total_meses: 34
+  +     }
+  +   },
+  +   whatsapp: '15998760001'
+  + }
+  - null
+  
+      at /Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/autorizacao.test.js:47:12
+      at async comPedidos (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/autorizacao.test.js:30:5)
+      at async TestContext.<anonymous> (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/autorizacao.test.js:44:3)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: { id: '640baf9c-b800-47aa-a14f-b657e2393aa2', nome: 'Pessoa de Sorocaba', whatsapp: '15998760001', cidade: 'Sorocaba', conta: '600', resultado: { kwp: 5.3, paineis: 10, retorno: [Object], conta_depois: 172, investimento: 13400, nao_compensa: false, economia_ano1: 5131 }, numeros: { fio_b_kwh: [Object], tarifa_kwh: [Object], conta_maxima: [Object], conta_minima: [Object], preco_kwp_faixas: [Object], iluminacao_publica: [Object], limite_retorno_anos: [Object], potencia_painel_kwp: [Object], reajuste_tarifa_anual: [Object], geracao_kwh_por_kwp_mes: [Object], fio_b_percentual_por_ano: [Object], disponibilidade_kwh_bifasica: [Object] }, estagio: 'chegou' },
+    expected: null,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/autorizacao.test.js:71:1
+✖ C4: o pedido de outra cidade responde igual a um pedido que nunca existiu (370.956583ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + {
+  +   cidade: 'Itu',
+  +   conta: '600',
+  +   estagio: 'chegou',
+  +   id: '0c8203d2-6a8f-49f0-8791-f66402ad4620',
+  +   nome: 'Pessoa de Itu',
+  +   numeros: {
+  +     conta_maxima: {
+  +       fonte: 'decisão da spec, seção 2',
+  +       valor: 2000,
+  +       vigencia: '2026-01-01'
+  +     },
+  +     conta_minima: {
+  +       fonte: 'decisão da spec, seção 2',
+  +       valor: 100,
+  +       vigencia: '2026-01-01'
+  +     },
+  +     disponibilidade_kwh_bifasica: {
+  +       fonte: 'regra da ANEEL para ligação bifásica (50 kWh)',
+  +       valor: 50,
+  +       vigencia: '2026-01-01'
+  +     },
+  +     fio_b_kwh: {
+  +       fonte: 'valor de teste, R$ por kWh de energia compensada, com impostos',
+  +       valor: 0.3,
+  +       vigencia: '2026-01-01'
+  +     },
+  +     fio_b_percentual_por_ano: {
+  +       fonte: 'cronograma da Lei 14.300/2022',
+  +       valor: {
+  +         '2026': 0.6,
+  +         '2027': 0.75,
+  +         '2028': 0.9,
+  +         '2029': 1
+  +       },
+  +       vigencia: '2026-01-01'
+  +     },
+  +     geracao_kwh_por_kwp_mes: {
+  +       fonte: 'planilha do Carlos (brief)',
+  +       valor: 115,
+  +       vigencia: '2026-01-01'
+  +     },
+  +     iluminacao_publica: {
+  +       fonte: 'valor de teste, R$ por mês',
+  +       valor: {
+  +         Itu: 25,
+  +         Salto: 25,
+  +         Sorocaba: 25,
+  +         Votorantim: 25
+  +       },
+  +       vigencia: '2026-01-01'
+  +     },
+  +     limite_retorno_anos: {
+  +       fonte: 'decisão da spec, seção 3',
+  +       valor: 6,
+  +       vigencia: '2026-01-01'
+  +     },
+  +     potencia_painel_kwp: {
+  +       fonte: 'painel de 550 W (brief)',
+  +       valor: 0.55,
+  +       vigencia: '2026-01-01'
+  +     },
+  +     preco_kwp_faixas: {
+  +       fonte: 'faixas de teste dentro de R$ 2.300 a R$ 2.900 por kWp (brief); 6,4 kWp x R$ 2.547 = cerca de R$ 16.300, o ticket do brief',
+  +       valor: [
+  +         {
+  +           ate_kwp: 4,
+  +           preco: 2900
+  +         },
+  +         {
+  +           ate_kwp: 8,
+  +           preco: 2547
+  +         },
+  +         {
+  +           ate_kwp: null,
+  +           preco: 2300
+  +         }
+  +       ],
+  +       vigencia: '2026-01-01'
+  +     },
+  +     reajuste_tarifa_anual: {
+  +       fonte: 'decisão da spec, seção 3 (errar contra nós)',
+  +       valor: 0,
+  +       vigencia: '2026-01-01'
+  +     },
+  +     tarifa_kwh: {
+  +       fonte: 'valor que a planilha do Carlos usa (brief); não é a tarifa homologada da CPFL Piratininga',
+  +       valor: 0.95,
+  +       vigencia: '2026-01-01'
+  +     }
+  +   },
+  +   resultado: {
+  +     conta_depois: 172,
+  +     economia_ano1: 5131,
+  +     investimento: 13400,
+  +     kwp: 5.3,
+  +     nao_compensa: false,
+  +     paineis: 10,
+  +     retorno: {
+  +       anos: 2,
+  +       meses: 10,
+  +       total_meses: 34
+  +     }
+  +   },
+  +   whatsapp: '15998760003'
+  + }
+  - null
+  
+      at /Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/autorizacao.test.js:75:12
+      at async comPedidos (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/autorizacao.test.js:30:5)
+      at async TestContext.<anonymous> (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/autorizacao.test.js:72:3)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: { id: '0c8203d2-6a8f-49f0-8791-f66402ad4620', nome: 'Pessoa de Itu', whatsapp: '15998760003', cidade: 'Itu', conta: '600', resultado: { kwp: 5.3, paineis: 10, retorno: [Object], conta_depois: 172, investimento: 13400, nao_compensa: false, economia_ano1: 5131 }, numeros: { fio_b_kwh: [Object], tarifa_kwh: [Object], conta_maxima: [Object], conta_minima: [Object], preco_kwp_faixas: [Object], iluminacao_publica: [Object], limite_retorno_anos: [Object], potencia_painel_kwp: [Object], reajuste_tarifa_anual: [Object], geracao_kwh_por_kwp_mes: [Object], fio_b_percentual_por_ano: [Object], disponibilidade_kwh_bifasica: [Object] }, estagio: 'chegou' },
+    expected: null,
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }

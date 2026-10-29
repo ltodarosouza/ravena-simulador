@@ -1,0 +1,13 @@
+✔ C4: o Carlos vê Sorocaba e Votorantim, e não vê Itu nem Salto (683.051625ms)
+✔ C4: a Renata vê Itu e Salto, e não vê Sorocaba nem Votorantim (402.184417ms)
+✔ C4: o dono vê os quatro (387.130375ms)
+✔ C4: quem não entrou não vê nada, e vendedor desconhecido também não (385.054208ms)
+✔ C4: o pedido de outra cidade responde igual a um pedido que nunca existiu (369.244958ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2294.4115
