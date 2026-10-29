@@ -1,0 +1,29 @@
+T0 chaves da resposta de /api/simular: simulacao_id,kwp,paineis,investimento,conta_depois,economia_ano1,retorno,nao_compensa
+
+T1 corpo de 30 MB no campo nome (text/plain, sem limite):
+ status 413 linhas/len gravado: undefined ms 28
+
+T2 corrida: 6 pedidos simultâneos, mesmo WhatsApp:
+ respostas: 201,201,201,201,201,201 pedidos gravados: 1
+
+T3 envenenar número alheio (vítima 15999990003):
+ atacante: 201 {"mensagem":"Pedido recebido."} | vítima depois: 201 {"mensagem":"Pedido recebido."}
+ no painel só existe: [{"nome":"Fulano Falso"}]
+
+T4 CPF válido 529.982.247-25 em algarismos de largura total no nome:
+ largura total: 422 {"erro":"nome_com_cpf","mensagem":"Digite só o seu nome. Não pedimos CPF."} | ASCII (controle): 422 {"erro":"nome_com_cpf","mensagem":"Digite só o seu nome. Não pedimos CPF."}
+ gravado: []
+
+T5 entradas malformadas:
+  null em /api/pedido -> 400 {"erro":"corpo_invalido"}
+  null em /api/simular -> 400 {"erro":"corpo_invalido"}
+  simulacao_id='abc' -> 422 {"erro":"simulacao_inexistente","mensagem":"Faça a simulação de novo."}
+  simulacao_id objeto -> 422 {"erro":"simulacao_inexistente","mensagem":"Faça a simulação de novo."}
+  simulacao_id ausente -> 422 {"erro":"simulacao_inexistente","mensagem":"Faça a simulação de novo."}
+ stderr do servidor: []
+
+T6 inundação de /api/simular sem pedido (1500 chamadas, 20 em paralelo):
+ linhas antes 2 depois 1502 em 276 ms (sem login, sem limite)
+
+T7 simulação velha serve para pedido depois que o simulador parou de responder:
+ /api/simular agora: 503 | /api/pedido com id antigo: 503 {"erro":"sem_valor_vigente","mensagem":"O simulador está em atualização. Tente mais tarde."}

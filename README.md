@@ -37,7 +37,7 @@ O servidor só responde com números cadastrados na tabela `numeros_calculo`, co
 - **Valor da conta no jeito brasileiro** ("R$ 1.234,56", "1234,56", "1.234"); notação científica é recusada. O campo da página é texto com teclado numérico.
 - **Um CPF nunca entra:** nem no campo nome, nem no campo WhatsApp (11 dígitos que fecham como CPF). Custo conhecido: cerca de 1 em cada 100 celulares fecha como CPF por acaso e é recusado com a mensagem de digitar o WhatsApp com DDD.
 - **O DDD não é comparado com a cidade:** a pessoa pode ter número de outro lugar.
-- **Mesmo WhatsApp em 24 horas é o mesmo pedido.** Consequência conhecida: uma segunda simulação de **outra cidade** com o mesmo contato recebe "já recebemos" e não chega ao vendedor daquela cidade. A spec decidiu assim; a pergunta de mudar isso ainda é do dono.
+- **Mesmo WhatsApp em 24 horas é o mesmo pedido.** Consequência conhecida: uma segunda simulação de **outra cidade** com o mesmo contato recebe a mesma resposta de pedido recebido (a tela não revela que o número já pediu) e o pedido não chega ao vendedor daquela cidade. A spec decidiu assim; a pergunta de mudar isso ainda é do dono.
 
 ## Dados pessoais que o sistema guarda
 
@@ -76,6 +76,26 @@ Está na seção 4 da spec: foto ou PDF da conta (traz CPF, endereço e 12 meses
 | 10b | Fio B limitado ao primeiro e ao último ano | **Recusar** | A Lei 14.300 fixa 100% de 2029 em diante; usar o último ano é o comportamento certo. Antes de 2026 não ocorre. |
 | 10c | Esquema de teste paralelo (PGlite) | **Deixar** | Evita testar em cima de dado real da P1 e deixa a CI sem chave. O C3 roda no banco de verdade com `TESTAR_NO_SUPABASE=1`. |
 | 11 | CPF em log sem teste | **Recusar** (metade do nome) e **corrigir** (metade do WhatsApp) | O revisor errou na parte do nome: o teste já captura o log. Na parte do WhatsApp ele acertou: não havia teste que provasse o log limpo. O servidor só registra três coisas (`server.js:61`, `:73`, `:78`; `lib/` não registra nada), e a de `:61` imprime exceções, que poderiam carregar um valor. O teste de WhatsApp agora captura o log, e uma mudança de propósito (registrar o corpo do pedido) o faz falhar (`evidencia/revisao-3-log-whatsapp-mutacao.txt`). |
+
+## Revisão de segurança (aula 2.13)
+
+- **Como foi feita:** um revisor em contexto limpo (subagente, que não viu a construção) recebeu só o pedido de [`revisao/pedido-seguranca.md`](revisao/pedido-seguranca.md): o repositório, a pergunta "o que alguém mal-intencionado faz com isto?" e a lista OWASP Top 10 de 2025, com a obrigação de responder os dez itens (inclusive "não se aplica, porque..."). O relatório, como veio: [`revisao/seguranca-lista-bruta.md`](revisao/seguranca-lista-bruta.md): 6 achados (1 alto, 1 médio, 4 baixos).
+- **Conferência:** o agente que escreveu o código rodou de novo o script de ataque do revisor e os casos se repetiram (`evidencia/seguranca-4-ataque-depois.txt` tem a mesma bateria depois da correção).
+- **Quem julga:** a classificação foi **proposta pelo agente**; o Lucas decidiu corrigir tudo o que foi proposto abaixo. A regra da aula: corrige-se o que muda quem alcança o quê (acesso, entrada, segredo); o resto fica de fora com o motivo escrito.
+- **Limite do revisor:** tudo foi provado no banco de teste (PGlite). O caminho do Supabase real tem a mesma lógica, mas o que vale só nele foi lido, não executado. Um comando dele foi barrado (busca de chaves coladas em todo o histórico), então isso ficou sem verificar pelo revisor.
+
+| # | Achado | Caixa | O que foi feito e por quê |
+|---|---|---|---|
+| 1 | Corpo sem teto (nome de 30 MB gravado) e simulações sem limite | **Corrigir** (teto); **deixar** (limite por origem) | O servidor guarda no máximo 10 KB do corpo e responde 413; o nome tem no máximo 100 caracteres. O limite de pedidos por origem depende da hospedagem, que não existe: pergunta 5 da spec. **Hoje, 1500 simulações seguidas ainda gravam 1500 linhas.** |
+| 2 | Pedido com o WhatsApp de outro trava o dele por 24 h, e "já recebemos" revelava quem pediu | **Corrigir** (o vazamento); **deixar** (a prova de posse) | Pedido repetido e novo têm agora a mesma resposta. A trava de 24 h continua, porque provar que o número é de quem pede muda o produto: pergunta 4 da spec, do dono. |
+| 3 | Simulação antiga ainda gera pedido sem número vigente | **Corrigir** | O C6 vale para o pedido: sem número vigente, 503 e nada gravado. A spec mudou antes. |
+| 4 | CPF em algarismos de largura total passa no nome | **Corrigir** | Os algarismos de qualquer alfabeto viram 0 a 9 antes de procurar CPF (nome e WhatsApp). |
+| 5 | Corpo `null` ou id inválido dá 500 | **Corrigir** | Corpo que não é um objeto: 400. Id que não parece identificador: "faça a simulação de novo". |
+| 6 | Script de números sobrescreve sem histórico | **Deixar** | É a tela do dono (fatia 4); o pedido já guarda uma cópia dos números usados. |
+| — | Corrida entre dois pedidos no Supabase (não reproduzida) | **Deixar** | Não confirmada; se for provada, a saída é uma restrição única no banco. |
+| — | O servidor roda com a chave secreta, que ignora RLS | **Recusar** | É o desenho da spec (chave só no servidor). A defesa é o servidor validar tudo o que entra, que é o que os itens 1, 4 e 5 fazem. |
+
+Cada correção tem teste que falhou antes e passa depois (`evidencia/seguranca-1-vermelho.txt`, `seguranca-2-verde.txt`), e quebrar cada uma de propósito faz o teste dela falhar (`evidencia/seguranca-3-mutacoes.txt`).
 
 ## Evidência
 

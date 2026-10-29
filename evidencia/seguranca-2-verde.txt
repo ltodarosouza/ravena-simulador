@@ -1,0 +1,62 @@
+
+> ravena-simulador@1.0.0 test
+> node --test test/criterios.test.js test/dado-pessoal.test.js test/whatsapp.test.js test/valor-da-conta.test.js test/revisao.test.js test/seguranca.test.js
+
+✔ C1: R$ 600 em Sorocaba mostra os seis resultados, na forma pedida (0.965125ms)
+✔ C1: com os números do dono, o retorno de R$ 600 em Sorocaba não é menor que 3 anos (0.248958ms) # pendente: rode com TESTAR_NO_SUPABASE=1 e com os números do dono no banco (seção 11 da spec)
+✔ C1: os cálculos internos não são arredondados e o painel recebe o que a tela mostrou (0.341125ms)
+✔ sem valor vigente o simulador não responde (0.405625ms)
+✔ C6: sem os números do dono, /api/simular recusa com aviso e não calcula (2474.404084ms)
+✔ C3 (PGlite): o pedido tem o valor digitado, a cidade, os resultados como mostrados e os números usados (1413.01025ms)
+✔ C5, controle: nome normal cria o pedido (2590.00075ms)
+✔ C5: CPF válido no campo nome (com pontos e traço) é recusado e não entra em tabela nem log (1558.625334ms)
+✔ C5: CPF válido no campo nome (só dígitos) é recusado e não entra em tabela nem log (768.118333ms)
+✔ C5: CPF válido no campo nome (no meio de uma frase) é recusado e não entra em tabela nem log (599.567541ms)
+✔ C5: CPF válido no campo nome (separado por espaços) é recusado e não entra em tabela nem log (607.533667ms)
+✔ a faixa de R$ 100 a R$ 2.000: fora dela não calcula, nas pontas calcula (1.27125ms)
+✔ cidade fora da lista, vazia ou ausente não calcula (0.273458ms)
+✔ R$ 600 em Sorocaba dá os números feitos à mão (0.6355ms)
+✔ o ano muda o Fio B e, com ele, o retorno (a conta é projetada ano a ano) (0.143417ms)
+✔ R$ 100 passa do limite de retorno e é marcado como não compensa (0.157542ms)
+✔ número cadastrado errado (tarifa zero): o simulador não responde e não grava conta (2545.889333ms)
+✔ número cadastrado errado (tarifa negativa): o simulador não responde e não grava conta (1641.374541ms)
+✔ número cadastrado errado (geração por kWp zero): o simulador não responde e não grava conta (866.687875ms)
+✔ número cadastrado errado (potência do painel zero): o simulador não responde e não grava conta (611.999875ms)
+✔ número cadastrado errado (Fio B acima de 100%): o simulador não responde e não grava conta (595.152125ms)
+✔ número cadastrado errado (tarifa que não é número): o simulador não responde e não grava conta (406ms)
+✔ simulação que não compensa: o servidor recusa o pedido e não grava a pessoa (433.224041ms)
+✔ simulação que compensa continua podendo virar pedido (429.01425ms)
+✔ a página trata nao_compensa: mostra a mensagem e esconde o formulário de pedido (0.249792ms)
+✔ o campo da conta aceita texto (R$ 1.234,56), não só número (0.070167ms)
+✔ Segurança 1: corpo grande é recusado e nada é gravado (2492.677667ms)
+✔ Segurança 1: nome de 101 caracteres é recusado, de 100 passa (1178.826209ms)
+✔ Segurança 2: pedido repetido tem a mesma resposta de um pedido novo (940.150542ms)
+✔ Segurança 3: sem número vigente o pedido não é gravado, mesmo de simulação antiga (634.769209ms)
+✔ Segurança 4: CPF no nome (largura total) é recusado e não é gravado (631.819417ms)
+✔ Segurança 4: CPF no nome (algarismos árabes) é recusado e não é gravado (530.332458ms)
+✔ Segurança 4: CPF no nome (controle ASCII) é recusado e não é gravado (404.654708ms)
+✔ Segurança 4: CPF em largura total no WhatsApp também é recusado (438.304209ms)
+✔ Segurança 5: null em /api/pedido dá 400, não 500 (410.293167ms)
+✔ Segurança 5: null em /api/simular dá 400, não 500 (383.225333ms)
+✔ Segurança 5: lista em /api/pedido dá 400, não 500 (474.291625ms)
+✔ Segurança 5: texto em /api/simular dá 400, não 500 (385.801917ms)
+✔ Segurança 5: número em /api/pedido dá 400, não 500 (379.641458ms)
+✔ Segurança 5: simulacao_id texto qualquer dá "faça de novo", não 500 (370.678417ms)
+✔ Segurança 5: simulacao_id objeto dá "faça de novo", não 500 (448.10875ms)
+✔ Segurança 5: simulacao_id número dá "faça de novo", não 500 (397.296375ms)
+✔ conta escrita no jeito brasileiro dá a mesma simulação que o número puro (2502.694125ms)
+✔ conta que não é número continua recusada (1403.175541ms)
+✔ conta no formato já aceito continua valendo (861.397208ms)
+✔ WhatsApp: CPF válido (só dígitos) é recusado e não é gravado (2543.307208ms)
+✔ WhatsApp: CPF válido (com pontos e traço) é recusado e não é gravado (1587.118541ms)
+✔ WhatsApp, controle: celular normal (787.107833ms)
+✔ WhatsApp, controle: com +55 (573.406083ms)
+✔ WhatsApp, controle: número de outro país (607.17ms)
+ℹ tests 50
+ℹ suites 0
+ℹ pass 49
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 1
+ℹ duration_ms 10584.899291

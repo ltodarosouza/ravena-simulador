@@ -91,7 +91,7 @@ for (const [nomeBanco, abrirBanco] of bancos) {
       const enviado = await post("/api/pedido", { simulacao_id, nome: "Maria Teste", whatsapp: zap });
       assert.equal(enviado.status, 201);
 
-      const linha = await banco.pedido(enviado.corpo.id);
+      const linha = await banco.ultimoPedidoDe(zap);
       assert.equal(Number(linha.conta), 600);
       assert.equal(linha.cidade, "Sorocaba");
       assert.equal(linha.whatsapp, zap);
@@ -105,8 +105,8 @@ for (const [nomeBanco, abrirBanco] of bancos) {
       const outra = await post("/api/simular", { conta: 800, cidade: "Itu" });
       calculos.push(outra.corpo.simulacao_id);
       const repetido = await post("/api/pedido", { simulacao_id: outra.corpo.simulacao_id, nome: "Maria Teste", whatsapp: zap });
-      assert.equal(repetido.corpo.duplicado, true);
-      assert.match(repetido.corpo.mensagem, /Já recebemos/);
+      assert.equal(repetido.status, enviado.status, "a resposta não revela que o número já pediu");
+      assert.deepEqual(repetido.corpo, enviado.corpo, "corpo idêntico ao de um pedido novo");
       assert.equal(await banco.contarPedidos(zap), 1);
 
       // depois de 24 h o mesmo WhatsApp vale de novo

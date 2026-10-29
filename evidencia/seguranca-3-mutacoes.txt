@@ -1,0 +1,22 @@
+[teto do corpo some] testes que falharam:
+✖ Segurança 1: corpo grande é recusado e nada é gravado (892.711875ms)
+[teto do nome some] testes que falharam:
+✖ Segurança 1: nome de 101 caracteres é recusado, de 100 passa (444.96925ms)
+[pedido repetido volta a avisar] testes que falharam:
+✖ C3 (PGlite): o pedido tem o valor digitado, a cidade, os resultados como mostrados e os números usados (454.734667ms)
+✖ Segurança 2: pedido repetido tem a mesma resposta de um pedido novo (406.160875ms)
+[pedido sem checar número vigente] MUTAÇÃO NÃO APLICOU
+[CPF só enxerga 0-9] testes que falharam:
+✖ Segurança 4: CPF no nome (algarismos árabes) é recusado e não é gravado (382.0575ms)
+✖ Segurança 4: CPF no nome (largura total) é recusado e não é gravado (379.022666ms)
+[corpo null volta a dar 500] testes que falharam:
+✖ Segurança 5: lista em /api/pedido dá 400, não 500 (348.358792ms)
+✖ Segurança 5: null em /api/pedido dá 400, não 500 (370.805834ms)
+✖ Segurança 5: null em /api/simular dá 400, não 500 (374.169125ms)
+✖ Segurança 5: número em /api/pedido dá 400, não 500 (362.428042ms)
+[id de simulação sem conferir] testes que falharam:
+✖ Segurança 5: simulacao_id número dá "faça de novo", não 500 (364.211084ms)
+✖ Segurança 5: simulacao_id objeto dá "faça de novo", não 500 (369.419292ms)
+✖ Segurança 5: simulacao_id texto qualquer dá "faça de novo", não 500 (346.399042ms)
+[pedido sem checar número vigente] testes que falharam:
+✖ Segurança 3: sem número vigente o pedido não é gravado, mesmo de simulação antiga (373.071084ms)

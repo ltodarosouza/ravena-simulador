@@ -1,0 +1,362 @@
+
+> ravena-simulador@1.0.0 test
+> node --test test/criterios.test.js test/dado-pessoal.test.js test/whatsapp.test.js test/valor-da-conta.test.js test/revisao.test.js test/seguranca.test.js
+
+✔ C1: R$ 600 em Sorocaba mostra os seis resultados, na forma pedida (0.638084ms)
+✔ C1: com os números do dono, o retorno de R$ 600 em Sorocaba não é menor que 3 anos (0.08275ms) # pendente: rode com TESTAR_NO_SUPABASE=1 e com os números do dono no banco (seção 11 da spec)
+✔ C1: os cálculos internos não são arredondados e o painel recebe o que a tela mostrou (0.08825ms)
+✔ sem valor vigente o simulador não responde (1.021125ms)
+✔ C6: sem os números do dono, /api/simular recusa com aviso e não calcula (3297.823625ms)
+✖ C3 (PGlite): o pedido tem o valor digitado, a cidade, os resultados como mostrados e os números usados (1602.763417ms)
+✔ C5, controle: nome normal cria o pedido (3373.917917ms)
+✔ C5: CPF válido no campo nome (com pontos e traço) é recusado e não entra em tabela nem log (2158.330666ms)
+✔ C5: CPF válido no campo nome (só dígitos) é recusado e não entra em tabela nem log (1188.719333ms)
+✔ C5: CPF válido no campo nome (no meio de uma frase) é recusado e não entra em tabela nem log (747.945917ms)
+✔ C5: CPF válido no campo nome (separado por espaços) é recusado e não entra em tabela nem log (715.91975ms)
+✔ a faixa de R$ 100 a R$ 2.000: fora dela não calcula, nas pontas calcula (0.606583ms)
+✔ cidade fora da lista, vazia ou ausente não calcula (0.122292ms)
+✔ R$ 600 em Sorocaba dá os números feitos à mão (0.312625ms)
+✔ o ano muda o Fio B e, com ele, o retorno (a conta é projetada ano a ano) (0.073958ms)
+✔ R$ 100 passa do limite de retorno e é marcado como não compensa (0.047958ms)
+✔ número cadastrado errado (tarifa zero): o simulador não responde e não grava conta (3303.589ms)
+✔ número cadastrado errado (tarifa negativa): o simulador não responde e não grava conta (1536.522916ms)
+✔ número cadastrado errado (geração por kWp zero): o simulador não responde e não grava conta (1112.508791ms)
+✔ número cadastrado errado (potência do painel zero): o simulador não responde e não grava conta (1011.639917ms)
+✔ número cadastrado errado (Fio B acima de 100%): o simulador não responde e não grava conta (673.711291ms)
+✔ número cadastrado errado (tarifa que não é número): o simulador não responde e não grava conta (673.501167ms)
+✔ simulação que não compensa: o servidor recusa o pedido e não grava a pessoa (433.286125ms)
+✔ simulação que compensa continua podendo virar pedido (484.477666ms)
+✔ a página trata nao_compensa: mostra a mensagem e esconde o formulário de pedido (0.260542ms)
+✔ o campo da conta aceita texto (R$ 1.234,56), não só número (0.074125ms)
+✖ Segurança 1: corpo grande é recusado e nada é gravado (3384.510708ms)
+✖ Segurança 1: nome de 101 caracteres é recusado, de 100 passa (1951.739ms)
+✖ Segurança 2: pedido repetido tem a mesma resposta de um pedido novo (1093.0065ms)
+✖ Segurança 3: sem número vigente o pedido não é gravado, mesmo de simulação antiga (793.056959ms)
+✖ Segurança 4: CPF no nome (largura total) é recusado e não é gravado (809.776542ms)
+✖ Segurança 4: CPF no nome (algarismos árabes) é recusado e não é gravado (502.294917ms)
+✔ Segurança 4: CPF no nome (controle ASCII) é recusado e não é gravado (406.448ms)
+✔ Segurança 4: CPF em largura total no WhatsApp também é recusado (543.210875ms)
+✖ Segurança 5: null em /api/pedido dá 400, não 500 (378.206375ms)
+✖ Segurança 5: null em /api/simular dá 400, não 500 (368.679459ms)
+✖ Segurança 5: lista em /api/pedido dá 400, não 500 (355.828917ms)
+✖ Segurança 5: texto em /api/simular dá 400, não 500 (357.82225ms)
+✖ Segurança 5: número em /api/pedido dá 400, não 500 (354.136ms)
+✖ Segurança 5: simulacao_id texto qualquer dá "faça de novo", não 500 (366.993375ms)
+✖ Segurança 5: simulacao_id objeto dá "faça de novo", não 500 (361.765917ms)
+✖ Segurança 5: simulacao_id número dá "faça de novo", não 500 (363.626125ms)
+✔ conta escrita no jeito brasileiro dá a mesma simulação que o número puro (3391.215917ms)
+✔ conta que não é número continua recusada (2079.980792ms)
+✔ conta no formato já aceito continua valendo (1303.604709ms)
+✔ WhatsApp: CPF válido (só dígitos) é recusado e não é gravado (3388.573208ms)
+✔ WhatsApp: CPF válido (com pontos e traço) é recusado e não é gravado (2035.211792ms)
+✔ WhatsApp, controle: celular normal (1088.360833ms)
+✔ WhatsApp, controle: com +55 (802.397083ms)
+✔ WhatsApp, controle: número de outro país (744.015792ms)
+ℹ tests 50
+ℹ suites 0
+ℹ pass 34
+ℹ fail 15
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 1
+ℹ duration_ms 12484.2345
+
+✖ failing tests:
+
+test at test/criterios.test.js:73:3
+✖ C3 (PGlite): o pedido tem o valor digitado, a cidade, os resultados como mostrados e os números usados (1602.763417ms)
+  AssertionError [ERR_ASSERTION]: a resposta não revela que o número já pediu
+  
+  200 !== 201
+  
+      at TestContext.<anonymous> (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/criterios.test.js:108:14)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 200,
+    expected: 201,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/seguranca.test.js:41:1
+✖ Segurança 1: corpo grande é recusado e nada é gravado (3384.510708ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  201 !== 413
+  
+      at /Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/seguranca.test.js:46:12
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async comServidor (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/seguranca.test.js:31:9)
+      at async TestContext.<anonymous> (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/seguranca.test.js:42:3)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 201,
+    expected: 413,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/seguranca.test.js:51:1
+✖ Segurança 1: nome de 101 caracteres é recusado, de 100 passa (1951.739ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  201 !== 422
+  
+      at /Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/seguranca.test.js:55:12
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async comServidor (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/seguranca.test.js:31:9)
+      at async TestContext.<anonymous> (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/seguranca.test.js:52:3)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 201,
+    expected: 422,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/seguranca.test.js:64:1
+✖ Segurança 2: pedido repetido tem a mesma resposta de um pedido novo (1093.0065ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  200 !== 201
+  
+      at /Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/seguranca.test.js:69:12
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async comServidor (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/seguranca.test.js:31:9)
+      at async TestContext.<anonymous> (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/seguranca.test.js:65:3)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 200,
+    expected: 201,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/seguranca.test.js:77:1
+✖ Segurança 3: sem número vigente o pedido não é gravado, mesmo de simulação antiga (793.056959ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  201 !== 503
+  
+      at /Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/seguranca.test.js:84:12
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async comServidor (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/seguranca.test.js:31:9)
+      at async TestContext.<anonymous> (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/seguranca.test.js:78:3)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 201,
+    expected: 503,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/seguranca.test.js:96:3
+✖ Segurança 4: CPF no nome (largura total) é recusado e não é gravado (809.776542ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  201 !== 422
+  
+      at /Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/seguranca.test.js:100:14
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async comServidor (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/seguranca.test.js:31:9)
+      at async TestContext.<anonymous> (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/seguranca.test.js:97:5)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 201,
+    expected: 422,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/seguranca.test.js:96:3
+✖ Segurança 4: CPF no nome (algarismos árabes) é recusado e não é gravado (502.294917ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  201 !== 422
+  
+      at /Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/seguranca.test.js:100:14
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async comServidor (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/seguranca.test.js:31:9)
+      at async TestContext.<anonymous> (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/seguranca.test.js:97:5)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 201,
+    expected: 422,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/seguranca.test.js:125:3
+✖ Segurança 5: null em /api/pedido dá 400, não 500 (378.206375ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  500 !== 400
+  
+      at /Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/seguranca.test.js:128:14
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async comServidor (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/seguranca.test.js:31:9)
+      at async TestContext.<anonymous> (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/seguranca.test.js:126:5)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 500,
+    expected: 400,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/seguranca.test.js:125:3
+✖ Segurança 5: null em /api/simular dá 400, não 500 (368.679459ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  500 !== 400
+  
+      at /Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/seguranca.test.js:128:14
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async comServidor (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/seguranca.test.js:31:9)
+      at async TestContext.<anonymous> (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/seguranca.test.js:126:5)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 500,
+    expected: 400,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/seguranca.test.js:125:3
+✖ Segurança 5: lista em /api/pedido dá 400, não 500 (355.828917ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  422 !== 400
+  
+      at /Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/seguranca.test.js:128:14
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async comServidor (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/seguranca.test.js:31:9)
+      at async TestContext.<anonymous> (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/seguranca.test.js:126:5)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 422,
+    expected: 400,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/seguranca.test.js:125:3
+✖ Segurança 5: texto em /api/simular dá 400, não 500 (357.82225ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  422 !== 400
+  
+      at /Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/seguranca.test.js:128:14
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async comServidor (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/seguranca.test.js:31:9)
+      at async TestContext.<anonymous> (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/seguranca.test.js:126:5)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 422,
+    expected: 400,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/seguranca.test.js:125:3
+✖ Segurança 5: número em /api/pedido dá 400, não 500 (354.136ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  422 !== 400
+  
+      at /Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/seguranca.test.js:128:14
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async comServidor (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/seguranca.test.js:31:9)
+      at async TestContext.<anonymous> (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/seguranca.test.js:126:5)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 422,
+    expected: 400,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/seguranca.test.js:135:3
+✖ Segurança 5: simulacao_id texto qualquer dá "faça de novo", não 500 (366.993375ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  500 !== 422
+  
+      at /Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/seguranca.test.js:138:14
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async comServidor (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/seguranca.test.js:31:9)
+      at async TestContext.<anonymous> (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/seguranca.test.js:136:5)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 500,
+    expected: 422,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/seguranca.test.js:135:3
+✖ Segurança 5: simulacao_id objeto dá "faça de novo", não 500 (361.765917ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  500 !== 422
+  
+      at /Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/seguranca.test.js:138:14
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async comServidor (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/seguranca.test.js:31:9)
+      at async TestContext.<anonymous> (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/seguranca.test.js:136:5)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 500,
+    expected: 422,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/seguranca.test.js:135:3
+✖ Segurança 5: simulacao_id número dá "faça de novo", não 500 (363.626125ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  500 !== 422
+  
+      at /Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/seguranca.test.js:138:14
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async comServidor (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/seguranca.test.js:31:9)
+      at async TestContext.<anonymous> (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/seguranca.test.js:136:5)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 500,
+    expected: 422,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
