@@ -1,0 +1,127 @@
+$ grep -rnoE "[0-9]{3}\.[0-9]{3}\.[0-9]{3}-[0-9]{2}" . --exclude-dir=node_modules --exclude-dir=.git --exclude=package-lock.json --exclude=dado-real-busca.txt   # CPF com pontuação
+test/whatsapp.test.js:25:529.982.247-25
+test/dado-pessoal.test.js:10:529.982.247-25
+evidencia/dado-real-busca.txt:2:529.982.247-25
+evidencia/dado-real-busca.txt:3:529.982.247-25
+evidencia/seguranca-4-ataque-depois.txt:13:529.982.247-25
+cenarios/fatia-2.md:13:529.982.247-25
+
+$ grep -rnoE "(^|[^0-9])[0-9]{11}([^0-9]|$)" test scripts lib server.js public cenarios depuracao evidencia revisao README.md SPEC.md brief.md referencia   # 11 dígitos soltos (CPF ou celular)
+test/whatsapp.test.js:24: 52998224725 
+test/whatsapp.test.js:25:"52998224725"
+test/whatsapp.test.js:40:/52998224725/
+test/dado-pessoal.test.js:28:"15998765432"
+test/dado-pessoal.test.js:30:"15998765432"
+test/dado-pessoal.test.js:37:"52998224725"
+test/dado-pessoal.test.js:48:"15998765432"
+test/dado-pessoal.test.js:54:"15998765432"
+test/revisao.test.js:96:"15998765432"
+test/revisao.test.js:100:"15998765432"
+test/revisao.test.js:107:"15998765432"
+test/seguranca.test.js:10:"52998224725"
+test/seguranca.test.js:44:"15998765432"
+test/seguranca.test.js:54:"15998765432"
+test/seguranca.test.js:58:"15998765432"
+test/seguranca.test.js:67:"15998765432"
+test/seguranca.test.js:68:"15998765432"
+test/seguranca.test.js:83:"15998765432"
+test/seguranca.test.js:99:"15998765432"
+test/seguranca.test.js:137:"15998765432"
+cenarios/fatia-2.md:14: 15998765432;
+evidencia/seguranca-4-ataque-depois.txt:9: 15999990003)
+evidencia/fatia-1.txt:30:"15998765432"
+revisao/seguranca-lista-bruta.md:49: 52998224725`
+
+$ grep -rnoE "\(?[0-9]{2}\)? ?9?[0-9]{4}-[0-9]{4}" . --exclude-dir=node_modules --exclude-dir=.git --exclude=package-lock.json --exclude=dado-real-busca.txt   # telefone com traço
+test/whatsapp.test.js:48:(15) 99876-5432
+test/whatsapp.test.js:49:(15) 99876-5432
+evidencia/dado-real-busca.txt:36:(15) 99876-5432
+evidencia/dado-real-busca.txt:37:(15) 99876-5432
+evidencia/revisao-3-log-whatsapp-mutacao.txt:3:(15) 99876-5432
+evidencia/revisao-3-log-whatsapp-mutacao.txt:5:(15) 99876-5432
+scripts/evidencia.js:19:(15) 99876-5432
+cenarios/fatia-2.md:14:(15) 99876-5432
+
+$ find . -name "*.log" -not -path "./node_modules/*" -not -path "./.git/*"   # arquivos de log
+(fim)
+
+$ ls *.png *.jpg *.jpeg *.pdf *.heic public/*.png; find . -type f ( -iname "*.png" -o -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.pdf" -o -iname "*.heic" ) fora de node_modules e .git
+(fim)
+
+$ grep -rnE "whatsapp: ?|nome: ?|\"11900000\"|\+1 415" test scripts | cut   # o que cada teste usa de nome e WhatsApp
+scripts/evidencia.js:19:nome: "Maria Souza"
+scripts/evidencia.js:19:whatsapp: "(15) 99876-5432"
+test/criterios.test.js:107:nome: "Maria Teste"
+test/criterios.test.js:114:nome: "Maria Teste"
+test/criterios.test.js:119:nome: " "
+test/criterios.test.js:120:nome: "Ana Teste"
+test/criterios.test.js:120:whatsapp: "123"
+test/criterios.test.js:83:"11900000" + String(Math.floor(Math.random() * 900) + 100)
+test/criterios.test.js:91:nome: "Maria Teste"
+test/dado-pessoal.test.js:28:nome: "Maria Souza"
+test/dado-pessoal.test.js:28:whatsapp: "15998765432"
+test/dado-pessoal.test.js:48:whatsapp: "15998765432"
+test/revisao.test.js:107:nome: "Maria Souza"
+test/revisao.test.js:107:whatsapp: "15998765432"
+test/revisao.test.js:96:nome: "Maria Souza"
+test/revisao.test.js:96:whatsapp: "15998765432"
+test/seguranca.test.js:111:nome: "Maria Souza"
+test/seguranca.test.js:137:nome: "Maria Souza"
+test/seguranca.test.js:137:whatsapp: "15998765432"
+test/seguranca.test.js:44:nome: "A"
+test/seguranca.test.js:44:whatsapp: "15998765432"
+test/seguranca.test.js:54:nome: "A"
+test/seguranca.test.js:54:whatsapp: "15998765432"
+test/seguranca.test.js:58:nome: "A"
+test/seguranca.test.js:58:whatsapp: "15998765432"
+test/seguranca.test.js:67:nome: "Maria Souza"
+test/seguranca.test.js:67:whatsapp: "15998765432"
+test/seguranca.test.js:68:nome: "Outra Pessoa"
+test/seguranca.test.js:68:whatsapp: "15998765432"
+test/seguranca.test.js:83:nome: "Maria Souza"
+test/seguranca.test.js:83:whatsapp: "15998765432"
+test/seguranca.test.js:99:whatsapp: "15998765432"
+test/whatsapp.test.js:33:nome: "Maria Souza"
+test/whatsapp.test.js:50:+1 415 555 2671
+test/whatsapp.test.js:55:nome: "Maria Souza"
+
+$ node -e (confere se cada número é um CPF válido, pelo cálculo dos dígitos verificadores)
+52998224725 fecha como CPF válido
+15998765432 não é CPF
+15999990003 não é CPF
+15998765432 não é CPF
+11900000123 não é CPF
+
+$ git grep -I -l -E "sb_secret_[A-Za-z0-9]|eyJ[A-Za-z0-9_-]{20,}\.[A-Za-z0-9_-]{20,}|service_role" $(git rev-list --all)   # chave em todo o histórico do simulador (só nomes de arquivo)
+(saída acima; vazia = nenhum arquivo em nenhum commit; código de saída 1)
+
+$ git rev-list --all | wc -l
+      25
+
+$ git log --all --oneline -- .env .env.local | wc -l
+       0
+
+$ (mesma busca na landing-solar, todos os branches)
+39862d654a9d9e8d225532ca298753953c5e2f4d:scripts/check.cjs
+39862d654a9d9e8d225532ca298753953c5e2f4d:supabase/config.toml
+a8778b13af1b256e1e8ec2da5aebc519cc859d3d:scripts/check.cjs
+a8778b13af1b256e1e8ec2da5aebc519cc859d3d:supabase/config.toml
+32e06d73fa4d974c401440ba1002a6d5498da864:scripts/check.cjs
+32e06d73fa4d974c401440ba1002a6d5498da864:supabase/config.toml
+b0bb771e30d0c8fc1b0606d2f7d54f64ee40e650:.env.example
+b0bb771e30d0c8fc1b0606d2f7d54f64ee40e650:supabase/config.toml
+a3e4206519a455eefd631431175687bca433be44:.env.example
+a3e4206519a455eefd631431175687bca433be44:supabase/config.toml
+83646d7498d98c266a3db5b0b61c584a3bd11bc1:.env.example
+83646d7498d98c266a3db5b0b61c584a3bd11bc1:supabase/config.toml
+0d6e64d2da71408e5349c989f84bb603e69e8f3d:.env.example
+0d6e64d2da71408e5349c989f84bb603e69e8f3d:supabase/config.toml
+27962b5b5a64dc3562ef7b5635da7f11cb75b125:.env.example
+27962b5b5a64dc3562ef7b5635da7f11cb75b125:supabase/config.toml
+106b640437927853557c707fba8c1c56c34ab241:.env.example
+106b640437927853557c707fba8c1c56c34ab241:supabase/config.toml
+4f61659d1e4f1f01293acf5e8387fe4c1b4fad0f:.env.example
+4f61659d1e4f1f01293acf5e8387fe4c1b4fad0f:supabase/config.toml
+bdf7fd0afbd3ff005455ec6664fd33ca184397e0:.env.example
+bdf7fd0afbd3ff005455ec6664fd33ca184397e0:supabase/config.toml
+(código de saída 0; 1 = nada achado)
