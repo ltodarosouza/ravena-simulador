@@ -13,6 +13,7 @@ const MENSAGENS = {
   whatsapp_invalido: "Digite um WhatsApp com DDD.",
   whatsapp_parece_cpf: "Esse número parece um CPF. Digite o seu WhatsApp com DDD.",
   simulacao_inexistente: "Faça a simulação de novo.",
+  nao_compensa: "Para essa conta o sistema solar não compensa, então não pedimos o seu contato.",
 };
 
 function criarServidor({ banco, numeros, hoje = () => new Date() }) {

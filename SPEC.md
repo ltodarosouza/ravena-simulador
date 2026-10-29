@@ -108,3 +108,4 @@ Se uma decisão muda no meio da construção, a spec muda antes do código, e co
 
 1. Quanto a planilha do Carlos dá de retorno para uma conta de R$ 600 em Sorocaba, em anos e meses?
 2. Como a planilha chega na economia do primeiro ano? O brief diz que ela ignora bandeira, Fio B e iluminação, mas a conta descrita dá cerca de 2 anos, não os 3 a 4 que ele diz prometer.
+3. **Conflito do C2 (achado pela revisão adversarial).** Com os números de teste, R$ 200 dá retorno de 4 anos e 2 meses, que **não** passa do limite de 6 anos, então a tela não diz "não compensa" para a conta que o brief cita. Só R$ 100 chega lá (8 anos e 6 meses). O C2 manda: se isso acontecer, o limite ou a faixa mínima da spec está errado e se muda aqui antes do código. Qual muda: o limite de retorno (por exemplo, 4 anos), a faixa mínima, ou os números de teste não valem e a resposta sai dos números oficiais?

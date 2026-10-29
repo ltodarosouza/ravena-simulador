@@ -1,0 +1,15 @@
+Conferência da página corrigida no navegador do app (en-US), servidor de teste na porta 4301, código depois das correções da revisão.
+O texto foi posto no campo por script e o botão "Ver quanto economizo" clicado; um interceptador de fetch registrou o que a página enviou.
+NÃO foi digitado à mão e NÃO foi testado em navegador em português.
+
+Campo agora: <input id="conta" type="text" inputmode="decimal" autocomplete="off" placeholder="ex.: 1.234,56" required>
+
+texto "1.234,56"     -> requisições: 1 | corpo: {"conta":"1.234,56","cidade":"Sorocaba"}    | resultado visível | retorno "2 anos e 5 meses" | formulário de pedido visível
+texto "R$ 1.234,56"  -> requisições: 1 | corpo: {"conta":"R$ 1.234,56","cidade":"Sorocaba"} | resultado visível | retorno "2 anos e 5 meses" | formulário de pedido visível
+texto "1234,56"      -> requisições: 1 | corpo: {"conta":"1234,56","cidade":"Sorocaba"}     | resultado visível | retorno "2 anos e 5 meses" | formulário de pedido visível
+texto "600"          -> requisições: 1 | resultado visível | retorno "2 anos e 10 meses" | formulário de pedido visível | aviso de não compensa: escondido
+texto "100"          -> requisições: 1 | resultado visível | retorno "8 anos e 6 meses" | aviso de não compensa: VISÍVEL | formulário de pedido: ESCONDIDO
+texto "600" (depois) -> aviso escondido de novo e formulário de pedido visível de novo
+texto "abc"          -> requisições: 1 | mensagem na tela: "Digite o valor da conta em reais." | resultado escondido
+
+Antes (evidencia/valor-da-conta e depuracao/evidencia-campo-da-pagina.txt): com type="number", "1.234,56" virava valor vazio e nenhuma requisição saía.

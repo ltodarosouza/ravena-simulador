@@ -1,0 +1,23 @@
+✔ a faixa de R$ 100 a R$ 2.000: fora dela não calcula, nas pontas calcula (0.575208ms)
+✔ cidade fora da lista, vazia ou ausente não calcula (0.112292ms)
+✔ R$ 600 em Sorocaba dá os números feitos à mão (0.27175ms)
+✔ o ano muda o Fio B e, com ele, o retorno (a conta é projetada ano a ano) (0.065333ms)
+✔ R$ 100 passa do limite de retorno e é marcado como não compensa (0.046375ms)
+✔ número cadastrado errado (tarifa zero): o simulador não responde e não grava conta (594.362542ms)
+✔ número cadastrado errado (tarifa negativa): o simulador não responde e não grava conta (405.772334ms)
+✔ número cadastrado errado (geração por kWp zero): o simulador não responde e não grava conta (411.14975ms)
+✔ número cadastrado errado (potência do painel zero): o simulador não responde e não grava conta (372.794791ms)
+✔ número cadastrado errado (Fio B acima de 100%): o simulador não responde e não grava conta (375.535833ms)
+✔ número cadastrado errado (tarifa que não é número): o simulador não responde e não grava conta (383.423125ms)
+✔ simulação que não compensa: o servidor recusa o pedido e não grava a pessoa (363.721666ms)
+✔ simulação que compensa continua podendo virar pedido (380.370542ms)
+✔ a página trata nao_compensa: mostra a mensagem e esconde o formulário de pedido (0.32225ms)
+✔ o campo da conta aceita texto (R$ 1.234,56), não só número (0.0685ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3358.221084

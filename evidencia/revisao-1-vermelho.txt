@@ -1,0 +1,203 @@
+✔ a faixa de R$ 100 a R$ 2.000: fora dela não calcula, nas pontas calcula (0.50975ms)
+✔ cidade fora da lista, vazia ou ausente não calcula (0.101333ms)
+✔ R$ 600 em Sorocaba dá os números feitos à mão (0.276291ms)
+✔ o ano muda o Fio B e, com ele, o retorno (a conta é projetada ano a ano) (0.049583ms)
+✔ R$ 100 passa do limite de retorno e é marcado como não compensa (0.051333ms)
+✖ número cadastrado errado (tarifa zero): o simulador não responde e não grava conta (644.024708ms)
+✖ número cadastrado errado (tarifa negativa): o simulador não responde e não grava conta (407.348125ms)
+✖ número cadastrado errado (geração por kWp zero): o simulador não responde e não grava conta (381.425334ms)
+✖ número cadastrado errado (potência do painel zero): o simulador não responde e não grava conta (364.363875ms)
+✖ número cadastrado errado (Fio B acima de 100%): o simulador não responde e não grava conta (363.17625ms)
+✖ número cadastrado errado (tarifa que não é número): o simulador não responde e não grava conta (378.941375ms)
+✖ simulação que não compensa: o servidor recusa o pedido e não grava a pessoa (374.908959ms)
+✔ simulação que compensa continua podendo virar pedido (364.938333ms)
+✖ a página trata nao_compensa: mostra a mensagem e esconde o formulário de pedido (0.351333ms)
+✖ o campo da conta aceita texto (R$ 1.234,56), não só número (0.11975ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 6
+ℹ fail 9
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3353.790542
+
+✖ failing tests:
+
+test at test/revisao.test.js:77:3
+✖ número cadastrado errado (tarifa zero): o simulador não responde e não grava conta (644.024708ms)
+  AssertionError [ERR_ASSERTION]: tem de recusar com o aviso de atualização
+  
+  200 !== 503
+  
+      at /Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/revisao.test.js:81:14
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async comServidor (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/revisao.test.js:22:9)
+      at async TestContext.<anonymous> (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/revisao.test.js:79:5)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 200,
+    expected: 503,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/revisao.test.js:77:3
+✖ número cadastrado errado (tarifa negativa): o simulador não responde e não grava conta (407.348125ms)
+  AssertionError [ERR_ASSERTION]: tem de recusar com o aviso de atualização
+  
+  200 !== 503
+  
+      at /Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/revisao.test.js:81:14
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async comServidor (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/revisao.test.js:22:9)
+      at async TestContext.<anonymous> (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/revisao.test.js:79:5)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 200,
+    expected: 503,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/revisao.test.js:77:3
+✖ número cadastrado errado (geração por kWp zero): o simulador não responde e não grava conta (381.425334ms)
+  AssertionError [ERR_ASSERTION]: tem de recusar com o aviso de atualização
+  
+  200 !== 503
+  
+      at /Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/revisao.test.js:81:14
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async comServidor (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/revisao.test.js:22:9)
+      at async TestContext.<anonymous> (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/revisao.test.js:79:5)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 200,
+    expected: 503,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/revisao.test.js:77:3
+✖ número cadastrado errado (potência do painel zero): o simulador não responde e não grava conta (364.363875ms)
+  AssertionError [ERR_ASSERTION]: tem de recusar com o aviso de atualização
+  
+  200 !== 503
+  
+      at /Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/revisao.test.js:81:14
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async comServidor (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/revisao.test.js:22:9)
+      at async TestContext.<anonymous> (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/revisao.test.js:79:5)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 200,
+    expected: 503,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/revisao.test.js:77:3
+✖ número cadastrado errado (Fio B acima de 100%): o simulador não responde e não grava conta (363.17625ms)
+  AssertionError [ERR_ASSERTION]: tem de recusar com o aviso de atualização
+  
+  200 !== 503
+  
+      at /Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/revisao.test.js:81:14
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async comServidor (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/revisao.test.js:22:9)
+      at async TestContext.<anonymous> (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/revisao.test.js:79:5)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 200,
+    expected: 503,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/revisao.test.js:77:3
+✖ número cadastrado errado (tarifa que não é número): o simulador não responde e não grava conta (378.941375ms)
+  AssertionError [ERR_ASSERTION]: tem de recusar com o aviso de atualização
+  
+  200 !== 503
+  
+      at /Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/revisao.test.js:81:14
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async comServidor (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/revisao.test.js:22:9)
+      at async TestContext.<anonymous> (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/revisao.test.js:79:5)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 200,
+    expected: 503,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/revisao.test.js:91:1
+✖ simulação que não compensa: o servidor recusa o pedido e não grava a pessoa (374.908959ms)
+  AssertionError [ERR_ASSERTION]: o pedido tem de ser recusado
+  
+  201 !== 422
+  
+      at /Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/revisao.test.js:97:12
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async comServidor (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/revisao.test.js:22:9)
+      at async TestContext.<anonymous> (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/revisao.test.js:92:3)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 201,
+    expected: 422,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/revisao.test.js:116:1
+✖ a página trata nao_compensa: mostra a mensagem e esconde o formulário de pedido (0.351333ms)
+  AssertionError [ERR_ASSERTION]: a página tem de olhar o campo nao_compensa
+      at TestContext.<anonymous> (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/revisao.test.js:117:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1397:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:969:18)
+      at Test.postRun (node:internal/test_runner/test:1537:19)
+      at Test.run (node:internal/test_runner/test:1462:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: '<!doctype html>\n<html lang="pt-BR">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1">\n<title>Simulador Ravena Solar</title>\n<style>\n  body { font: 16px/1.5 system-ui, sans-serif; max-width: 32rem; margin: 0 auto; padding: 1rem; color: #12263a; }\n  label { display: block; margin-top: 1rem; font-weight: 600; }\n  input, select, button { font: inherit; width: 100%; box-sizing: border-box; min-height: 44px; padding: .5rem; margin-top: .25rem; }\n  button { background: #f5a623; border: 0; color: #12263a; font-weight: 700; cursor: pointer; }\n  dl { margin: 1rem 0; } dt { font-weight: 600; margin-top: .5rem; } dd { margin: 0; }\n  #erro { color: #9b1c1c; } [hidden] { display: none; }\n</style>\n</head>\n<body>\n<h1>Quanto você economizaria com energia solar?</h1>\n<form id="simular">\n  <label for="conta">Quanto você paga de luz por mês (R$)</label>\n  <input id="conta" name="conta" type="number" inputmode="decimal" min="0" step="any" required>\n  <label for="cidade">Cidade</label>\n  <select id="cidade" name="cidade" required>\n    <option value="">Escolha</option>\n    <option>Sorocaba</option><option>Votorantim</option><option>Itu</option><option>Salto</option>\n  </select>\n  <button type="submit">Ver quanto economizo</button>\n</form>\n<p id="erro" role="alert"></p>\n\n<section id="resultado" hidden>\n  <h2>Resultado</h2>\n  <dl>\n    <dt>Tamanho do sistema</dt><dd id="r-kwp"></dd>\n    <dt>Investimento aproximado</dt><dd id="r-investimento"></dd>\n    <dt>Sua conta depois</dt><dd id="r-depois"></dd>\n    <dt>Economia por ano</dt><dd id="r-economia"></dd>\n    <dt>O sistema se paga em</dt><dd id="r-retorno"></dd>\n  </dl>\n  <p>É uma estimativa. A proposta vem depois da visita técnica.</p>\n  <form id="pedir">\n    <h2>Quero a simulação detalhada</h2>\n    <label for="nome">Nome</label><input id="nome" name="nome" autocomplete="name">\n    <label for="whatsapp">WhatsApp com DDD</label><input id="whatsapp" name="whatsapp" inputmode="tel" autocomplete="tel">\n    <button type="submit">Pedir simulação detalhada</button>\n  </form>\n  <p id="pedido-msg" role="status"></p>\n</section>\n\n<script>\nconst real = (v) => "R$ " + v.toLocaleString("pt-BR");\nlet simulacaoId = null;\nconst $ = (id) => document.getElementById(id);\n\nasync function enviar(url, corpo) {\n  const r = await fetch(url, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(corpo) });\n  return { status: r.status, corpo: await r.json() };\n}\n\n$("simular").addEventListener("submit", async (e) => {\n  e.preventDefault();\n  $("erro").textContent = ""; $("resultado").hidden = true; $("pedido-msg").textContent = "";\n  const { status, corpo } = await enviar("/api/simular", { conta: $("conta").value, cidade: $("cidade").value });\n  if (status !== 200) { $("erro").textContent = corpo.mensagem || "Não foi possível simular."; return; }\n  simulacaoId = corpo.simulacao_id;\n  $("r-kwp").textContent = corpo.kwp.toLocaleString("pt-BR") + " kWp (" + corpo.paineis + " painéis)";\n  $("r-investimento").textContent = real(corpo.investimento);\n  $("r-depois").textContent = real(corpo.conta_depois) + " por mês";\n  $("r-economia").textContent = real(corpo.economia_ano1) + " no primeiro ano";\n  $("r-retorno").textContent = corpo.retorno ? corpo.retorno.anos + " anos e " + corpo.retorno.meses + " meses" : "mais de 50 anos";\n  $("resultado").hidden = false;\n});\n\n$("pedir").addEventListener("submit", async (e) => {\n  e.preventDefault();\n  const { corpo } = await enviar("/api/pedido", { simulacao_id: simulacaoId, nome: $("nome").value, whatsapp: $("whatsapp").value });\n  $("pedido-msg").textContent = corpo.mensagem;\n});\n</script>\n</body>\n</html>\n',
+    expected: /nao_compensa/,
+    operator: 'match',
+    diff: 'simple'
+  }
+
+test at test/revisao.test.js:121:1
+✖ o campo da conta aceita texto (R$ 1.234,56), não só número (0.11975ms)
+  AssertionError [ERR_ASSERTION]: type=number faz o navegador descartar 1.234,56 antes de enviar
+      at TestContext.<anonymous> (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/revisao.test.js:123:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1397:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:969:18)
+      at Test.postRun (node:internal/test_runner/test:1537:19)
+      at Test.run (node:internal/test_runner/test:1462:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: '<input id="conta" name="conta" type="number" inputmode="decimal" min="0" step="any" required>',
+    expected: /type="number"/,
+    operator: 'doesNotMatch',
+    diff: 'simple'
+  }

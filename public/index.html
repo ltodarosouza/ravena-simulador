@@ -17,7 +17,7 @@
 <h1>Quanto você economizaria com energia solar?</h1>
 <form id="simular">
   <label for="conta">Quanto você paga de luz por mês (R$)</label>
-  <input id="conta" name="conta" type="number" inputmode="decimal" min="0" step="any" required>
+  <input id="conta" name="conta" type="text" inputmode="decimal" autocomplete="off" placeholder="ex.: 1.234,56" required>
   <label for="cidade">Cidade</label>
   <select id="cidade" name="cidade" required>
     <option value="">Escolha</option>
@@ -37,6 +37,7 @@
     <dt>O sistema se paga em</dt><dd id="r-retorno"></dd>
   </dl>
   <p>É uma estimativa. A proposta vem depois da visita técnica.</p>
+  <p id="aviso-nao-compensa" role="status" hidden><strong>Para essa conta, o sistema solar não compensa:</strong> o retorno estimado passa do prazo que a gente considera razoável. Por isso não pedimos o seu contato.</p>
   <form id="pedir">
     <h2>Quero a simulação detalhada</h2>
     <label for="nome">Nome</label><input id="nome" name="nome" autocomplete="name">
@@ -67,6 +68,8 @@ $("simular").addEventListener("submit", async (e) => {
   $("r-depois").textContent = real(corpo.conta_depois) + " por mês";
   $("r-economia").textContent = real(corpo.economia_ano1) + " no primeiro ano";
   $("r-retorno").textContent = corpo.retorno ? corpo.retorno.anos + " anos e " + corpo.retorno.meses + " meses" : "mais de 50 anos";
+  $("pedir").hidden = corpo.nao_compensa;
+  $("aviso-nao-compensa").hidden = !corpo.nao_compensa;
   $("resultado").hidden = false;
 });
 
