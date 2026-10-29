@@ -1,0 +1,52 @@
+✖ WhatsApp: CPF válido (só dígitos) é recusado e não é gravado (615.688375ms)
+✖ WhatsApp: CPF válido (com pontos e traço) é recusado e não é gravado (401.128ms)
+pedido {"simulacao_id":"e90d8781-ea8a-4c87-999b-8917a2a8d74b","nome":"Maria Souza","whatsapp":"(15) 99876-5432"}
+✔ WhatsApp, controle: celular normal (388.120208ms)
+pedido {"simulacao_id":"0e318c54-01bd-4e65-8b98-b4153c02630d","nome":"Maria Souza","whatsapp":"+55 (15) 99876-5432"}
+✔ WhatsApp, controle: com +55 (392.152667ms)
+pedido {"simulacao_id":"ed911dfd-f769-442d-80e3-d252dcb2a1c7","nome":"Maria Souza","whatsapp":"+1 415 555 2671"}
+✔ WhatsApp, controle: número de outro país (369.952ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 3
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2228.110084
+
+✖ failing tests:
+
+test at test/whatsapp.test.js:26:3
+✖ WhatsApp: CPF válido (só dígitos) é recusado e não é gravado (615.688375ms)
+  AssertionError [ERR_ASSERTION]: o CPF não aparece em log
+      at /Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/whatsapp.test.js:35:14
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async comServidor (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/whatsapp.test.js:20:9)
+      at async TestContext.<anonymous> (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/whatsapp.test.js:27:5)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at test/whatsapp.test.js:26:3
+✖ WhatsApp: CPF válido (com pontos e traço) é recusado e não é gravado (401.128ms)
+  AssertionError [ERR_ASSERTION]: o CPF não aparece em log
+      at /Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/whatsapp.test.js:35:14
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async comServidor (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/whatsapp.test.js:20:9)
+      at async TestContext.<anonymous> (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/whatsapp.test.js:27:5)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

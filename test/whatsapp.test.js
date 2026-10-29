@@ -26,7 +26,13 @@ for (const [rotulo, zap] of [["só dígitos", "52998224725"], ["com pontos e tra
   test(`WhatsApp: CPF válido (${rotulo}) é recusado e não é gravado`, async () => {
     await comServidor(async ({ banco, post }) => {
       const sim = await post("/api/simular", { conta: 600, cidade: "Sorocaba" });
-      const r = await post("/api/pedido", { simulacao_id: sim.corpo.simulacao_id, nome: "Maria Souza", whatsapp: zap });
+      const saidas = [];
+      const antes = { log: console.log, error: console.error };
+      console.log = console.error = (...a) => saidas.push(a.join(" "));
+      let r;
+      try { r = await post("/api/pedido", { simulacao_id: sim.corpo.simulacao_id, nome: "Maria Souza", whatsapp: zap }); }
+      finally { console.log = antes.log; console.error = antes.error; }
+      assert.ok(!/529.?982.?247.?25/.test(saidas.join("\n")), "o CPF não aparece em log");
       assert.equal(r.status, 422, "o pedido tem de ser recusado");
       assert.equal(r.corpo.erro, "whatsapp_parece_cpf");
       assert.match(r.corpo.mensagem, /parece um CPF/i);
