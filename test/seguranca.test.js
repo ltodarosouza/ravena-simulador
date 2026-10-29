@@ -25,7 +25,10 @@ async function comServidor(fn) {
     try { json = await r.json(); } catch {}
     return { status: r.status, corpo: json };
   };
-  const post = (rota, obj) => bruto(rota, JSON.stringify(obj));
+  const post = (rota, obj) => {
+    const entrada = rota === "/api/pedido" ? { aceite_privacidade: true, ...obj } : obj;
+    return bruto(rota, JSON.stringify(entrada));
+  };
   const saidas = [];
   const antes = { log: console.log, error: console.error };
   console.log = console.error = (...a) => saidas.push(a.join(" "));

@@ -16,7 +16,8 @@ async function comServidor(nums, fn) {
   await new Promise((ok) => srv.listen(0, ok));
   const base = `http://localhost:${srv.address().port}`;
   const post = async (rota, corpo) => {
-    const r = await fetch(base + rota, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(corpo) });
+    const entrada = rota === "/api/pedido" ? { aceite_privacidade: true, ...corpo } : corpo;
+    const r = await fetch(base + rota, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(entrada) });
     return { status: r.status, corpo: await r.json() };
   };
   try { await fn({ banco, post }); } finally { srv.close(); await banco.fechar(); }

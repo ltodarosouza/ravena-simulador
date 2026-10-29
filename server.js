@@ -13,6 +13,7 @@ const MENSAGENS = {
   nome_longo: "Digite só o seu nome, com até 100 letras.",
   whatsapp_invalido: "Digite um WhatsApp com DDD.",
   whatsapp_parece_cpf: "Esse número parece um CPF. Digite o seu WhatsApp com DDD.",
+  privacidade_nao_aceita: "Confirme o aviso de privacidade para pedir a simulação detalhada.",
   simulacao_inexistente: "Faça a simulação de novo.",
   nao_compensa: "Para essa conta o sistema solar não compensa, então não pedimos o seu contato.",
 };
@@ -64,6 +65,12 @@ function criarServidor({ banco, numeros, hoje = () => new Date() }) {
       }
       if (req.method === "POST" && req.url === "/api/pedido") {
         const corpo = await lerCorpo(req);
+        if (corpo.aceite_privacidade !== true) {
+          return json(res, 422, {
+            erro: "privacidade_nao_aceita",
+            mensagem: MENSAGENS.privacidade_nao_aceita,
+          });
+        }
         exigirNumeros(await numerosDe(hoje()), hoje()); // C6 vale também para quem pede
         const r = await banco.criarPedido(corpo);
         if (r.erro) return json(res, 422, { erro: r.erro, mensagem: MENSAGENS[r.erro] });

@@ -1,0 +1,49 @@
+$ node --test test/privacidade.test.js
+✖ a página explica o uso dos dados e o aceite começa desmarcado (0.689167ms)
+✖ o servidor não grava pedido sem aceite explícito (666.137458ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 0
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 737.173708
+
+✖ failing tests:
+
+test at test/privacidade.test.js:34:1
+✖ a página explica o uso dos dados e o aceite começa desmarcado (0.689167ms)
+  AssertionError [ERR_ASSERTION]: diz por quanto tempo um pedido que não fechou fica guardado
+      at TestContext.<anonymous> (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/privacidade.test.js:40:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1397:25)
+      at Test.start (node:internal/test_runner/test:1257:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at test/privacidade.test.js:48:1
+✖ o servidor não grava pedido sem aceite explícito (666.137458ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  201 !== 422
+  
+      at /Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/privacidade.test.js:59:14
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async comServidor (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/privacidade.test.js:27:5)
+      at async TestContext.<anonymous> (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/privacidade.test.js:49:3)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 201,
+    expected: 422,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

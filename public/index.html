@@ -9,6 +9,9 @@
   label { display: block; margin-top: 1rem; font-weight: 600; }
   input, select, button { font: inherit; width: 100%; box-sizing: border-box; min-height: 44px; padding: .5rem; margin-top: .25rem; }
   button { background: #f5a623; border: 0; color: #12263a; font-weight: 700; cursor: pointer; }
+  .privacidade { font-size: .925rem; }
+  .aceite { display: flex; align-items: flex-start; gap: .5rem; font-weight: 400; }
+  .aceite input { flex: 0 0 44px; width: 44px; min-height: 44px; margin: 0; }
   dl { margin: 1rem 0; } dt { font-weight: 600; margin-top: .5rem; } dd { margin: 0; }
   #erro { color: #9b1c1c; } [hidden] { display: none; }
 </style>
@@ -42,6 +45,11 @@
     <h2>Quero a simulação detalhada</h2>
     <label for="nome">Nome</label><input id="nome" name="nome" autocomplete="name">
     <label for="whatsapp">WhatsApp com DDD</label><input id="whatsapp" name="whatsapp" inputmode="tel" autocomplete="tel">
+    <p class="privacidade">Usaremos seu nome, WhatsApp, cidade, valor da conta e resultado para atender ao pedido de simulação detalhada. Pedidos que não fecharem ficam guardados por até 12 meses; os que fecharem, enquanto houver relação comercial. Para pedir exclusão, responda ao vendedor que entrar em contato.</p>
+    <label class="aceite" for="aceite-privacidade">
+      <input id="aceite-privacidade" name="aceite_privacidade" type="checkbox" required>
+      <span>Li o aviso de privacidade e concordo com esse uso dos meus dados.</span>
+    </label>
     <button type="submit">Pedir simulação detalhada</button>
   </form>
   <p id="pedido-msg" role="status"></p>
@@ -79,7 +87,12 @@ $("simular").addEventListener("submit", async (e) => {
 
 $("pedir").addEventListener("submit", async (e) => {
   e.preventDefault();
-  const { corpo } = await enviar("/api/pedido", { simulacao_id: simulacaoId, nome: $("nome").value, whatsapp: $("whatsapp").value });
+  const { corpo } = await enviar("/api/pedido", {
+    simulacao_id: simulacaoId,
+    nome: $("nome").value,
+    whatsapp: $("whatsapp").value,
+    aceite_privacidade: $("aceite-privacidade").checked,
+  });
   $("pedido-msg").textContent = corpo.mensagem;
 });
 </script>

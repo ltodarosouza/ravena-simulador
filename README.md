@@ -9,7 +9,7 @@ A spec é o contrato: [`SPEC.md`](SPEC.md). O pedido do cliente: [`brief.md`](br
 | Pedaço (ordem da spec, seção 8) | Estado |
 |---|---|
 | Fatia 1: conta de R$ 600 em Sorocaba até o pedido gravado | **Feita.** Pedido grava o que a pessoa viu e os números usados. |
-| Fatia 2: dado pessoal | **Meio feita.** CPF no nome e no WhatsApp é recusado. **Falta** o aviso de privacidade e a caixa de aceite. |
+| Fatia 2: dado pessoal | **Feita.** CPF no nome e no WhatsApp é recusado; a página explica o uso e o prazo dos dados, a caixa começa desmarcada e o servidor exige aceite explícito. |
 | Fatia 3: tela de não compensa | **Mecanismo feito.** Servidor recusa o pedido e a página esconde o formulário. Ver "Conflito do C2" abaixo. |
 | Fatia 4: tela de números do dono | **Não feita.** Os números moram numa tabela e entram por script. O simulador recusa número zerado ou implausível. |
 | Fatia 5: painel do vendedor, estágios, retenção, exclusão | **Não feita.** |
@@ -55,7 +55,7 @@ O servidor só responde com números cadastrados na tabela `numeros_calculo`, co
 
 **Decidido não guardar:** CPF (recusado antes de gravar, nome e WhatsApp), endereço, número da instalação, foto ou PDF da conta. Motivo: a foto da conta traz CPF, endereço e 12 meses de consumo, e o simulador não precisa de nada disso para calcular. Nenhum dado de pedido vai para log (o teste confere).
 
-**Ainda não feito (decidido, não implementado):** o aviso de privacidade na tela do pedido, a limpeza automática aos 12 meses e aos 30 dias, e o pedido de exclusão. Hoje o sistema grava nome e WhatsApp sem avisar finalidade, prazo nem como excluir. Isso precisa existir antes de qualquer publicação.
+**Ainda não feito (decidido, não implementado):** a limpeza automática aos 12 meses e aos 30 dias, e o pedido de exclusão. O aviso de privacidade e a caixa desmarcada já estão na tela, e o servidor recusa o pedido sem aceite explícito.
 
 ## Quem vê o quê (C4)
 
@@ -110,4 +110,4 @@ Cada correção tem teste que falhou antes e passa depois (`evidencia/seguranca-
 
 ## Evidência
 
-`evidencia/` guarda a saída crua do que foi rodado: vermelho e verde de cada correção, a prova de que o hook dispara sozinho e a conferência da página no navegador. `evidencia/2.14-varredura/` guarda o plano, o ponto de retomada e as provas do sensor novo, inclusive a mutação que troca a falha por sucesso falso e faz o teste reprovar. `depuracao/` guarda as hipóteses escritas antes das correções.
+`evidencia/` guarda a saída crua do que foi rodado: vermelho e verde de cada correção, a prova de que o hook dispara sozinho e a conferência da página no navegador. `evidencia/2.14-varredura/` guarda o plano, o ponto de retomada e as provas do sensor novo, inclusive a mutação que troca a falha por sucesso falso e faz o teste reprovar. `evidencia/fechamento-p2/` guarda o vermelho, o verde, a mutação e a suíte completa da fatia de privacidade. `depuracao/` guarda as hipóteses escritas antes das correções.
