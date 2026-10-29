@@ -29,6 +29,7 @@ A cidade do pedido é a do simulador e não é pedida de novo.
 - Aviso curto: é estimativa, a proposta vem depois da visita técnica.
 - Se o retorno passar do limite configurado (inicial: 6 anos) ou não houver retorno: mensagem clara de que não compensa e por quê, sem botão de pedir simulação.
 - Aviso de privacidade na tela do pedido: dados pedidos, para quê e por quanto tempo, com como pedir exclusão; sem caixa pré-marcada.
+- Se a conexão falhar ao simular ou ao enviar o pedido, a tela não mostra sucesso: explica que não foi possível concluir e orienta a tentar de novo.
 - Os cálculos internos usam os valores sem arredondar; o arredondamento só vale na hora de mostrar, e o número que vai ao painel é o mesmo que a pessoa viu, já arredondado.
 
 **Pedido (vai ao painel):** nome, WhatsApp, cidade, valor digitado, todos os resultados acima exatamente como mostrados, e os números usados no cálculo (cada um com valor, data e fonte). Nunca é recalculado depois.
@@ -72,6 +73,8 @@ Cada critério diz o estado de partida (Dado), a ação (Quando) e o resultado q
 **C2. Conta baixa ouve que não compensa.** Dado uma conta de R$ 200 em qualquer das quatro cidades, quando a pessoa simula, então a tela diz que não compensa e por quê, não mostra botão de pedir simulação e nenhum dado pessoal é pedido. Se, com os números congelados, o retorno de R$ 200 não passar do limite de 6 anos, é o limite ou a faixa mínima desta spec que está errada, e se muda aqui antes do código.
 
 **C3. O pedido guarda o que a pessoa viu.** Dado uma simulação de R$ 600 em Sorocaba na tela, quando a pessoa envia nome e WhatsApp válidos, então o banco tem um pedido com o valor digitado, a cidade, todos os resultados exatamente como mostrados (já arredondados) e cada número usado com valor, data e fonte. Dado o mesmo WhatsApp com pedido nas últimas 24 h, quando ele envia de novo, então não nasce pedido novo e a resposta é idêntica à de um pedido novo: a tela não revela que o número já pediu.
+
+Dado uma falha de conexão ao simular ou enviar o pedido, quando a chamada não recebe resposta, então a tela mostra que não foi possível concluir e orienta a tentar de novo; nunca mostra nem sugere que o pedido foi recebido.
 
 **C4. Um vendedor não vê o lead do outro.** Dado o Carlos logado, quando ele abre o endereço direto de um pedido de Itu (copiado da tela da Renata, por exemplo), então não vê o pedido. O mesmo vale para a Renata com um pedido de Sorocaba. O dono abre os dois.
 
