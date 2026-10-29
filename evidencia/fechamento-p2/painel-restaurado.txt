@@ -1,0 +1,11 @@
+$ node --test test/painel.test.js
+✔ C7: a tela do painel prepara o uso no celular sem guardar segredo (0.532875ms)
+✔ C4 e C7: Carlos vê e altera só a região dele, com histórico (707.283083ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 793.541875

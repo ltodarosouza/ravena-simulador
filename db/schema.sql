@@ -24,6 +24,17 @@ create table if not exists pedidos (
 
 create index if not exists pedidos_whatsapp_criado on pedidos (whatsapp, criado_em);
 
+create table if not exists historico_estagios (
+  id uuid primary key default gen_random_uuid(),
+  pedido_id uuid not null references pedidos(id),
+  de text not null,
+  para text not null,
+  alterado_por text not null,
+  alterado_em timestamptz not null default now()
+);
+
+create index if not exists historico_estagios_pedido on historico_estagios (pedido_id, alterado_em desc);
+
 create table if not exists numeros_calculo (
   id uuid primary key default gen_random_uuid(),
   chave text not null,

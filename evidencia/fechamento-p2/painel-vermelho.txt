@@ -1,0 +1,49 @@
+$ node --test test/painel.test.js
+✖ C7: a tela do painel prepara o uso no celular sem guardar segredo (0.466667ms)
+✖ C4 e C7: Carlos vê e altera só a região dele, com histórico (653.197292ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 0
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 728.633709
+
+✖ failing tests:
+
+test at test/painel.test.js:54:1
+✖ C7: a tela do painel prepara o uso no celular sem guardar segredo (0.466667ms)
+  AssertionError [ERR_ASSERTION]: a tela do painel ainda não existe
+      at TestContext.<anonymous> (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/painel.test.js:56:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1397:25)
+      at Test.start (node:internal/test_runner/test:1257:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at test/painel.test.js:64:1
+✖ C4 e C7: Carlos vê e altera só a região dele, com histórico (653.197292ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  404 !== 401
+  
+      at /Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/painel.test.js:66:12
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async comPainel (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/painel.test.js:47:5)
+      at async TestContext.<anonymous> (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/painel.test.js:65:3)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 404,
+    expected: 401,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

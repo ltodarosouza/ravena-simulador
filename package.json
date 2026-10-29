@@ -8,7 +8,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "node --test test/criterios.test.js test/dado-pessoal.test.js test/whatsapp.test.js test/valor-da-conta.test.js test/revisao.test.js test/seguranca.test.js test/autorizacao.test.js test/interface.test.js test/privacidade.test.js test/numero-dono.test.js",
+    "test": "node --test test/criterios.test.js test/dado-pessoal.test.js test/whatsapp.test.js test/valor-da-conta.test.js test/revisao.test.js test/seguranca.test.js test/autorizacao.test.js test/interface.test.js test/privacidade.test.js test/numero-dono.test.js test/painel.test.js",
     "start": "node server.js"
   },
   "repository": {

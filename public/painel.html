@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pedidos — Ravena Solar</title>
+<link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css">
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<style>
+  :root { --solar: #e9a319; --ink: #172033; --paper: #f7f6f2; }
+  * { box-sizing: border-box; }
+  body { margin: 0; min-width: 0; overflow-x: hidden; background: var(--paper); color: var(--ink); }
+  main { width: min(100% - 2rem, 44rem); margin: 0 auto; padding: 1.25rem 0 4rem; }
+  header { border-bottom: 3px solid var(--solar); margin-bottom: 1.25rem; padding-bottom: 1rem; }
+  h1 { font: 800 clamp(2rem, 9vw, 3.4rem)/.95 ui-sans-serif, system-ui, sans-serif; letter-spacing: -.05em; margin: .35rem 0; }
+  .campo { display: grid; gap: .4rem; margin: 1rem 0; }
+  .campo label { font-weight: 750; }
+  .input, .select, .btn { min-height: 44px; }
+  .btn-entrar { background: var(--ink); color: white; border-color: var(--ink); }
+  .pedidos { display: grid; gap: .8rem; padding: 0; }
+  .pedido { min-width: 0; border: 1px solid #d9d6cc; background: white; box-shadow: none; }
+  .pedido p, .pedido strong, .historico li { overflow-wrap: anywhere; }
+  .pedido-topo { display: flex; justify-content: space-between; gap: .75rem; align-items: start; }
+  .cidade { color: #73520b; font-weight: 800; }
+  .resultado { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .5rem; margin: 1rem 0; }
+  .resultado div { min-width: 0; border-top: 1px solid #e5e2d9; padding-top: .5rem; }
+  .resultado dt { color: #5d6170; font-size: .78rem; }
+  .resultado dd { margin: .1rem 0 0; font-weight: 750; overflow-wrap: anywhere; }
+  .acoes { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .5rem; margin-top: 1rem; }
+  .mensagem:empty { display: none; }
+  .historico { margin: .75rem 0 0; padding-left: 1.2rem; font-size: .9rem; }
+  @media (max-width: 420px) { .resultado, .acoes { grid-template-columns: 1fr; } .acoes .btn { width: 100%; } }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <p class="font-semibold">Ravena Solar · atendimento</p>
+    <h1>Pedidos da sua região</h1>
+    <p>Veja o que a pessoa recebeu e registre o próximo passo.</p>
+  </header>
+
+  <section id="entrada" aria-labelledby="titulo-acesso">
+    <h2 id="titulo-acesso" class="text-xl font-bold">Acesso individual</h2>
+    <div class="campo">
+      <label for="acesso">Seu acesso</label>
+      <input class="input input-bordered w-full" id="acesso" type="password" autocomplete="current-password">
+    </div>
+    <button class="btn btn-entrar btn-block" id="entrar" type="button">Abrir meus pedidos</button>
+  </section>
+
+  <p id="mensagem" class="mensagem alert alert-soft mt-4" role="status"></p>
+  <section class="mt-6" aria-labelledby="titulo-pedidos">
+    <div class="flex items-end justify-between gap-4 mb-3">
+      <h2 id="titulo-pedidos" class="text-xl font-bold">Pedidos</h2>
+      <span id="quantidade" class="text-sm"></span>
+    </div>
+    <ul id="pedidos" class="pedidos list"></ul>
+  </section>
+</main>
+<script>
+const $ = (id) => document.getElementById(id);
+const rotulos = {
+  chegou: "Chegou", respondi: "Respondi", visita_marcada: "Visita marcada",
+  proposta_enviada: "Proposta enviada", fechou: "Fechou", nao_vai: "Não vai",
+};
+const autorizacao = () => ({ authorization: "Bearer " + $("acesso").value });
+const mensagem = (texto, erro = false) => {
+  $("mensagem").textContent = texto;
+  $("mensagem").className = `mensagem alert alert-soft mt-4 ${erro ? "alert-error" : "alert-success"}`;
+};
+const texto = (tag, conteudo, classe) => {
+  const elemento = document.createElement(tag);
+  elemento.textContent = conteudo;
+  if (classe) elemento.className = classe;
+  return elemento;
+};
+const reais = (valor) => Number.isFinite(valor) ? valor.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }) : "Não registrado";
+const resultado = (pedido) => {
+  const r = pedido.resultado || {};
+  const retorno = r.retorno ? `${r.retorno.anos} anos e ${r.retorno.meses} meses` : "Não registrado";
+  const valores = [
+    ["Tamanho", Number.isFinite(r.kwp) ? `${r.kwp.toLocaleString("pt-BR")} kWp` : "Não registrado"],
+    ["Painéis", Number.isInteger(r.paineis) ? String(r.paineis) : "Não registrado"],
+    ["Investimento", reais(r.investimento)],
+    ["Conta depois", reais(r.conta_depois)],
+    ["Economia anual", reais(r.economia_ano1)],
+    ["Retorno", retorno],
+  ];
+  const lista = document.createElement("dl");
+  lista.className = "resultado";
+  for (const [rotulo, valor] of valores) {
+    const grupo = document.createElement("div");
+    grupo.append(texto("dt", rotulo), texto("dd", valor));
+    lista.append(grupo);
+  }
+  return lista;
+};
+
+async function detalhe(id, area) {
+  const resposta = await fetch(`/api/painel/pedidos/${id}`, { headers: autorizacao() });
+  if (!resposta.ok) return mensagem("Não foi possível abrir esse pedido.", true);
+  const { historico } = await resposta.json();
+  const lista = document.createElement("ol");
+  lista.className = "historico";
+  if (!historico.length) lista.append(texto("li", "Ainda não houve mudança de estágio."));
+  for (const item of historico) {
+    lista.append(texto("li", `${rotulos[item.de]} → ${rotulos[item.para]} por ${item.alterado_por}`));
+  }
+  area.replaceChildren(lista);
+}
+
+function cartao(pedido) {
+  const item = document.createElement("li");
+  item.className = "pedido card card-border list-row";
+  const corpo = document.createElement("div");
+  corpo.className = "card-body p-4";
+  const topo = document.createElement("div");
+  topo.className = "pedido-topo";
+  const identidade = document.createElement("div");
+  identidade.append(texto("strong", pedido.nome), texto("p", pedido.cidade, "cidade"));
+  topo.append(identidade, texto("strong", `R$ ${Number(pedido.conta).toFixed(2).replace(".", ",")}`));
+  corpo.append(topo, texto("p", `WhatsApp: ${pedido.whatsapp}`), resultado(pedido));
+
+  const acoes = document.createElement("div");
+  acoes.className = "acoes";
+  const seletor = document.createElement("select");
+  seletor.className = "select select-bordered w-full";
+  seletor.setAttribute("aria-label", `Estágio de ${pedido.nome}`);
+  for (const [valor, rotulo] of Object.entries(rotulos)) {
+    const opcao = document.createElement("option");
+    opcao.value = valor;
+    opcao.textContent = rotulo;
+    opcao.selected = valor === pedido.estagio;
+    seletor.append(opcao);
+  }
+  const salvar = texto("button", "Salvar", "btn");
+  salvar.type = "button";
+  const areaHistorico = document.createElement("div");
+  salvar.addEventListener("click", async () => {
+    salvar.disabled = true;
+    const resposta = await fetch(`/api/painel/pedidos/${pedido.id}/estagio`, {
+      method: "PATCH",
+      headers: { ...autorizacao(), "content-type": "application/json" },
+      body: JSON.stringify({ estagio: seletor.value }),
+    });
+    salvar.disabled = false;
+    if (!resposta.ok) return mensagem("Não foi possível salvar a mudança.", true);
+    mensagem("Estágio salvo.");
+    await detalhe(pedido.id, areaHistorico);
+  });
+  acoes.append(seletor, salvar);
+  corpo.append(acoes, areaHistorico);
+  item.append(corpo);
+  return item;
+}
+
+async function carregar() {
+  $("entrar").disabled = true;
+  const resposta = await fetch("/api/painel/pedidos", { headers: autorizacao() });
+  $("entrar").disabled = false;
+  if (!resposta.ok) return mensagem("Acesso recusado. Confira e tente de novo.", true);
+  const pedidos = await resposta.json();
+  $("pedidos").replaceChildren(...pedidos.map(cartao));
+  $("quantidade").textContent = `${pedidos.length} pedido${pedidos.length === 1 ? "" : "s"}`;
+  mensagem(pedidos.length ? "Pedidos carregados." : "Nenhum pedido novo na sua região.");
+}
+
+$("entrar").addEventListener("click", carregar);
+</script>
+</body>
+</html>
