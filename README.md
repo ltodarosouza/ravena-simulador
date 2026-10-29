@@ -38,6 +38,7 @@ O servidor só responde com números cadastrados na tabela `numeros_calculo`, co
 - **Um CPF nunca entra:** nem no campo nome, nem no campo WhatsApp (11 dígitos que fecham como CPF). Custo conhecido: cerca de 1 em cada 100 celulares fecha como CPF por acaso e é recusado com a mensagem de digitar o WhatsApp com DDD.
 - **O DDD não é comparado com a cidade:** a pessoa pode ter número de outro lugar.
 - **Mesmo WhatsApp em 24 horas é o mesmo pedido.** Consequência conhecida: uma segunda simulação de **outra cidade** com o mesmo contato recebe a mesma resposta de pedido recebido (a tela não revela que o número já pediu) e o pedido não chega ao vendedor daquela cidade. A spec decidiu assim; a pergunta de mudar isso ainda é do dono.
+- **Falha de conexão não parece sucesso.** Ao simular ou pedir contato, uma chamada sem resposta mostra que não foi possível concluir e orienta a tentar de novo. O sensor em `test/interface.test.js` falha se essa mensagem virar uma confirmação.
 
 ## Dados pessoais que o sistema guarda
 
@@ -109,4 +110,4 @@ Cada correção tem teste que falhou antes e passa depois (`evidencia/seguranca-
 
 ## Evidência
 
-`evidencia/` guarda a saída crua do que foi rodado: vermelho e verde de cada correção, a prova de que o hook dispara sozinho e a conferência da página no navegador. `depuracao/` guarda as hipóteses escritas antes das correções.
+`evidencia/` guarda a saída crua do que foi rodado: vermelho e verde de cada correção, a prova de que o hook dispara sozinho e a conferência da página no navegador. `evidencia/2.14-varredura/` guarda o plano, o ponto de retomada e as provas do sensor novo, inclusive a mutação que troca a falha por sucesso falso e faz o teste reprovar. `depuracao/` guarda as hipóteses escritas antes das correções.

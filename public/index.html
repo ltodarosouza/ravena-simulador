@@ -53,8 +53,12 @@ let simulacaoId = null;
 const $ = (id) => document.getElementById(id);
 
 async function enviar(url, corpo) {
-  const r = await fetch(url, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(corpo) });
-  return { status: r.status, corpo: await r.json() };
+  try {
+    const r = await fetch(url, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(corpo) });
+    return { status: r.status, corpo: await r.json() };
+  } catch {
+    return { status: 0, corpo: { mensagem: "Não foi possível concluir. Confira sua conexão e tente de novo." } };
+  }
 }
 
 $("simular").addEventListener("submit", async (e) => {

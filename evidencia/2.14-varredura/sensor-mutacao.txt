@@ -1,0 +1,29 @@
+$ node --test test/interface.test.js
+✖ falha de conexão orienta a tentar de novo e nunca confirma sucesso (1.103042ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 40.590917
+
+✖ failing tests:
+
+test at test/interface.test.js:18:1
+✖ falha de conexão orienta a tentar de novo e nunca confirma sucesso (1.103042ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /não foi possível concluir/i. Input:
+  
+  'Recebemos seu pedido com sucesso.'
+  
+      at TestContext.<anonymous> (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/interface.test.js:30:10)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'Recebemos seu pedido com sucesso.',
+    expected: /não foi possível concluir/i,
+    operator: 'match',
+    diff: 'simple'
+  }

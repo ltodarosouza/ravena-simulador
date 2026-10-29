@@ -1,0 +1,26 @@
+$ node --test test/interface.test.js
+✖ falha de conexão orienta a tentar de novo e nunca confirma sucesso (1.608791ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 48.401333
+
+✖ failing tests:
+
+test at test/interface.test.js:18:1
+✖ falha de conexão orienta a tentar de novo e nunca confirma sucesso (1.608791ms)
+  Error: rede indisponível
+      at /Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/interface.test.js:20:11
+      at enviar (evalmachine.<anonymous>:7:19)
+      at evalmachine.<anonymous>:1:1
+      at Script.runInContext (node:vm:150:12)
+      at Object.runInContext (node:vm:302:6)
+      at TestContext.<anonymous> (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/interface.test.js:24:29)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1397:25)
+      at Test.start (node:internal/test_runner/test:1257:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17)
