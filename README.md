@@ -58,7 +58,7 @@ Está na seção 4 da spec: foto ou PDF da conta (traz CPF, endereço e 12 meses
 
 - **Como foi feita:** um revisor em contexto limpo (subagente, sem a conversa que construiu o sistema) recebeu só o pedido magro: [`revisao/pedido.md`](revisao/pedido.md) (trabalho, a spec como régua e a definição de achado). Uma primeira tentativa, por outra sessão do Claude Code, falhou por login expirado e não conta.
 - **A lista, como veio:** [`revisao/lista-bruta.md`](revisao/lista-bruta.md), 11 itens: 6 de promessa sem código, 1 de código sem pedido, 4 de critério sem teste.
-- **Quem julga:** a classificação foi **proposta pelo agente que escreveu o código**. O Lucas leu a proposta em 2026-10-28, concordou com ela e com quatro mudanças que ela trazia (itens 2, 3, 4-tela e 9 de "corrigir" para "deixar por enquanto", e o item 11 inteiro para "recusar"). Nenhum achado foi fechado pela palavra do autor: o que foi corrigido tem teste vermelho antes e verde depois, e o agente conferiu as afirmações principais do revisor antes de aceitá-las.
+- **Quem julga:** a classificação foi **proposta pelo agente que escreveu o código**. O Lucas leu a proposta em 2026-10-28, concordou com ela e com quatro mudanças que ela trazia (itens 2, 3, 4-tela e 9 de "corrigir" para "deixar por enquanto"). A tutora mostrou que o item 11 não é excesso inteiro: só a metade do nome; a do WhatsApp virou "corrigir" e foi feita. Nenhum achado foi fechado pela palavra do autor: o que foi corrigido tem teste vermelho antes e verde depois, e o agente conferiu as afirmações principais do revisor antes de aceitá-las.
 - **Afirmações do revisor que estavam erradas em parte:** no item 4 ele disse que `tarifa_kwh = 0` dava "Infinity ou NaN na tela", mas a resposta vinha com status 200 e todos os valores `null`; no item 11 ele disse não ter visto o log conferido nos testes de nome, mas o teste de nome captura `console.log` e `console.error` (`test/dado-pessoal.test.js`, linha 46).
 
 | # | Achado | Caixa | O que foi feito e por quê |
@@ -75,7 +75,7 @@ Está na seção 4 da spec: foto ou PDF da conta (traz CPF, endereço e 12 meses
 | 10a | Reajuste diferente de zero vira erro 500 | **Deixar, limite conhecido** | A spec fixa 0%. Quem cadastrar outro valor derruba o simulador. Fica anotado aqui. |
 | 10b | Fio B limitado ao primeiro e ao último ano | **Recusar** | A Lei 14.300 fixa 100% de 2029 em diante; usar o último ano é o comportamento certo. Antes de 2026 não ocorre. |
 | 10c | Esquema de teste paralelo (PGlite) | **Deixar** | Evita testar em cima de dado real da P1 e deixa a CI sem chave. O C3 roda no banco de verdade com `TESTAR_NO_SUPABASE=1`. |
-| 11 | CPF em log sem teste | **Recusar** (é o excesso da lista) | O próprio revisor escreve "não afirmo que há vazamento", e na parte do nome ele errou: o teste já captura o log. No WhatsApp o servidor não registra o corpo do pedido. Um achado que o autor dele não sustenta é lacuna inventada para cumprir a tarefa. |
+| 11 | CPF em log sem teste | **Recusar** (metade do nome) e **corrigir** (metade do WhatsApp) | O revisor errou na parte do nome: o teste já captura o log. Na parte do WhatsApp ele acertou: não havia teste que provasse o log limpo. O servidor só registra três coisas (`server.js:61`, `:73`, `:78`; `lib/` não registra nada), e a de `:61` imprime exceções, que poderiam carregar um valor. O teste de WhatsApp agora captura o log, e uma mudança de propósito (registrar o corpo do pedido) o faz falhar (`evidencia/revisao-3-log-whatsapp-mutacao.txt`). |
 
 ## Evidência
 
