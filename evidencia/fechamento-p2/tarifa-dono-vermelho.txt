@@ -1,0 +1,64 @@
+$ node --test test/numero-dono.test.js
+✖ a tela do dono tem os campos da tarifa e não contém segredo (0.739791ms)
+✖ só o dono salva tarifa válida com fonte, e a mudança entra no cálculo e no histórico (672.545417ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 0
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 10767.0065
+
+✖ failing tests:
+
+test at test/numero-dono.test.js:57:1
+✖ a tela do dono tem os campos da tarifa e não contém segredo (0.739791ms)
+  AssertionError [ERR_ASSERTION]: a tela do dono ainda não existe
+      at TestContext.<anonymous> (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/numero-dono.test.js:59:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1397:25)
+      at Test.start (node:internal/test_runner/test:1257:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at test/numero-dono.test.js:67:1
+✖ só o dono salva tarifa válida com fonte, e a mudança entra no cálculo e no histórico (672.545417ms)
+  error: relation "numeros_calculo" does not exist
+      at Ae.ia (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/node_modules/@electric-sql/pglite/dist/index.cjs:4:22716)
+      at Ae.$a (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/node_modules/@electric-sql/pglite/dist/index.cjs:4:20085)
+      at Ae.parse (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/node_modules/@electric-sql/pglite/dist/index.cjs:4:18729)
+      at _e.Ia (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/node_modules/@electric-sql/pglite/dist/index.cjs:15:1789)
+      at /Users/ltodaro/dev/trabalhos-202/ravena-simulador/node_modules/@electric-sql/pglite/dist/index.cjs:15:1161
+      at wasm://wasm/0269dffe:wasm-function[10979]:0x5ad04f
+      at wasm://wasm/0269dffe:wasm-function[3598]:0x281dd2
+      at wasm://wasm/0269dffe:wasm-function[3640]:0x289ccf
+      at wasm://wasm/0269dffe:wasm-function[3650]:0x289f2b
+      at wasm://wasm/0269dffe:wasm-function[9956]:0x55697c {
+    length: 114,
+    severity: 'ERROR',
+    code: '42P01',
+    detail: undefined,
+    hint: undefined,
+    position: '13',
+    internalPosition: undefined,
+    internalQuery: undefined,
+    where: undefined,
+    schema: undefined,
+    table: undefined,
+    column: undefined,
+    dataType: undefined,
+    constraint: undefined,
+    file: 'parse_relation.c',
+    line: '1501',
+    routine: 'parserOpenTable',
+    query: 'insert into numeros_calculo (chave, valor, vigencia, fonte) values ($1, $2, $3, $4)',
+    params: [ 'tarifa_kwh', '0.95', '2026-01-01', 'valor que a planilha do Carlos usa (brief); não é a tarifa homologada da CPFL Piratininga' ],
+    queryOptions: undefined
+  }

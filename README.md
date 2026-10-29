@@ -11,7 +11,7 @@ A spec é o contrato: [`SPEC.md`](SPEC.md). O pedido do cliente: [`brief.md`](br
 | Fatia 1: conta de R$ 600 em Sorocaba até o pedido gravado | **Feita.** Pedido grava o que a pessoa viu e os números usados. |
 | Fatia 2: dado pessoal | **Feita.** CPF no nome e no WhatsApp é recusado; a página explica o uso e o prazo dos dados, a caixa começa desmarcada e o servidor exige aceite explícito. |
 | Fatia 3: tela de não compensa | **Mecanismo feito.** Servidor recusa o pedido e a página esconde o formulário. Ver "Conflito do C2" abaixo. |
-| Fatia 4: tela de números do dono | **Não feita.** Os números moram numa tabela e entram por script. O simulador recusa número zerado ou implausível. |
+| Fatia 4: tela de números do dono | **Começada pela tarifa.** O dono já pode salvar tarifa com valor, vigência e fonte; a simulação usa a mudança e o histórico registra a alteração. Os outros números ainda entram por script. |
 | Fatia 5: painel do vendedor, estágios, retenção, exclusão | **Não feita.** |
 | Fatia 6: outras cidades e o resto | A conta já aceita as quatro cidades. O resto, não. |
 
@@ -39,6 +39,7 @@ O servidor só responde com números cadastrados na tabela `numeros_calculo`, co
 - **O DDD não é comparado com a cidade:** a pessoa pode ter número de outro lugar.
 - **Mesmo WhatsApp em 24 horas é o mesmo pedido.** Consequência conhecida: uma segunda simulação de **outra cidade** com o mesmo contato recebe a mesma resposta de pedido recebido (a tela não revela que o número já pediu) e o pedido não chega ao vendedor daquela cidade. A spec decidiu assim; a pergunta de mudar isso ainda é do dono.
 - **Falha de conexão não parece sucesso.** Ao simular ou pedir contato, uma chamada sem resposta mostra que não foi possível concluir e orienta a tentar de novo. O sensor em `test/interface.test.js` falha se essa mensagem virar uma confirmação.
+- **Acesso inicial do dono.** A rota `/dono` pede um segredo configurado apenas no servidor como `OWNER_ACCESS_TOKEN`; ele não fica na página nem no repositório. A primeira fatia da tela edita somente a tarifa. O teste prova que retirar a barreira permite uma gravação indevida e reprova.
 
 ## Dados pessoais que o sistema guarda
 
@@ -110,4 +111,4 @@ Cada correção tem teste que falhou antes e passa depois (`evidencia/seguranca-
 
 ## Evidência
 
-`evidencia/` guarda a saída crua do que foi rodado: vermelho e verde de cada correção, a prova de que o hook dispara sozinho e a conferência da página no navegador. `evidencia/2.14-varredura/` guarda o plano, o ponto de retomada e as provas do sensor novo, inclusive a mutação que troca a falha por sucesso falso e faz o teste reprovar. `evidencia/fechamento-p2/` guarda o vermelho, o verde, a mutação e a suíte completa da fatia de privacidade. `depuracao/` guarda as hipóteses escritas antes das correções.
+`evidencia/` guarda a saída crua do que foi rodado: vermelho e verde de cada correção, a prova de que o hook dispara sozinho e a conferência da página no navegador. `evidencia/2.14-varredura/` guarda o plano, o ponto de retomada e as provas do sensor novo, inclusive a mutação que troca a falha por sucesso falso e faz o teste reprovar. `evidencia/fechamento-p2/` guarda o vermelho, o verde, a mutação e a suíte completa das fatias de privacidade e tarifa do dono. `depuracao/` guarda as hipóteses escritas antes das correções.

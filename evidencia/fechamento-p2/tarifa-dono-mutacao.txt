@@ -1,0 +1,33 @@
+$ node --test test/numero-dono.test.js
+✔ a tela do dono tem os campos da tarifa e não contém segredo (0.535083ms)
+✖ só o dono salva tarifa válida com fonte, e a mudança entra no cálculo e no histórico (698.497792ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 1
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 779.089292
+
+✖ failing tests:
+
+test at test/numero-dono.test.js:67:1
+✖ só o dono salva tarifa válida com fonte, e a mudança entra no cálculo e no histórico (698.497792ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  201 !== 401
+  
+      at /Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/numero-dono.test.js:78:12
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async comServidor (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/numero-dono.test.js:50:5)
+      at async TestContext.<anonymous> (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/numero-dono.test.js:68:3)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 201,
+    expected: 401,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

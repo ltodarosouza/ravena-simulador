@@ -23,3 +23,23 @@ create table if not exists pedidos (
 );
 
 create index if not exists pedidos_whatsapp_criado on pedidos (whatsapp, criado_em);
+
+create table if not exists numeros_calculo (
+  id uuid primary key default gen_random_uuid(),
+  chave text not null,
+  valor jsonb not null,
+  vigencia date not null,
+  fonte text not null check (char_length(btrim(fonte)) >= 3),
+  criado_em timestamptz not null default now(),
+  unique (chave, vigencia)
+);
+
+create table if not exists historico_numeros_calculo (
+  id uuid primary key default gen_random_uuid(),
+  chave text not null,
+  valor jsonb not null,
+  vigencia date not null,
+  fonte text not null,
+  alterado_por text not null,
+  alterado_em timestamptz not null default now()
+);

@@ -1,8 +1,10 @@
 const http = require("http");
+const crypto = require("crypto");
 const fs = require("fs");
 const path = require("path");
 const { simular, exigirNumeros, SemValor } = require("./lib/calculo");
 const { lerConta } = require("./lib/valor-da-conta");
+const { validarTarifa } = require("./lib/numero-dono");
 
 const MENSAGENS = {
   conta_invalida: "Digite o valor da conta em reais.",
@@ -16,13 +18,17 @@ const MENSAGENS = {
   privacidade_nao_aceita: "Confirme o aviso de privacidade para pedir a simulação detalhada.",
   simulacao_inexistente: "Faça a simulação de novo.",
   nao_compensa: "Para essa conta o sistema solar não compensa, então não pedimos o seu contato.",
+  numero_invalido: "Digite uma tarifa maior que zero.",
+  vigencia_invalida: "Digite uma data de vigência válida.",
+  fonte_invalida: "Informe a fonte da tarifa.",
 };
 
 const LIMITE_DO_CORPO = 10 * 1024; // bytes; um pedido de verdade tem poucas centenas
 class CorpoGrande extends Error {}
 
-function criarServidor({ banco, numeros, hoje = () => new Date() }) {
+function criarServidor({ banco, numeros, hoje = () => new Date(), donoToken = "" }) {
   const pagina = fs.readFileSync(path.join(__dirname, "public", "index.html"));
+  const paginaDono = fs.readFileSync(path.join(__dirname, "public", "dono.html"));
 
   // Lê o corpo guardando no máximo o limite: o que passar é descartado, e a recusa vem no fim.
   function lerCorpo(req) {
@@ -47,12 +53,41 @@ function criarServidor({ banco, numeros, hoje = () => new Date() }) {
     res.writeHead(status, { "content-type": "application/json; charset=utf-8" });
     res.end(JSON.stringify(corpo));
   };
+  const donoAutorizado = (req) => {
+    const recebido = String(req.headers.authorization || "").replace(/^Bearer\s+/i, "");
+    if (!donoToken || !recebido) return false;
+    const esperadoBuffer = Buffer.from(String(donoToken));
+    const recebidoBuffer = Buffer.from(recebido);
+    return esperadoBuffer.length === recebidoBuffer.length
+      && crypto.timingSafeEqual(esperadoBuffer, recebidoBuffer);
+  };
 
   return http.createServer(async (req, res) => {
     try {
       if (req.method === "GET" && req.url === "/") {
         res.writeHead(200, { "content-type": "text/html; charset=utf-8" });
         return res.end(pagina);
+      }
+      if (req.method === "GET" && req.url === "/dono") {
+        res.writeHead(200, { "content-type": "text/html; charset=utf-8" });
+        return res.end(paginaDono);
+      }
+      if (req.url === "/api/dono/tarifa") {
+        if (!donoToken) return json(res, 503, { erro: "acesso_dono_nao_configurado" });
+        if (!donoAutorizado(req)) return json(res, 401, { erro: "nao_autorizado" });
+        if (req.method === "GET") return json(res, 200, await banco.historicoNumero("tarifa_kwh"));
+        if (req.method === "POST") {
+          const validado = validarTarifa(await lerCorpo(req));
+          if (validado.erro) {
+            return json(res, 422, { erro: validado.erro, mensagem: MENSAGENS[validado.erro] });
+          }
+          await banco.salvarNumero({
+            chave: "tarifa_kwh",
+            ...validado,
+            alterado_por: "dono",
+          });
+          return json(res, 201, { mensagem: "Tarifa salva." });
+        }
       }
       if (req.method === "POST" && req.url === "/api/simular") {
         const { conta, cidade } = await lerCorpo(req);
@@ -99,6 +134,11 @@ if (require.main === module) {
     }
     const banco = supabase.abrir();
     const porta = Number(process.env.PORT) || 4300;
-    criarServidor({ banco, numeros: (hoje) => banco.numerosVigentes(hoje) }).listen(porta, () => console.log(`simulador em http://localhost:${porta} (números do dono, no Supabase)`));
+    const env = supabase.lerEnv();
+    criarServidor({
+      banco,
+      numeros: (hoje) => banco.numerosVigentes(hoje),
+      donoToken: env.OWNER_ACCESS_TOKEN,
+    }).listen(porta, () => console.log(`simulador em http://localhost:${porta} (números do dono, no Supabase)`));
   })();
 }

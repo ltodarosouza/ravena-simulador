@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Números do dono — Ravena Solar</title>
+<style>
+  body { font: 16px/1.5 system-ui, sans-serif; max-width: 32rem; margin: 0 auto; padding: 1rem; color: #12263a; }
+  label { display: block; margin-top: 1rem; font-weight: 600; }
+  input, button { font: inherit; width: 100%; box-sizing: border-box; min-height: 44px; padding: .5rem; margin-top: .25rem; }
+  button { background: #f5a623; border: 0; color: #12263a; font-weight: 700; cursor: pointer; }
+  #mensagem { min-height: 1.5rem; }
+  li { margin-bottom: .75rem; }
+</style>
+</head>
+<body>
+<h1>Tarifa usada no cálculo</h1>
+<p>Área do dono. O acesso não fica salvo nesta página.</p>
+<form id="tarifa">
+  <label for="acesso">Acesso do dono</label>
+  <input id="acesso" name="acesso" type="password" autocomplete="current-password" required>
+  <label for="valor">Tarifa por kWh (R$)</label>
+  <input id="valor" name="valor" type="number" min="0.0001" step="0.0001" required>
+  <label for="vigencia">Válida desde</label>
+  <input id="vigencia" name="vigencia" type="date" required>
+  <label for="fonte">Fonte</label>
+  <input id="fonte" name="fonte" type="text" required>
+  <button type="submit">Salvar tarifa</button>
+</form>
+<p id="mensagem" role="status"></p>
+<h2>Histórico</h2>
+<button id="carregar" type="button">Carregar histórico</button>
+<ul id="historico"></ul>
+<script>
+const $ = (id) => document.getElementById(id);
+const autorizacao = () => ({ authorization: "Bearer " + $("acesso").value });
+
+async function carregar() {
+  const resposta = await fetch("/api/dono/tarifa", { headers: autorizacao() });
+  const corpo = await resposta.json();
+  if (!resposta.ok) { $("mensagem").textContent = "Acesso recusado."; return; }
+  $("historico").replaceChildren(...corpo.map((item) => {
+    const li = document.createElement("li");
+    li.textContent = `R$ ${item.valor} desde ${item.vigencia} — ${item.fonte}`;
+    return li;
+  }));
+}
+
+$("carregar").addEventListener("click", carregar);
+$("tarifa").addEventListener("submit", async (evento) => {
+  evento.preventDefault();
+  const resposta = await fetch("/api/dono/tarifa", {
+    method: "POST",
+    headers: { ...autorizacao(), "content-type": "application/json" },
+    body: JSON.stringify({
+      valor: Number($("valor").value),
+      vigencia: $("vigencia").value,
+      fonte: $("fonte").value,
+    }),
+  });
+  const corpo = await resposta.json();
+  $("mensagem").textContent = corpo.mensagem || "Não foi possível salvar.";
+  if (resposta.ok) await carregar();
+});
+</script>
+</body>
+</html>

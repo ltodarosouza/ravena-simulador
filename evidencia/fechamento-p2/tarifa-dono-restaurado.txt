@@ -1,0 +1,11 @@
+$ node --test test/numero-dono.test.js
+✔ a tela do dono tem os campos da tarifa e não contém segredo (0.595458ms)
+✔ só o dono salva tarifa válida com fonte, e a mudança entra no cálculo e no histórico (2819.561583ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3030.846209
