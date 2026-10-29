@@ -10,8 +10,9 @@ Permitir que a dona de casa de Sorocaba, Votorantim, Itu ou Salto veja, só com 
 |---|---|---|---|
 | Valor da conta mensal | Reais, número positivo, escrito como a pessoa escreve no Brasil ("R$ 1.234,56", "1234,56", "1.234" e "1234.56" valem; "1e3" e "1,2,3" não) | Pessoa, no site | Vazio, texto, zero ou negativo: pede de novo. Fora da faixa configurada (inicial R$ 100 a R$ 2.000): explica o motivo e não calcula nem pede dados pessoais (acima = comércio/sistema grande, que não atendemos). |
 | Cidade | Uma de 4: Sorocaba, Votorantim, Itu, Salto (lista fechada) | Pessoa | Sem cidade: não calcula. Outra cidade não existe como opção. |
-| Nome | Texto livre | Pessoa, ao pedir simulação detalhada | Vazio: o pedido não é enviado. |
-| WhatsApp | Telefone brasileiro com DDD | Pessoa, ao pedir | Inválido ou vazio: o pedido não é enviado. Mesmo WhatsApp com pedido nas últimas 24 h: não cria pedido novo, mostra "já recebemos". |
+| Nome | Texto livre, até 100 caracteres | Pessoa, ao pedir simulação detalhada | Vazio, maior que 100 caracteres ou com CPF dentro: o pedido não é enviado. |
+| WhatsApp | Telefone brasileiro com DDD | Pessoa, ao pedir | Inválido ou vazio: o pedido não é enviado. Mesmo WhatsApp com pedido nas últimas 24 h: não cria pedido novo, e a tela mostra a mesma resposta de pedido recebido, sem dizer que o número já tinha pedido. |
+| O corpo de cada chamada ao servidor | JSON que seja um objeto, até 10 KB | Quem chama (a página ou qualquer outro) | Maior que o limite: recusado antes de ler tudo. Que não seja JSON de objeto, ou com identificador de simulação que não seja um identificador: recusado com erro de pedido malformado. Nunca vira erro interno. |
 | Números de cálculo (tarifa CPFL Piratininga com ICMS e PIS/COFINS, iluminação pública por cidade, percentual do Fio B por ano, custo de disponibilidade por tipo de ligação, geração por kWp/mês, preço por kWp por faixa de tamanho, potência do painel, limite de retorno que define "não compensa", reajuste anual da tarifa, faixa de valor aceita, prazo de retenção) | Número + data de vigência + fonte | Só o dono, numa tela só dele | Vazio, zero, negativo ou implausível: recusa. Sem valor vigente para algum número: o simulador não responde e avisa em vez de usar valor velho. |
 | Estágio do pedido | Chegou, respondi, visita marcada, proposta enviada, fechou, não vai | Vendedor da cidade (ou dono) | Estágio fora da lista: recusa. Toda mudança fica registrada (quem, quando). |
 
@@ -57,6 +58,7 @@ A cidade do pedido é a do simulador e não é pedida de novo.
 - O simulador usa o mesmo banco da landing (P1): o pedido é uma linha da tabela de simulações da P1, e a pessoa é o lead dela. A P1 exigia conta de R$ 450 ou mais também no banco; o simulador atende de R$ 100, e a faixa é número do dono, então o banco só exige conta positiva. A regra dos R$ 450 continua na própria página da landing, que é quem a aplica.
 - Números de teste nunca respondem a uma pessoa de verdade: o simulador lê os números do banco, e sem número vigente ele recusa.
 - Mesmo WhatsApp em 24 h conta como o mesmo pedido.
+- O sistema não prova que o WhatsApp é de quem pede (pergunta 4 da seção 11). O limite de pedidos por origem depende de onde o sistema for hospedado e fica para quando a hospedagem existir (pergunta 5).
 - Estágios podem ser mudados em qualquer ordem, inclusive voltando; o histórico fica guardado.
 
 ## 6. Critérios de aceitação
@@ -67,13 +69,13 @@ Cada critério diz o estado de partida (Dado), a ação (Quando) e o resultado q
 
 **C2. Conta baixa ouve que não compensa.** Dado uma conta de R$ 200 em qualquer das quatro cidades, quando a pessoa simula, então a tela diz que não compensa e por quê, não mostra botão de pedir simulação e nenhum dado pessoal é pedido. Se, com os números congelados, o retorno de R$ 200 não passar do limite de 6 anos, é o limite ou a faixa mínima desta spec que está errada, e se muda aqui antes do código.
 
-**C3. O pedido guarda o que a pessoa viu.** Dado uma simulação de R$ 600 em Sorocaba na tela, quando a pessoa envia nome e WhatsApp válidos, então o banco tem um pedido com o valor digitado, a cidade, todos os resultados exatamente como mostrados (já arredondados) e cada número usado com valor, data e fonte. Dado o mesmo WhatsApp com pedido nas últimas 24 h, quando ele envia de novo, então não nasce pedido novo e a tela mostra "já recebemos".
+**C3. O pedido guarda o que a pessoa viu.** Dado uma simulação de R$ 600 em Sorocaba na tela, quando a pessoa envia nome e WhatsApp válidos, então o banco tem um pedido com o valor digitado, a cidade, todos os resultados exatamente como mostrados (já arredondados) e cada número usado com valor, data e fonte. Dado o mesmo WhatsApp com pedido nas últimas 24 h, quando ele envia de novo, então não nasce pedido novo e a resposta é idêntica à de um pedido novo: a tela não revela que o número já pediu.
 
 **C4. Um vendedor não vê o lead do outro.** Dado o Carlos logado, quando ele abre o endereço direto de um pedido de Itu (copiado da tela da Renata, por exemplo), então não vê o pedido. O mesmo vale para a Renata com um pedido de Sorocaba. O dono abre os dois.
 
-**C5. Dado pessoal onde não deve.** Dado um pedido enviado com um CPF válido digitado no campo nome, quando a pessoa envia, então o pedido é recusado com a mensagem de que só o nome é pedido, e o CPF não aparece em nenhuma tabela nem log.
+**C5. Dado pessoal onde não deve.** Dado um pedido enviado com um CPF válido digitado no campo nome, quando a pessoa envia, então o pedido é recusado com a mensagem de que só o nome é pedido, e o CPF não aparece em nenhuma tabela nem log. Vale para qualquer jeito de escrever os algarismos (inclusive os de largura total e de outros alfabetos).
 
-**C6. Número do dono.** Dado um número de cálculo vazio, zero, negativo ou implausível, quando o dono tenta salvar, então a tela recusa e explica. Dado um número sem valor vigente, quando alguém simula, então o simulador não responde e avisa, em vez de usar valor velho.
+**C6. Número do dono.** Dado um número de cálculo vazio, zero, negativo ou implausível, quando o dono tenta salvar, então a tela recusa e explica. Dado um número sem valor vigente, quando alguém simula, então o simulador não responde e avisa, em vez de usar valor velho. O mesmo vale para o pedido: sem número vigente, nenhum pedido é gravado, mesmo de uma simulação feita antes de o número sair.
 
 **C7. Painel no celular.** Dado o Carlos logado num celular de 390 px de largura, quando ele abre a lista e muda o estágio de um pedido de Sorocaba, então não há rolagem horizontal, a lista aparece em até 3 segundos em 4G, os botões têm pelo menos 44 px de altura e a mudança leva até 3 toques; o histórico mostra quem mudou e quando.
 
@@ -109,3 +111,5 @@ Se uma decisão muda no meio da construção, a spec muda antes do código, e co
 1. Quanto a planilha do Carlos dá de retorno para uma conta de R$ 600 em Sorocaba, em anos e meses?
 2. Como a planilha chega na economia do primeiro ano? O brief diz que ela ignora bandeira, Fio B e iluminação, mas a conta descrita dá cerca de 2 anos, não os 3 a 4 que ele diz prometer.
 3. **Conflito do C2 (achado pela revisão adversarial).** Com os números de teste, R$ 200 dá retorno de 4 anos e 2 meses, que **não** passa do limite de 6 anos, então a tela não diz "não compensa" para a conta que o brief cita. Só R$ 100 chega lá (8 anos e 6 meses). O C2 manda: se isso acontecer, o limite ou a faixa mínima da spec está errado e se muda aqui antes do código. Qual muda: o limite de retorno (por exemplo, 4 anos), a faixa mínima, ou os números de teste não valem e a resposta sai dos números oficiais?
+4. **Prova de que o WhatsApp é de quem pede (achado 2 da revisão de segurança).** Hoje qualquer pessoa pode pedir com o número de outra e travar o pedido verdadeiro dela por 24 h; a resposta já não revela quem pediu, mas o bloqueio continua. Confirmar o número (por exemplo, o vendedor confirma por mensagem antes de contar o pedido) ou aceitar o risco para 27 pedidos por mês?
+5. **Limite de pedidos por origem (achado 1 da revisão de segurança).** Cada simulação grava uma linha, e quem repetir a chamada enche o banco que a landing também usa. O corpo já tem teto; o limite por origem depende da hospedagem. Qual será ela, e qual limite o dono aceita?
