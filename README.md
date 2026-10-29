@@ -58,23 +58,24 @@ Está na seção 4 da spec: foto ou PDF da conta (traz CPF, endereço e 12 meses
 
 - **Como foi feita:** um revisor em contexto limpo (subagente, sem a conversa que construiu o sistema) recebeu só o pedido magro: [`revisao/pedido.md`](revisao/pedido.md) (trabalho, a spec como régua e a definição de achado). Uma primeira tentativa, por outra sessão do Claude Code, falhou por login expirado e não conta.
 - **A lista, como veio:** [`revisao/lista-bruta.md`](revisao/lista-bruta.md), 11 itens: 6 de promessa sem código, 1 de código sem pedido, 4 de critério sem teste.
-- **Quem julga:** a classificação abaixo foi **proposta pelo agente que escreveu o código e precisa ser confirmada pelo Lucas**. Nenhum achado foi fechado pela palavra do autor: o que foi corrigido tem teste vermelho antes e verde depois, e eu conferi por conta própria as afirmações principais do revisor antes de aceitá-las.
+- **Quem julga:** a classificação foi **proposta pelo agente que escreveu o código**. O Lucas leu a proposta em 2026-10-28, concordou com ela e com quatro mudanças que ela trazia (itens 2, 3, 4-tela e 9 de "corrigir" para "deixar por enquanto", e o item 11 inteiro para "recusar"). Nenhum achado foi fechado pela palavra do autor: o que foi corrigido tem teste vermelho antes e verde depois, e o agente conferiu as afirmações principais do revisor antes de aceitá-las.
+- **Afirmações do revisor que estavam erradas em parte:** no item 4 ele disse que `tarifa_kwh = 0` dava "Infinity ou NaN na tela", mas a resposta vinha com status 200 e todos os valores `null`; no item 11 ele disse não ter visto o log conferido nos testes de nome, mas o teste de nome captura `console.log` e `console.error` (`test/dado-pessoal.test.js`, linha 46).
 
 | # | Achado | Caixa | O que foi feito e por quê |
 |---|---|---|---|
 | 1 | Tela de não compensa | **Corrigir** (mecanismo feito) | O servidor recusa pedido de simulação que não compensa; a página mostra o aviso e esconde o formulário. Testes `test/revisao.test.js`; conferido no navegador. Ver o conflito do C2. |
-| 2 | Aviso de privacidade e caixa desmarcada | **Corrigir, não feito** | Está na spec (seção 3) e é a fatia 2. Fica na fila antes de qualquer publicação. |
-| 3 | Painel do vendedor | **Corrigir, não feito** | Fatia 5 da spec. O sistema não serve ao Carlos e à Renata sem ele. |
-| 4 | Números do dono: recusa de valor ruim | **Corrigido** na parte do simulador; **tela não feita** | Número zerado, negativo ou implausível vira "sem valor vigente" e o simulador não responde, em vez de devolver uma conta de `null`. A tela de edição é a fatia 4. |
+| 2 | Aviso de privacidade e caixa desmarcada | **Deixar por enquanto** | Ainda não chegou na ordem da seção 8 e nada está publicado. A spec diz que o pedido "não pode ir ao ar sem" o aviso: é obrigatório **antes de publicar**. |
+| 3 | Painel do vendedor | **Deixar por enquanto** | Fatia 5 da spec, ainda não chegou. É obrigatório antes de o Carlos e a Renata usarem o sistema. |
+| 4 | Números do dono: recusa de valor ruim | **Corrigido** na parte do simulador; tela: **deixar por enquanto** | Número zerado, negativo ou implausível vira "sem valor vigente" e o simulador não responde, em vez de devolver uma conta de `null`. A tela de edição é a fatia 4, ainda não chegou. |
 | 5 | Piso de 3 anos nunca verificado | **Corrigir, bloqueado** | Faltam quatro números de fonte pública. O teste continua pendente de propósito; este README diz isso. |
 | 6 | C2: R$ 200 não dá "não compensa" | **Corrigir pela spec, decisão do dono** | Com os números de teste R$ 200 dá 4 anos e 2 meses. O C2 manda mudar a spec antes do código. Pergunta registrada em `SPEC.md`, seção 11, item 3. |
 | 7 | Testes que faltavam | **Corrigido** | Faixa, cidade, a conta de R$ 600 com valores feitos à mão, o ano mudando o Fio B e R$ 100 como não compensa. Quatro mudanças de fórmula feitas de propósito fizeram os testes falharem. |
 | 8 | Campo da página rejeita "R$ 1.234,56" | **Corrigido** (campo); **recusado** (guardar o texto cru) | O campo virou texto com teclado numérico e a página manda o texto ao servidor. Guardar também o texto cru seria dado a mais; o pedido já guarda a conta digitada, como número. |
-| 9 | README, retenção, exclusão | README **feito agora**; retenção e exclusão **não feitas** | A tabela de dados pessoais acima diz o que existe e o que falta. |
+| 9 | README, retenção, exclusão | README **feito agora**; retenção e exclusão: **deixar por enquanto** | Fatia 5, ainda não chegou; obrigatórias antes de publicar. A tabela de dados pessoais acima diz o que existe e o que falta. |
 | 10a | Reajuste diferente de zero vira erro 500 | **Deixar, limite conhecido** | A spec fixa 0%. Quem cadastrar outro valor derruba o simulador. Fica anotado aqui. |
 | 10b | Fio B limitado ao primeiro e ao último ano | **Recusar** | A Lei 14.300 fixa 100% de 2029 em diante; usar o último ano é o comportamento certo. Antes de 2026 não ocorre. |
 | 10c | Esquema de teste paralelo (PGlite) | **Deixar** | Evita testar em cima de dado real da P1 e deixa a CI sem chave. O C3 roda no banco de verdade com `TESTAR_NO_SUPABASE=1`. |
-| 11 | CPF em log sem teste | **Recusar** (nome), **deixar** (WhatsApp) | O teste de nome já captura o log. O de WhatsApp não; a consequência é baixa e o servidor não registra o corpo do pedido. |
+| 11 | CPF em log sem teste | **Recusar** (é o excesso da lista) | O próprio revisor escreve "não afirmo que há vazamento", e na parte do nome ele errou: o teste já captura o log. No WhatsApp o servidor não registra o corpo do pedido. Um achado que o autor dele não sustenta é lacuna inventada para cumprir a tarefa. |
 
 ## Evidência
 
