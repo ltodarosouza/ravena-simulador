@@ -34,6 +34,7 @@ function criarServidor({ banco, numeros, hoje = () => new Date(), donoToken = ""
   const paginaPainel = fs.readFileSync(path.join(__dirname, "public", "painel.html"));
   const estilo = fs.readFileSync(path.join(__dirname, "public", "ravena.css"));
   const logo = fs.readFileSync(path.join(__dirname, "public", "logo.svg"));
+  const icone = fs.readFileSync(path.join(__dirname, "public", "icone.svg"));
   const tokens = { ...acessos, dono: acessos.dono || donoToken };
 
   // Lê o corpo guardando no máximo o limite: o que passar é descartado, e a recusa vem no fim.
@@ -96,6 +97,10 @@ function criarServidor({ banco, numeros, hoje = () => new Date(), donoToken = ""
       if (req.method === "GET" && req.url === "/logo.svg") {
         res.writeHead(200, { "content-type": "image/svg+xml" });
         return res.end(logo);
+      }
+      if (req.method === "GET" && req.url === "/icone.svg") {
+        res.writeHead(200, { "content-type": "image/svg+xml" });
+        return res.end(icone);
       }
       if (req.url === "/api/dono/tarifa") {
         if (!tokens.dono) return json(res, 503, { erro: "acesso_dono_nao_configurado" });

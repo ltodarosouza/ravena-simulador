@@ -23,6 +23,9 @@ test("as páginas recebem a folha de estilo e a logo da marca", async () => {
     const logo = await fetch(base + "/logo.svg");
     assert.equal(logo.status, 200);
     assert.match(logo.headers.get("content-type"), /image\/svg\+xml/);
+    const icone = await fetch(base + "/icone.svg");
+    assert.equal(icone.status, 200);
+    assert.match(icone.headers.get("content-type"), /image\/svg\+xml/);
   });
 });
 
@@ -31,6 +34,7 @@ test("nenhuma tela depende de CSS ou script vindo de outro site", () => {
     const pagina = fs.readFileSync(path.join(__dirname, "..", "public", nome), "utf8");
     assert.doesNotMatch(pagina, /(href|src)="https?:/, `${nome} carrega algo de fora`);
     assert.match(pagina, /href="\/ravena\.css"/, `${nome} sem a folha da marca`);
+    assert.match(pagina, /<link rel="icon" type="image\/svg\+xml" href="\/icone\.svg">/, `${nome} sem o ícone da aba`);
   }
 });
 
