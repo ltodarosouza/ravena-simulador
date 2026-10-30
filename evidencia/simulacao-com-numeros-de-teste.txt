@@ -1,0 +1,29 @@
+# Simulação rodada só com números de TESTE (referencia/numeros.json), fora do banco do site. Não são números oficiais.
+# Data: 2026-10-30. Feito pelo agente. Nada foi gravado no Supabase.
+$ node -e "..." (simular conta 600 Sorocaba, 200 Itu)
+{"conta":600,"cidade":"Sorocaba"} => {
+ "kwp": 5.3,
+ "paineis": 10,
+ "investimento": 13400,
+ "conta_depois": 172,
+ "economia_ano1": 5131,
+ "retorno": {
+  "anos": 2,
+  "meses": 10,
+  "total_meses": 34
+ },
+ "nao_compensa": false
+}
+{"conta":200,"cidade":"Itu"} => {
+ "kwp": 1.6,
+ "paineis": 3,
+ "investimento": 4600,
+ "conta_depois": 97,
+ "economia_ano1": 1240,
+ "retorno": {
+  "anos": 4,
+  "meses": 2,
+  "total_meses": 50
+ },
+ "nao_compensa": false
+}

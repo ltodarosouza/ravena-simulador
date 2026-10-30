@@ -71,6 +71,18 @@ A regra de acesso mora **na própria consulta ao banco** (`pedidoPara`, `listarP
 
 Está na seção 4 da spec: foto ou PDF da conta (traz CPF, endereço e 12 meses de histórico), "refazer a simulação" no painel, consumo em kWh, bandeira tarifária no cálculo, busca automática na ANEEL, financiamento, bateria, comércio acima de 75 kWp, outras cidades, proposta, recálculo de pedidos antigos e notificações.
 
+### Números que ficaram sem fonte (2026-10-30)
+
+O simulador só calcula com número vigente, com data e fonte. Estes três **não foram encontrados** em fonte oficial e **não foram cadastrados**; nenhum número de teste entrou no banco do site:
+
+| Número | O que foi tentado | Por que ficou fora |
+|---|---|---|
+| Fio B em R$/kWh | Base aberta da ANEEL (tarifas homologadas e componentes tarifários, arquivo de 2026) e busca na web. A CPFL Piratininga não aparece no arquivo de componentes; o PDF da resolução respondeu 403 ao agente. | Blogs citam valores só da CPFL Paulista, e blog não é fonte. A conta certa é o percentual do ano (60% em 2026, Lei 14.300, já cadastrado) × a tarifa do Fio B da resolução da ANEEL, que ninguém leu ainda. |
+| Iluminação pública de Sorocaba, Votorantim, Itu e Salto | Busca de lei municipal (COSIP) para cada cidade. | Nenhuma lei vigente apareceu. O único achado de Sorocaba é de um projeto antigo, não da lei em vigor. |
+| Tarifa com impostos | A ANEEL publica a tarifa sem ICMS, PIS e COFINS (R$ 0,7588, cadastrada). | A SPEC pede com impostos. Conflito aberto: mudar a SPEC ou cadastrar com impostos é decisão do Lucas, e as alíquotas também precisam de fonte. |
+
+Consequência: sem o Fio B o simulador não responde em **nenhuma** cidade, porque o Fio B não depende da cidade. Sem a iluminação, não responde em nenhuma das quatro. O site diz "em atualização" em vez de mostrar uma conta inventada. O cálculo foi rodado só com os números de teste e fora do banco, em [`evidencia/simulacao-com-numeros-de-teste.txt`](evidencia/simulacao-com-numeros-de-teste.txt): com eles, R$ 600 em Sorocaba dá retorno de 2 anos e 10 meses, **abaixo** do piso de 3 anos do C1. Isso não prova nada, porque os números são de teste; o C1 continua pendente até haver os números oficiais.
+
 ## Revisão adversarial
 
 - **Como foi feita:** um revisor em contexto limpo (subagente, sem a conversa que construiu o sistema) recebeu só o pedido magro: [`revisao/pedido.md`](revisao/pedido.md) (trabalho, a spec como régua e a definição de achado). Uma primeira tentativa, por outra sessão do Claude Code, falhou por login expirado e não conta.
