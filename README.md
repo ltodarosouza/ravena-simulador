@@ -68,6 +68,24 @@ O servidor só responde com números cadastrados na tabela `numeros_calculo`, co
 
 A regra de acesso mora **na própria consulta ao banco** (`pedidoPara`, `listarPedidosPara` e `alterarEstagioPara` em `lib/banco.js`, com a cidade do vendedor no `WHERE`). O Carlos vê Sorocaba e Votorantim, a Renata vê Itu e Salto, o dono vê tudo, e quem não se identificou ou não é conhecido não vê nada. Quem não pode ver recebe a mesma resposta de um pedido que nunca existiu. O painel chama essas consultas e tem um teste pela API (`test/painel.test.js`). **Provado só no banco de teste (PGlite):** a versão do Supabase (`lib/banco-supabase.js`) tem a mesma regra, lida e não executada. Ao retirar de propósito o filtro da mudança de estágio, Carlos altera um pedido de Itu e o teste reprova.
 
+## Ver o simulador no ar, sem login
+
+Conferido em 2026-10-30 contra https://ravena-simulador.vercel.app, sem senha nem usuário de teste. A rota de simulação é pública; o painel (`/painel`) e a tela do dono (`/dono`) pedem acesso e não entram neste exemplo.
+
+```bash
+curl -s -X POST https://ravena-simulador.vercel.app/api/simular \
+  -H 'content-type: application/json' \
+  -d '{"conta":600,"cidade":"Sorocaba"}'
+```
+
+Saída crua desta rodada (o `simulacao_id` muda a cada chamada):
+
+```json
+{"simulacao_id":"6f9f735a-b050-4709-828a-3ca7546108f3","kwp":6.9,"paineis":13,"investimento":17500,"conta_depois":38,"economia_ano1":6745,"retorno":{"anos":2,"meses":8,"total_meses":32},"nao_compensa":false,"sem_numero":["fio_b_kwh","iluminacao_publica"]}
+```
+
+O campo `sem_numero` lista o que ficou fora da conta por falta de número com fonte (ver "Números que ficaram sem fonte"). Sem ele, o resultado seria o de um cálculo completo.
+
 ## O que ficou de fora e por quê
 
 Está na seção 4 da spec: foto ou PDF da conta (traz CPF, endereço e 12 meses de histórico), "refazer a simulação" no painel, consumo em kWh, bandeira tarifária no cálculo, busca automática na ANEEL, financiamento, bateria, comércio acima de 75 kWp, outras cidades, proposta, recálculo de pedidos antigos e notificações.
