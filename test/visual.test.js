@@ -44,7 +44,7 @@ test("conta fora da faixa diz quais são os limites cadastrados", async () => {
     const r = await fetch(base + "/api/simular", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ conta: 5, cidade: "Sorocaba" }) });
     const corpo = await r.json();
     assert.equal(r.status, 422);
-    assert.match(corpo.mensagem, /R\$ 100/);
+    assert.match(corpo.mensagem, /R\$ 450/);
     assert.match(corpo.mensagem, /R\$ 2\.000/);
   });
 });

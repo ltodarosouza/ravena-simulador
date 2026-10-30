@@ -10,6 +10,7 @@ const numeros = [
   ["limite_retorno_anos", 6, "2026-10-24", "decisão da spec do simulador, seção 3: acima disso não compensa"],
   ["reajuste_tarifa_anual", 0, "2026-10-24", "decisão da spec do simulador, seção 3: reajuste zero para errar contra a empresa"],
   ["conta_minima", 100, "2026-10-24", "decisão da spec do simulador, seção 2"],
+  ["conta_minima", 450, "2026-10-30", "decisão do dono em 2026-10-30: o mesmo mínimo da landing (brief); abaixo disso não compensa"],
   ["conta_maxima", 2000, "2026-10-24", "decisão da spec do simulador, seção 2"],
   ["disponibilidade_kwh_bifasica", 50, "2026-10-24", "custo de disponibilidade da ligação bifásica: 50 kWh (regra da ANEEL, REN 1.000/2021)"],
   ["fio_b_percentual_por_ano", { 2026: 0.6, 2027: 0.75, 2028: 0.9, 2029: 1 }, "2026-01-01", "cronograma da Lei 14.300/2022 (60% em 2026, 75%, 90% e 100% em 2029)"],

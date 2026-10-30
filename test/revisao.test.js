@@ -9,6 +9,8 @@ const { criarServidor } = require("../server");
 
 const numeros = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "referencia", "numeros.json"), "utf8")).numeros;
 const HOJE = new Date("2026-10-24T12:00:00-03:00");
+// Faixa que começa em R$ 100, só para exercitar o limite de retorno em contas pequenas (a faixa do dono começa em R$ 450).
+const numerosDeContaPequena = { ...numeros, conta_minima: { ...numeros.conta_minima, valor: 100 } };
 
 async function comServidor(nums, fn) {
   const banco = await abrir();
@@ -25,9 +27,34 @@ async function comServidor(nums, fn) {
 
 // ---- Item 7: a faixa, a cidade e os valores da conta (regra de dinheiro) ----
 
-test("a faixa de R$ 100 a R$ 2.000: fora dela não calcula, nas pontas calcula", () => {
-  for (const conta of [99.99, 2000.01, 50, 5000]) assert.equal(simular({ conta, cidade: "Sorocaba" }, numeros, HOJE).erro, "fora_da_faixa", `R$ ${conta}`);
-  for (const conta of [100, 2000]) assert.ok(simular({ conta, cidade: "Sorocaba" }, numeros, HOJE).exibido, `R$ ${conta}`);
+test("a faixa de R$ 450 a R$ 2.000: fora dela não calcula, nas pontas calcula", () => {
+  for (const conta of [449.99, 2000.01, 100, 200, 5000]) assert.equal(simular({ conta, cidade: "Sorocaba" }, numeros, HOJE).erro, "fora_da_faixa", `R$ ${conta}`);
+  for (const conta of [450, 2000]) assert.ok(simular({ conta, cidade: "Sorocaba" }, numeros, HOJE).exibido, `R$ ${conta}`);
+});
+
+// Spec, C2: a conta baixa ouve que não compensa, nas quatro cidades, sem cálculo guardado e sem pedido de dado.
+test("C2: R$ 200 nas quatro cidades ouve que não compensa e nada é guardado", async () => {
+  await comServidor(numeros, async ({ banco, post }) => {
+    for (const cidade of ["Sorocaba", "Votorantim", "Itu", "Salto"]) {
+      const r = await post("/api/simular", { conta: 200, cidade });
+      assert.equal(r.status, 422, cidade);
+      assert.equal(r.corpo.erro, "fora_da_faixa", cidade);
+      assert.match(r.corpo.mensagem, /não compensa/i, `${cidade}: tem de dizer com todas as letras`);
+      assert.match(r.corpo.mensagem, /R\$ 450/, `${cidade}: tem de dizer o mínimo atendido`);
+      assert.equal(r.corpo.simulacao_id, undefined, `${cidade}: sem id para pedir`);
+      assert.equal(r.corpo.kwp, undefined, `${cidade}: sem cálculo`);
+    }
+    assert.equal((await banco.db.query("select count(*)::int n from simulacoes")).rows[0].n, 0, "nada gravado");
+  });
+});
+
+test("C2: conta acima do máximo não ouve que não compensa (é sistema grande)", async () => {
+  await comServidor(numeros, async ({ post }) => {
+    const r = await post("/api/simular", { conta: 5000, cidade: "Sorocaba" });
+    assert.equal(r.status, 422);
+    assert.doesNotMatch(r.corpo.mensagem, /não compensa/i);
+    assert.match(r.corpo.mensagem, /R\$ 2\.000/);
+  });
 });
 
 test("cidade fora da lista, vazia ou ausente não calcula", () => {
@@ -59,8 +86,8 @@ test("o ano muda o Fio B e, com ele, o retorno (a conta é projetada ano a ano)"
   assert.ok(em2029.retorno.total_meses > em2026.retorno.total_meses, "e o retorno é mais longo");
 });
 
-test("R$ 100 passa do limite de retorno e é marcado como não compensa", () => {
-  const e = simular({ conta: 100, cidade: "Sorocaba" }, numeros, HOJE).exibido;
+test("R$ 100 passa do limite de retorno e é marcado como não compensa (faixa que começa em R$ 100)", () => {
+  const e = simular({ conta: 100, cidade: "Sorocaba" }, numerosDeContaPequena, HOJE).exibido;
   assert.equal(e.nao_compensa, true);
   assert.ok(e.retorno.total_meses > 6 * 12);
 });
@@ -90,7 +117,7 @@ for (const [rotulo, chave, valor] of [
 // ---- Item 1: quem tem conta que não compensa não deixa dado, nem pelo servidor ----
 
 test("simulação que não compensa: o servidor recusa o pedido e não grava a pessoa", async () => {
-  await comServidor(numeros, async ({ banco, post }) => {
+  await comServidor(numerosDeContaPequena, async ({ banco, post }) => {
     const sim = await post("/api/simular", { conta: 100, cidade: "Sorocaba" });
     assert.equal(sim.status, 200);
     assert.equal(sim.corpo.nao_compensa, true);

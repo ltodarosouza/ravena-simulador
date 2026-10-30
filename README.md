@@ -34,7 +34,7 @@ O servidor só calcula com números cadastrados na tabela `numeros_calculo`, com
 
 ## Decisões
 
-- **O mesmo banco da landing (P1).** O pedido é uma linha de `simulacoes`, e a pessoa é um `lead`. O mínimo de R$ 450 saiu do banco; a faixa (R$ 100 a R$ 2.000) é número cadastrado. A regra de R$ 450 continua só na página da landing.
+- **O mesmo banco da landing (P1).** O pedido é uma linha de `simulacoes`, e a pessoa é um `lead`. O mínimo de R$ 450 saiu do banco; a faixa (R$ 450 a R$ 2.000, a partir de 2026-10-30) é número cadastrado. A regra de R$ 450 continua só na página da landing.
 - **Números do dono, nunca de teste.** Os de teste ficam só nos testes.
 - **Valor da conta no jeito brasileiro** ("R$ 1.234,56", "1234,56", "1.234"); notação científica é recusada. O campo da página é texto com teclado numérico.
 - **Um CPF nunca entra:** nem no campo nome, nem no campo WhatsApp (11 dígitos que fecham como CPF). Custo conhecido: cerca de 1 em cada 100 celulares fecha como CPF por acaso e é recusado com a mensagem de digitar o WhatsApp com DDD.
@@ -119,8 +119,8 @@ Consequência (valendo desde o C8, 2026-10-30): a primeira versão deste parágr
 | 3 | Painel do vendedor | **Deixar por enquanto** | Fatia 5 da spec, ainda não chegou. É obrigatório antes de o Carlos e a Renata usarem o sistema. |
 | 4 | Números do dono: recusa de valor ruim | **Corrigido** na parte do simulador; tela: **deixar por enquanto** | Número zerado, negativo ou implausível vira "sem valor vigente" e o simulador não responde, em vez de devolver uma conta de `null`. A tela de edição é a fatia 4, ainda não chegou. |
 | 5 | Piso de 3 anos nunca verificado | **Corrigir, bloqueado** | Faltam quatro números de fonte pública. O teste continua pendente de propósito; este README diz isso. |
-| 6 | C2: R$ 200 não dá "não compensa" | **Corrigir pela spec, decisão do dono** | Com os números de teste R$ 200 dá 4 anos e 2 meses. O C2 manda mudar a spec antes do código. Pergunta registrada em `SPEC.md`, seção 11, item 3. |
-| 7 | Testes que faltavam | **Corrigido** | Faixa, cidade, a conta de R$ 600 com valores feitos à mão, o ano mudando o Fio B e R$ 100 como não compensa. Quatro mudanças de fórmula feitas de propósito fizeram os testes falharem. |
+| 6 | C2: R$ 200 não dá "não compensa" | **Corrigido no código; falta cadastrar no banco real** | Decisão do dono em 2026-10-30: a conta mínima sobe para R$ 450, o mesmo mínimo da landing. R$ 200 agora recebe 422 com a frase "não compensa" e o mínimo atendido, sem guardar cálculo. A spec mudou antes (C2 e seção 3). Teste `test/revisao.test.js`; duas mutações feitas de propósito fizeram falhar. Para o banco real, o SQL está em `evidencia/sql-conta-minima-450.sql`. |
+| 7 | Testes que faltavam | **Corrigido** | Faixa, cidade, a conta de R$ 600 com valores feitos à mão, o ano mudando o Fio B e R$ 100 como não compensa (com uma faixa de teste que começa em R$ 100). Quatro mudanças de fórmula feitas de propósito fizeram os testes falharem. |
 | 8 | Campo da página rejeita "R$ 1.234,56" | **Corrigido** (campo); **recusado** (guardar o texto cru) | O campo virou texto com teclado numérico e a página manda o texto ao servidor. Guardar também o texto cru seria dado a mais; o pedido já guarda a conta digitada, como número. |
 | 9 | README, retenção, exclusão | **Corrigido** | A rotina apaga pedidos não fechados após 12 meses e simulações sem contato após 30 dias, preservando pedidos fechados. A área do dono também executa a exclusão a pedido com confirmação explícita e autorização conferida no servidor. |
 | 10a | Reajuste diferente de zero vira erro 500 | **Deixar, limite conhecido** | A spec fixa 0%. Quem cadastrar outro valor derruba o simulador. Fica anotado aqui. |

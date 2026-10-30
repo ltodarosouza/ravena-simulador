@@ -19,7 +19,7 @@
     },
     "limite_retorno_anos": { "valor": 6, "vigencia": "2026-01-01", "fonte": "decisão da spec, seção 3" },
     "reajuste_tarifa_anual": { "valor": 0, "vigencia": "2026-01-01", "fonte": "decisão da spec, seção 3 (errar contra nós)" },
-    "conta_minima": { "valor": 100, "vigencia": "2026-01-01", "fonte": "decisão da spec, seção 2" },
+    "conta_minima": { "valor": 450, "vigencia": "2026-01-01", "fonte": "decisão do dono em 2026-10-30: o mesmo mínimo da landing (brief); abaixo disso não compensa" },
     "conta_maxima": { "valor": 2000, "vigencia": "2026-01-01", "fonte": "decisão da spec, seção 2" }
   }
 }

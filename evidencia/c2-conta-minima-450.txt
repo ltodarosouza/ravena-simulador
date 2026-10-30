@@ -1,0 +1,26 @@
+$ git diff --stat
+ .gitignore                   |  1 +
+ README.md                    |  6 +++---
+ SPEC.md                      | 10 +++++-----
+ referencia/numeros.json      |  2 +-
+ scripts/cadastrar-numeros.js |  1 +
+ server.js                    |  5 ++++-
+ test/revisao.test.js         | 39 +++++++++++++++++++++++++++++++++------
+ test/visual.test.js          |  2 +-
+ 8 files changed, 49 insertions(+), 17 deletions(-)
+
+$ node --test test/revisao.test.js test/visual.test.js
+✔ a faixa de R$ 450 a R$ 2.000: fora dela não calcula, nas pontas calcula (0.674042ms)
+✔ C2: R$ 200 nas quatro cidades ouve que não compensa e nada é guardado (922.287125ms)
+✔ C2: conta acima do máximo não ouve que não compensa (é sistema grande) (554.100875ms)
+✔ R$ 100 passa do limite de retorno e é marcado como não compensa (faixa que começa em R$ 100) (0.04825ms)
+✔ conta fora da faixa diz quais são os limites cadastrados (578.176958ms)
+ℹ tests 21
+ℹ pass 21
+ℹ fail 0
+
+$ npm test
+ℹ tests 78
+ℹ pass 77
+ℹ fail 0
+ℹ todo 1

@@ -172,7 +172,10 @@ function criarServidor({ banco, numeros, hoje = () => new Date(), donoToken = ""
         const sim = simular({ conta: lerConta(conta), cidade }, dosNumeros, agora);
         if (sim.erro === "fora_da_faixa") {
           const reais = (chave) => "R$ " + dosNumeros[chave].valor.toLocaleString("pt-BR");
-          return json(res, 422, { erro: sim.erro, mensagem: `O simulador atende contas de ${reais("conta_minima")} a ${reais("conta_maxima")} por mês.` });
+          const faixa = `O simulador atende contas de ${reais("conta_minima")} a ${reais("conta_maxima")} por mês.`;
+          const abaixo = lerConta(conta) < dosNumeros.conta_minima.valor;
+          const motivo = abaixo ? `Para uma conta abaixo de ${reais("conta_minima")} por mês o sistema solar não compensa, então não calculamos nem pedimos o seu contato. ` : "";
+          return json(res, 422, { erro: sim.erro, mensagem: motivo + faixa });
         }
         if (sim.erro) return json(res, 422, { erro: sim.erro, mensagem: MENSAGENS[sim.erro] });
         const id = await banco.guardarSimulacao(sim);
