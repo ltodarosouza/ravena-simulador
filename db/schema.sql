@@ -26,7 +26,7 @@ create index if not exists pedidos_whatsapp_criado on pedidos (whatsapp, criado_
 
 create table if not exists historico_estagios (
   id uuid primary key default gen_random_uuid(),
-  pedido_id uuid not null references pedidos(id),
+  pedido_id uuid not null references pedidos(id) on delete cascade,
   de text not null,
   para text not null,
   alterado_por text not null,

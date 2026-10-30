@@ -171,6 +171,17 @@ if (require.main === module) {
     const banco = supabase.abrir();
     const porta = Number(process.env.PORT) || 4300;
     const env = supabase.lerEnv();
+    const limparRetencao = async () => {
+      try {
+        const removidos = await banco.limparRetencao(new Date());
+        console.log(`retenção: ${removidos.pedidos} pedidos e ${removidos.simulacoes_sem_contato} simulações removidos`);
+      } catch {
+        console.error("Não foi possível executar a retenção automática.");
+      }
+    };
+    await limparRetencao();
+    const relogioRetencao = setInterval(limparRetencao, 24 * 60 * 60 * 1000);
+    relogioRetencao.unref();
     criarServidor({
       banco,
       numeros: (hoje) => banco.numerosVigentes(hoje),
