@@ -28,7 +28,7 @@ TESTAR_NO_SUPABASE=1 npm test     # também roda o C3 no Supabase de verdade (cr
 npm start                         # precisa de SUPABASE_URL e SUPABASE_SECRET_KEY no .env.local
 ```
 
-O servidor só responde com números cadastrados na tabela `numeros_calculo`, com data de vigência e fonte. Sem número vigente, ele avisa e não calcula.
+O servidor só calcula com números cadastrados na tabela `numeros_calculo`, com data de vigência e fonte. Sem número vigente de qualquer um deles ele avisa e não calcula, com uma exceção desde o C8 (2026-10-30): o Fio B em R$/kWh e a iluminação pública podem faltar; nesse caso valem zero e a resposta traz o aviso `sem_numero`, que a tela mostra à pessoa.
 
 ## Decisões
 
