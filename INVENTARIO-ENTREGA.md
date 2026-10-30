@@ -19,17 +19,16 @@ Decisão de escopo de 2026-10-29. O agente escolheu o recorte a pedido do Lucas,
 - Entrada de dinheiro no formato brasileiro e validações de conta, cidade, nome e WhatsApp.
 - Cálculo com números vigentes do banco, recusa quando eles faltam e mensagem de “não compensa”.
 - Pedido com a cópia dos resultados vistos e dos números usados.
-- Regra de acesso no banco para Carlos, Renata e dono, ainda sem painel.
+- Painel móvel com acesso individual, regiões separadas, detalhe, mudança de estágio e histórico.
 - Proteções contra CPF, corpo grande, pedido malformado, duplicidade em 24 horas e sucesso falso numa falha de conexão.
-- Banco compartilhado com a landing, migrações e testes locais: 55 passam, nenhum falha e 1 depende dos números oficiais.
+- Aviso de privacidade com aceite desmarcado, retenção automática e exclusão a pedido executada pelo dono.
+- Primeira tela do dono para atualizar a tarifa com fonte, vigência e histórico.
+- Banco compartilhado com a landing, migrações e testes locais; a contagem atual fica registrada na evidência da suíte completa.
 
 ## O que ainda vai entrar
 
-- Aviso de privacidade e aceite desmarcado antes de enviar nome e WhatsApp.
 - Números oficiais com fonte e data, fechamento das dúvidas de cálculo e execução do critério hoje pendente.
-- Tela do dono para consultar e editar os números, com validação e histórico.
-- Acesso individual e painel móvel dos vendedores, com lista, detalhe, mudança de estágio e histórico.
-- Retenção automática, exclusão de dados e limpeza das simulações sem pedido.
+- Completar a tela do dono para consultar e editar os demais números, além da tarifa.
 - Proteção contra volume abusivo definida de acordo com a hospedagem escolhida.
 - Verificação ponta a ponta, atualização final do README e publicação somente depois da autorização do Lucas.
 

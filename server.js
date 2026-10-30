@@ -22,6 +22,8 @@ const MENSAGENS = {
   numero_invalido: "Digite uma tarifa maior que zero.",
   vigencia_invalida: "Digite uma data de vigência válida.",
   fonte_invalida: "Informe a fonte da tarifa.",
+  confirmacao_exclusao_invalida: "Digite EXCLUIR para confirmar.",
+  whatsapp_exclusao_invalido: "Digite um WhatsApp válido com DDD.",
 };
 
 const LIMITE_DO_CORPO = 10 * 1024; // bytes; um pedido de verdade tem poucas centenas
@@ -101,6 +103,30 @@ function criarServidor({ banco, numeros, hoje = () => new Date(), donoToken = ""
             alterado_por: "dono",
           });
           return json(res, 201, { mensagem: "Tarifa salva." });
+        }
+      }
+      if (req.url === "/api/dono/exclusao") {
+        if (!tokens.dono) return json(res, 503, { erro: "acesso_dono_nao_configurado" });
+        if (!donoAutorizado(req)) return json(res, 401, { erro: "nao_autorizado" });
+        if (req.method === "POST") {
+          const corpo = await lerCorpo(req);
+          if (corpo.confirmacao !== "EXCLUIR") {
+            return json(res, 422, {
+              erro: "confirmacao_exclusao_invalida",
+              mensagem: MENSAGENS.confirmacao_exclusao_invalida,
+            });
+          }
+          const removidos = await banco.excluirPessoaPorWhatsapp(corpo.whatsapp);
+          if (!removidos) {
+            return json(res, 422, {
+              erro: "whatsapp_exclusao_invalido",
+              mensagem: MENSAGENS.whatsapp_exclusao_invalido,
+            });
+          }
+          const mensagem = removidos.pedidos
+            ? "Dados excluídos."
+            : "Nenhum dado encontrado para esse WhatsApp.";
+          return json(res, 200, { mensagem, removidos });
         }
       }
       if (req.url.startsWith("/api/painel/")) {

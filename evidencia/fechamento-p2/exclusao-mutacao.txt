@@ -1,0 +1,33 @@
+$ node --test test/exclusao.test.js
+✔ a tela do dono permite confirmar a exclusão sem guardar segredo (0.63075ms)
+✖ só o dono exclui todos os dados ligados ao WhatsApp confirmado (731.331708ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 1
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 798.645875
+
+✖ failing tests:
+
+test at test/exclusao.test.js:66:1
+✖ só o dono exclui todos os dados ligados ao WhatsApp confirmado (731.331708ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  200 !== 401
+  
+      at /Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/exclusao.test.js:77:12
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async comServidor (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/exclusao.test.js:50:5)
+      at async TestContext.<anonymous> (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/exclusao.test.js:67:3)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/harness:387:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 200,
+    expected: 401,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

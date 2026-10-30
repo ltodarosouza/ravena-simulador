@@ -1,0 +1,49 @@
+$ node --test test/exclusao.test.js
+✖ a tela do dono permite confirmar a exclusão sem guardar segredo (0.717042ms)
+✖ só o dono exclui todos os dados ligados ao WhatsApp confirmado (754.687375ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 0
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 833.398083
+
+✖ failing tests:
+
+test at test/exclusao.test.js:57:1
+✖ a tela do dono permite confirmar a exclusão sem guardar segredo (0.717042ms)
+  AssertionError [ERR_ASSERTION]: falta o formulário de exclusão
+      at TestContext.<anonymous> (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/exclusao.test.js:59:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1397:25)
+      at Test.start (node:internal/test_runner/test:1257:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at test/exclusao.test.js:66:1
+✖ só o dono exclui todos os dados ligados ao WhatsApp confirmado (754.687375ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  404 !== 401
+  
+      at /Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/exclusao.test.js:77:12
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async comServidor (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/exclusao.test.js:50:5)
+      at async TestContext.<anonymous> (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/exclusao.test.js:67:3)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/harness:387:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 404,
+    expected: 401,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

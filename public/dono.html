@@ -1,44 +1,99 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-theme="light">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Números do dono — Ravena Solar</title>
+<title>Área do dono — Ravena Solar</title>
+<link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css">
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 <style>
-  body { font: 16px/1.5 system-ui, sans-serif; max-width: 32rem; margin: 0 auto; padding: 1rem; color: #12263a; }
-  label { display: block; margin-top: 1rem; font-weight: 600; }
-  input, button { font: inherit; width: 100%; box-sizing: border-box; min-height: 44px; padding: .5rem; margin-top: .25rem; }
-  button { background: #f5a623; border: 0; color: #12263a; font-weight: 700; cursor: pointer; }
-  #mensagem { min-height: 1.5rem; }
-  li { margin-bottom: .75rem; }
+  :root { --solar: #e9a319; --ink: #172033; --paper: #f7f6f2; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); }
+  main { width: min(100% - 2rem, 42rem); margin: 0 auto; padding: 1.25rem 0 4rem; }
+  header { border-bottom: 3px solid var(--solar); margin-bottom: 1.25rem; padding-bottom: 1rem; }
+  h1 { font: 800 clamp(2rem, 9vw, 3.4rem)/.95 ui-sans-serif, system-ui, sans-serif; letter-spacing: -.05em; margin: .35rem 0; }
+  .painel { border: 1px solid #d9d6cc; background: white; box-shadow: none; }
+  .input, .btn { min-height: 44px; }
+  .btn-solar { background: var(--solar); border-color: var(--solar); color: var(--ink); }
+  .mensagem:empty { display: none; }
+  li { margin-bottom: .75rem; overflow-wrap: anywhere; }
 </style>
 </head>
 <body>
-<h1>Tarifa usada no cálculo</h1>
-<p>Área do dono. O acesso não fica salvo nesta página.</p>
-<form id="tarifa">
-  <label for="acesso">Acesso do dono</label>
-  <input id="acesso" name="acesso" type="password" autocomplete="current-password" required>
-  <label for="valor">Tarifa por kWh (R$)</label>
-  <input id="valor" name="valor" type="number" min="0.0001" step="0.0001" required>
-  <label for="vigencia">Válida desde</label>
-  <input id="vigencia" name="vigencia" type="date" required>
-  <label for="fonte">Fonte</label>
-  <input id="fonte" name="fonte" type="text" required>
-  <button type="submit">Salvar tarifa</button>
-</form>
-<p id="mensagem" role="status"></p>
-<h2>Histórico</h2>
-<button id="carregar" type="button">Carregar histórico</button>
-<ul id="historico"></ul>
+<main>
+  <header>
+    <p class="font-semibold">Ravena Solar · administração</p>
+    <h1>Área do dono</h1>
+    <p>O acesso vale para esta tela e não fica salvo no navegador.</p>
+  </header>
+
+  <fieldset class="fieldset mb-5">
+    <legend class="fieldset-legend">Acesso do dono</legend>
+    <input class="input w-full" id="acesso" name="acesso" type="password" autocomplete="current-password" required>
+    <p class="label">Use o acesso individual configurado no servidor.</p>
+  </fieldset>
+
+  <section class="painel card card-border mb-5" aria-labelledby="titulo-tarifa">
+    <div class="card-body">
+      <h2 id="titulo-tarifa" class="card-title">Tarifa usada no cálculo</h2>
+      <form id="tarifa" class="grid gap-3">
+        <fieldset class="fieldset">
+          <legend class="fieldset-legend">Tarifa por kWh (R$)</legend>
+          <input class="input w-full" id="valor" name="valor" type="number" min="0.0001" step="0.0001" required>
+        </fieldset>
+        <fieldset class="fieldset">
+          <legend class="fieldset-legend">Válida desde</legend>
+          <input class="input w-full" id="vigencia" name="vigencia" type="date" required>
+        </fieldset>
+        <fieldset class="fieldset">
+          <legend class="fieldset-legend">Fonte</legend>
+          <input class="input w-full" id="fonte" name="fonte" type="text" required>
+        </fieldset>
+        <button class="btn btn-solar btn-block" type="submit">Salvar tarifa</button>
+      </form>
+      <p id="mensagem" class="mensagem alert alert-soft mt-3" role="status"></p>
+      <div class="divider">Histórico</div>
+      <button class="btn btn-block" id="carregar" type="button">Carregar histórico</button>
+      <ul id="historico" class="mt-3 pl-5"></ul>
+    </div>
+  </section>
+
+  <section class="painel card card-border" aria-labelledby="titulo-exclusao">
+    <div class="card-body">
+      <h2 id="titulo-exclusao" class="card-title">Pedido de exclusão</h2>
+      <div role="alert" class="alert alert-warning alert-soft">
+        Esta ação apaga o cadastro, os pedidos e as simulações ligadas à pessoa. Não pode ser desfeita.
+      </div>
+      <form id="exclusao" class="grid gap-3 mt-2">
+        <fieldset class="fieldset">
+          <legend class="fieldset-legend">WhatsApp da pessoa</legend>
+          <input class="input w-full" id="whatsapp-exclusao" name="whatsapp" type="tel" inputmode="tel" autocomplete="off" required>
+          <p class="label">Use o mesmo número informado no pedido, com DDD.</p>
+        </fieldset>
+        <fieldset class="fieldset">
+          <legend class="fieldset-legend">Confirmação</legend>
+          <input class="input w-full" id="confirmacao-exclusao" name="confirmacao" type="text" pattern="EXCLUIR" autocomplete="off" required>
+          <p class="label">Digite EXCLUIR em letras maiúsculas.</p>
+        </fieldset>
+        <button class="btn btn-error btn-block" type="submit">Apagar dados</button>
+      </form>
+      <p id="mensagem-exclusao" class="mensagem alert alert-soft mt-3" role="status"></p>
+    </div>
+  </section>
+</main>
 <script>
 const $ = (id) => document.getElementById(id);
 const autorizacao = () => ({ authorization: "Bearer " + $("acesso").value });
+const mostrar = (id, texto, erro = false) => {
+  $(id).textContent = texto;
+  $(id).className = `mensagem alert alert-soft mt-3 ${erro ? "alert-error" : "alert-success"}`;
+};
 
 async function carregar() {
   const resposta = await fetch("/api/dono/tarifa", { headers: autorizacao() });
   const corpo = await resposta.json();
-  if (!resposta.ok) { $("mensagem").textContent = "Acesso recusado."; return; }
+  if (!resposta.ok) { mostrar("mensagem", "Acesso recusado.", true); return; }
   $("historico").replaceChildren(...corpo.map((item) => {
     const li = document.createElement("li");
     li.textContent = `R$ ${item.valor} desde ${item.vigencia} — ${item.fonte}`;
@@ -59,8 +114,29 @@ $("tarifa").addEventListener("submit", async (evento) => {
     }),
   });
   const corpo = await resposta.json();
-  $("mensagem").textContent = corpo.mensagem || "Não foi possível salvar.";
+  mostrar("mensagem", corpo.mensagem || "Não foi possível salvar.", !resposta.ok);
   if (resposta.ok) await carregar();
+});
+
+$("exclusao").addEventListener("submit", async (evento) => {
+  evento.preventDefault();
+  const botao = evento.submitter;
+  botao.disabled = true;
+  const resposta = await fetch("/api/dono/exclusao", {
+    method: "POST",
+    headers: { ...autorizacao(), "content-type": "application/json" },
+    body: JSON.stringify({
+      whatsapp: $("whatsapp-exclusao").value,
+      confirmacao: $("confirmacao-exclusao").value,
+    }),
+  });
+  const corpo = await resposta.json();
+  botao.disabled = false;
+  mostrar("mensagem-exclusao", corpo.mensagem || "Não foi possível excluir.", !resposta.ok);
+  if (resposta.ok) {
+    $("whatsapp-exclusao").value = "";
+    $("confirmacao-exclusao").value = "";
+  }
 });
 </script>
 </body>

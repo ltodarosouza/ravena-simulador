@@ -12,7 +12,7 @@ A spec é o contrato: [`SPEC.md`](SPEC.md). O pedido do cliente: [`brief.md`](br
 | Fatia 2: dado pessoal | **Feita.** CPF no nome e no WhatsApp é recusado; a página explica o uso e o prazo dos dados, a caixa começa desmarcada e o servidor exige aceite explícito. |
 | Fatia 3: tela de não compensa | **Mecanismo feito.** Servidor recusa o pedido e a página esconde o formulário. Ver "Conflito do C2" abaixo. |
 | Fatia 4: tela de números do dono | **Começada pela tarifa.** O dono já pode salvar tarifa com valor, vigência e fonte; a simulação usa a mudança e o histórico registra a alteração. Os outros números ainda entram por script. |
-| Fatia 5: painel do vendedor, estágios, retenção, exclusão | **Painel e retenção feitos.** Carlos e Renata têm lista isolada por região, detalhe com os números vistos pela pessoa e mudança de estágio com histórico. A limpeza automática respeita 12 meses, 30 dias e preserva pedidos fechados. A exclusão a pedido ainda não foi feita. |
+| Fatia 5: painel do vendedor, estágios, retenção, exclusão | **Feita.** Carlos e Renata têm lista isolada por região, detalhe com os números vistos pela pessoa e mudança de estágio com histórico. A limpeza automática respeita 12 meses, 30 dias e preserva pedidos fechados. O dono atende pedidos de exclusão pelo WhatsApp, com confirmação explícita. |
 | Fatia 6: outras cidades e o resto | A conta já aceita as quatro cidades. O resto, não. |
 
 **Nada disto está publicado.** O simulador só roda na máquina de quem constrói.
@@ -42,6 +42,7 @@ O servidor só responde com números cadastrados na tabela `numeros_calculo`, co
 - **Acesso inicial do dono.** A rota `/dono` pede um segredo configurado apenas no servidor como `OWNER_ACCESS_TOKEN`; ele não fica na página nem no repositório. A primeira fatia da tela edita somente a tarifa. O teste prova que retirar a barreira permite uma gravação indevida e reprova.
 - **Acesso inicial dos vendedores.** A rota `/painel` recebe o acesso individual digitado na hora; os segredos de Carlos e Renata ficam somente no servidor. Lista, endereço direto e mudança de estágio consultam o banco em nome do vendedor. A interface mostra os seis resultados guardados no pedido e o histórico registra quem mudou e quando.
 - **Retenção automática.** Ao iniciar e depois uma vez por dia, o servidor remove pedidos não fechados com mais de 12 meses e simulações sem contato com mais de 30 dias. Pedidos fechados são preservados. O teste usa somente dados fictícios e prova a exceção retirando-a de propósito.
+- **Exclusão a pedido.** A pessoa pede pelo contato informado no aviso de privacidade. Na área do dono, o WhatsApp e a confirmação `EXCLUIR` são exigidos; o servidor confere novamente o acesso do dono e apaga, numa operação, o cadastro, os pedidos e os cálculos ligados. O agente escolheu esse mecanismo de construção para executar a decisão de exclusão que o Lucas já havia aprovado. O teste usa somente pessoas fictícias.
 
 ## Dados pessoais que o sistema guarda
 
@@ -58,7 +59,7 @@ O servidor só responde com números cadastrados na tabela `numeros_calculo`, co
 
 **Decidido não guardar:** CPF (recusado antes de gravar, nome e WhatsApp), endereço, número da instalação, foto ou PDF da conta. Motivo: a foto da conta traz CPF, endereço e 12 meses de consumo, e o simulador não precisa de nada disso para calcular. Nenhum dado de pedido vai para log (o teste confere).
 
-**Ainda não feito (decidido, não implementado):** o pedido de exclusão. A limpeza automática aos 12 meses e aos 30 dias já foi implementada; o aviso de privacidade e a caixa desmarcada já estão na tela, e o servidor recusa o pedido sem aceite explícito.
+**Implementado:** o pedido de exclusão é executado pelo dono na área administrativa, exige a palavra `EXCLUIR` e remove todos os pedidos e simulações ligados ao WhatsApp. A limpeza automática aos 12 meses e aos 30 dias também está implementada; o aviso de privacidade e a caixa desmarcada estão na tela, e o servidor recusa o pedido sem aceite explícito.
 
 ## Quem vê o quê (C4)
 
@@ -85,7 +86,7 @@ Está na seção 4 da spec: foto ou PDF da conta (traz CPF, endereço e 12 meses
 | 6 | C2: R$ 200 não dá "não compensa" | **Corrigir pela spec, decisão do dono** | Com os números de teste R$ 200 dá 4 anos e 2 meses. O C2 manda mudar a spec antes do código. Pergunta registrada em `SPEC.md`, seção 11, item 3. |
 | 7 | Testes que faltavam | **Corrigido** | Faixa, cidade, a conta de R$ 600 com valores feitos à mão, o ano mudando o Fio B e R$ 100 como não compensa. Quatro mudanças de fórmula feitas de propósito fizeram os testes falharem. |
 | 8 | Campo da página rejeita "R$ 1.234,56" | **Corrigido** (campo); **recusado** (guardar o texto cru) | O campo virou texto com teclado numérico e a página manda o texto ao servidor. Guardar também o texto cru seria dado a mais; o pedido já guarda a conta digitada, como número. |
-| 9 | README, retenção, exclusão | README e retenção **feitos**; exclusão: **pendente** | A rotina apaga pedidos não fechados após 12 meses e simulações sem contato após 30 dias, preservando pedidos fechados. A exclusão a pedido ainda precisa ser implementada antes de publicar. |
+| 9 | README, retenção, exclusão | **Corrigido** | A rotina apaga pedidos não fechados após 12 meses e simulações sem contato após 30 dias, preservando pedidos fechados. A área do dono também executa a exclusão a pedido com confirmação explícita e autorização conferida no servidor. |
 | 10a | Reajuste diferente de zero vira erro 500 | **Deixar, limite conhecido** | A spec fixa 0%. Quem cadastrar outro valor derruba o simulador. Fica anotado aqui. |
 | 10b | Fio B limitado ao primeiro e ao último ano | **Recusar** | A Lei 14.300 fixa 100% de 2029 em diante; usar o último ano é o comportamento certo. Antes de 2026 não ocorre. |
 | 10c | Esquema de teste paralelo (PGlite) | **Deixar** | Evita testar em cima de dado real da P1 e deixa a CI sem chave. O C3 roda no banco de verdade com `TESTAR_NO_SUPABASE=1`. |
@@ -113,4 +114,4 @@ Cada correção tem teste que falhou antes e passa depois (`evidencia/seguranca-
 
 ## Evidência
 
-`evidencia/` guarda a saída crua do que foi rodado: vermelho e verde de cada correção, a prova de que o hook dispara sozinho e a conferência da página no navegador. `evidencia/2.14-varredura/` guarda o plano, o ponto de retomada e as provas do sensor novo, inclusive a mutação que troca a falha por sucesso falso e faz o teste reprovar. `evidencia/fechamento-p2/` guarda o vermelho, o verde, a mutação e a suíte completa das fatias de privacidade, tarifa do dono, painel do vendedor e retenção. `depuracao/` guarda as hipóteses escritas antes das correções.
+`evidencia/` guarda a saída crua do que foi rodado: vermelho e verde de cada correção, a prova de que o hook dispara sozinho e a conferência da página no navegador. `evidencia/2.14-varredura/` guarda o plano, o ponto de retomada e as provas do sensor novo, inclusive a mutação que troca a falha por sucesso falso e faz o teste reprovar. `evidencia/fechamento-p2/` guarda o vermelho, o verde, a mutação e a suíte completa das fatias de privacidade, tarifa do dono, painel do vendedor, retenção e exclusão a pedido. `depuracao/` guarda as hipóteses escritas antes das correções.
