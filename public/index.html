@@ -42,7 +42,7 @@
   .telhado i { width: 40px; height: 56px; border-radius: 4px; border: 2px solid var(--branco); box-shadow: 0 0 0 1px var(--linha);
     background: linear-gradient(135deg, #2A6E9C, #1A4C72 55%, #0F3350); }
   .toca .telhado i { animation: encaixa .5s var(--saida) both; animation-delay: calc(var(--i) * 45ms + .4s); }
-  @keyframes encaixa { from { opacity: 0; transform: translateY(-16px) scale(.9); } }
+  @keyframes encaixa { from { transform: translateY(-16px) scale(.9); } }
   .dados { margin: 0; display: grid; gap: var(--e3); }
   .dados div { display: grid; gap: 4px; }
   .dados dt { font-size: 14px; font-weight: 600; color: var(--tinta-suave); }
@@ -63,8 +63,7 @@
   .recebido { margin-top: var(--e4); padding: var(--e3); border-radius: 16px; background: var(--sol); display: grid; gap: var(--e1); }
   .recebido:focus { outline: none; }
   .recebido.toca { animation: entra .6s var(--saida) both; }
-  @keyframes entra { from { opacity: 0; transform: translateY(16px); } }
-  .enviando { opacity: .7; }
+  @keyframes entra { from { transform: translateY(16px); } }
 
   @media (min-width: 900px) {
     .hero-corpo { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); align-items: center; padding-block: var(--e4) var(--e5); }
@@ -218,6 +217,8 @@ $("simular").addEventListener("submit", async (e) => {
   $("resultado").hidden = false;
   void $("resultado").offsetWidth;
   $("resultado").classList.add("toca");
+  // a animação é enfeite: passado o tempo dela, a tela fica no estado final mesmo que o navegador a tenha segurado
+  setTimeout(() => $("resultado").classList.remove("toca"), 2600);
   contar($("r-economia"), corpo.economia_ano1);
   $("resultado").focus({ preventScroll: true });
   $("resultado").scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });

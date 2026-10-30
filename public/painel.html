@@ -18,7 +18,7 @@
 
   .pedidos { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--e2); }
   .pedido { min-width: 0; padding: var(--e3); display: grid; gap: var(--e2); animation: surge .4s var(--saida) both; animation-delay: calc(var(--i) * 40ms); }
-  @keyframes surge { from { opacity: 0; transform: translateY(8px); } }
+  @keyframes surge { from { transform: translateY(8px); } }
   .pedido, .pedido p, .pedido strong, .historico li { overflow-wrap: anywhere; }
   .pedido-topo { display: flex; justify-content: space-between; gap: var(--e2); align-items: flex-start; }
   .pedido-topo h3 { font-size: 20px; }
