@@ -1,0 +1,62 @@
+✖ C8: sem Fio B e sem iluminação o cálculo responde e avisa o que ficou de fora (0.410333ms)
+✔ C8: com o Fio B e a iluminação cadastrados o aviso some (0.148375ms)
+✖ C8: só o Fio B ou só a iluminação faltando lista só o que falta (0.053041ms)
+✔ C8: a exceção vale só para esses dois; sem tarifa o simulador continua sem responder (0.134125ms)
+✔ C8: um Fio B cadastrado com valor absurdo continua recusado (só a falta é tolerada) (0.046875ms)
+✖ C8: /api/simular devolve 200 com o aviso quando faltam os dois (658.668834ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 3
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 724.8595
+
+✖ failing tests:
+
+test at test/sem-fio-b.test.js:15:1
+✖ C8: sem Fio B e sem iluminação o cálculo responde e avisa o que ficou de fora (0.410333ms)
+  Error: sem valor vigente para iluminacao_publica
+      at n (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/lib/calculo.js:37:95)
+      at simular (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/lib/calculo.js:49:22)
+      at TestContext.<anonymous> (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/sem-fio-b.test.js:16:13)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1397:25)
+      at Test.start (node:internal/test_runner/test:1257:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    chave: 'iluminacao_publica'
+  }
+
+test at test/sem-fio-b.test.js:29:1
+✖ C8: só o Fio B ou só a iluminação faltando lista só o que falta (0.053041ms)
+  Error: sem valor vigente para fio_b_kwh
+      at n (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/lib/calculo.js:37:95)
+      at simular (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/lib/calculo.js:51:19)
+      at TestContext.<anonymous> (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/sem-fio-b.test.js:31:20)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1397:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:969:18)
+      at Test.postRun (node:internal/test_runner/test:1537:19)
+      at Test.run (node:internal/test_runner/test:1462:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    chave: 'fio_b_kwh'
+  }
+
+test at test/sem-fio-b.test.js:46:1
+✖ C8: /api/simular devolve 200 com o aviso quando faltam os dois (658.668834ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  503 !== 200
+  
+      at TestContext.<anonymous> (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/sem-fio-b.test.js:53:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 503,
+    expected: 200,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

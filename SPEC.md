@@ -27,6 +27,7 @@ A cidade do pedido é a do simulador e não é pedida de novo.
 - Economia por ano: R$ inteiro, no primeiro ano.
 - Retorno: "X anos e Y meses", projetado ano a ano (Fio B sobe pelo cronograma da Lei 14.300; reajuste da tarifa padrão = 0%, para errar contra nós).
 - Aviso curto: é estimativa, a proposta vem depois da visita técnica.
+- **Exceção para Fio B e iluminação (decisão do Lucas, 2026-10-30).** Enquanto o Fio B em R$/kWh, ou a iluminação pública da cidade, não tiver número do dono com data e fonte, o cálculo trata o que falta como zero e o resultado traz um aviso: a conta ainda não inclui esse item, então a economia pode estar maior e o retorno menor do que o real (o contrário de errar contra nós, aceito de propósito para a entrega mostrar a simulação rodando). Cadastrado o número, ele passa a valer sozinho e o aviso some. A exceção vale só para esses dois números; qualquer outro sem valor vigente continua sem resposta.
 - Se o retorno passar do limite configurado (inicial: 6 anos) ou não houver retorno: mensagem clara de que não compensa e por quê, sem botão de pedir simulação.
 - Aviso de privacidade na tela do pedido: dados pedidos, para quê e por quanto tempo, com como pedir exclusão; sem caixa pré-marcada.
 - Se a conexão falhar ao simular ou ao enviar o pedido, a tela não mostra sucesso: explica que não foi possível concluir e orienta a tentar de novo.
@@ -80,9 +81,11 @@ Dado uma falha de conexão ao simular ou enviar o pedido, quando a chamada não 
 
 **C5. Dado pessoal onde não deve.** Dado um pedido enviado com um CPF válido digitado no campo nome, quando a pessoa envia, então o pedido é recusado com a mensagem de que só o nome é pedido, e o CPF não aparece em nenhuma tabela nem log. Vale para qualquer jeito de escrever os algarismos (inclusive os de largura total e de outros alfabetos).
 
-**C6. Número do dono.** Dado um número de cálculo vazio, zero, negativo ou implausível, quando o dono tenta salvar, então a tela recusa e explica. Dado um número sem valor vigente, quando alguém simula, então o simulador não responde e avisa, em vez de usar valor velho. O mesmo vale para o pedido: sem número vigente, nenhum pedido é gravado, mesmo de uma simulação feita antes de o número sair.
+**C6. Número do dono.** Dado um número de cálculo vazio, zero, negativo ou implausível, quando o dono tenta salvar, então a tela recusa e explica. Dado um número sem valor vigente, quando alguém simula, então o simulador não responde e avisa, em vez de usar valor velho. O mesmo vale para o pedido: sem número vigente, nenhum pedido é gravado, mesmo de uma simulação feita antes de o número sair. Exceção: Fio B em R$/kWh e iluminação pública, que seguem a seção 3 e o C8.
 
 **C7. Painel no celular.** Dado o Carlos logado num celular de 390 px de largura, quando ele abre a lista e muda o estágio de um pedido de Sorocaba, então não há rolagem horizontal, a lista aparece em até 3 segundos em 4G, os botões têm pelo menos 44 px de altura e a mudança leva até 3 toques; o histórico mostra quem mudou e quando.
+
+**C8. Simulação sem Fio B e sem iluminação.** Dado que o dono ainda não cadastrou o Fio B em R$/kWh nem a iluminação pública, quando alguém simula R$ 600 em Sorocaba, então o simulador responde, o resultado traz o aviso de que esses dois itens ficaram de fora e a conta é a mesma que se os dois valessem zero. Dado que o Fio B foi cadastrado com data e fonte, então ele entra no cálculo e esse aviso sai (ou lista só o que ainda falta). Dado que falta qualquer outro número, então nada muda: o simulador não responde.
 
 ## 7. Restrições
 

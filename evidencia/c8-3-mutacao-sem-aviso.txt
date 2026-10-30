@@ -1,0 +1,88 @@
+✖ C8: sem Fio B e sem iluminação o cálculo responde e avisa o que ficou de fora (0.979708ms)
+✔ C8: com o Fio B e a iluminação cadastrados o aviso some (0.099417ms)
+✖ C8: só o Fio B ou só a iluminação faltando lista só o que falta (0.118625ms)
+✔ C8: a exceção vale só para esses dois; sem tarifa o simulador continua sem responder (0.146208ms)
+✔ C8: um Fio B cadastrado com valor absurdo continua recusado (só a falta é tolerada) (0.056ms)
+✖ C8: /api/simular devolve 200 com o aviso quando faltam os dois (614.179375ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 3
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 670.467583
+
+✖ failing tests:
+
+test at test/sem-fio-b.test.js:15:1
+✖ C8: sem Fio B e sem iluminação o cálculo responde e avisa o que ficou de fora (0.979708ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + undefined
+  - [
+  -   'fio_b_kwh',
+  -   'iluminacao_publica'
+  - ]
+  
+      at TestContext.<anonymous> (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/sem-fio-b.test.js:18:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1397:25)
+      at Test.start (node:internal/test_runner/test:1257:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: [ 'fio_b_kwh', 'iluminacao_publica' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at test/sem-fio-b.test.js:29:1
+✖ C8: só o Fio B ou só a iluminação faltando lista só o que falta (0.118625ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + undefined
+  - [
+  -   'fio_b_kwh'
+  - ]
+  
+      at TestContext.<anonymous> (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/sem-fio-b.test.js:31:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1397:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:969:18)
+      at Test.postRun (node:internal/test_runner/test:1537:19)
+      at Test.run (node:internal/test_runner/test:1462:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: [ 'fio_b_kwh' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at test/sem-fio-b.test.js:46:1
+✖ C8: /api/simular devolve 200 com o aviso quando faltam os dois (614.179375ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + undefined
+  - [
+  -   'fio_b_kwh',
+  -   'iluminacao_publica'
+  - ]
+  
+      at TestContext.<anonymous> (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/sem-fio-b.test.js:54:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: [ 'fio_b_kwh', 'iluminacao_publica' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }

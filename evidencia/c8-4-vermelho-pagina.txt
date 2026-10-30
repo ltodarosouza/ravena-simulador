@@ -1,0 +1,138 @@
+✔ C8: sem Fio B e sem iluminação o cálculo responde e avisa o que ficou de fora (0.747792ms)
+✔ C8: com o Fio B e a iluminação cadastrados o aviso some (0.072708ms)
+✔ C8: só o Fio B ou só a iluminação faltando lista só o que falta (0.087ms)
+✔ C8: a exceção vale só para esses dois; sem tarifa o simulador continua sem responder (0.13975ms)
+✔ C8: um Fio B cadastrado com valor absurdo continua recusado (só a falta é tolerada) (0.056792ms)
+✔ C8: /api/simular devolve 200 com o aviso quando faltam os dois (625.585791ms)
+✖ C8: a página tem o aviso de itens fora da conta, escondido por padrão e ligado a sem_numero (1.803708ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 6
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 705.898584
+
+✖ failing tests:
+
+test at test/sem-fio-b.test.js:59:1
+✖ C8: a página tem o aviso de itens fora da conta, escondido por padrão e ligado a sem_numero (1.803708ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /<p id="aviso-sem-numero"[^>]*\bhidden\b[^>]*>[^<]*(Fio B|fio)[^<]*(iluminação)/i. Input:
+  
+  '<!doctype html>\n' +
+    '<html lang="pt-BR">\n' +
+    '<head>\n' +
+    '<meta charset="utf-8">\n' +
+    '<meta name="viewport" content="width=device-width, initial-scale=1">\n' +
+    '<title>Simulador Ravena Solar</title>\n' +
+    '<style>\n' +
+    '  body { font: 16px/1.5 system-ui, sans-serif; max-width: 32rem; margin: 0 auto; padding: 1rem; color: #12263a; }\n' +
+    '  label { display: block; margin-top: 1rem; font-weight: 600; }\n' +
+    '  input, select, button { font: inherit; width: 100%; box-sizing: border-box; min-height: 44px; padding: .5rem; margin-top: .25rem; }\n' +
+    '  button { background: #f5a623; border: 0; color: #12263a; font-weight: 700; cursor: pointer; }\n' +
+    '  .privacidade { font-size: .925rem; }\n' +
+    '  .aceite { display: flex; align-items: flex-start; gap: .5rem; font-weight: 400; }\n' +
+    '  .aceite input { flex: 0 0 44px; width: 44px; min-height: 44px; margin: 0; }\n' +
+    '  dl { margin: 1rem 0; } dt { font-weight: 600; margin-top: .5rem; } dd { margin: 0; }\n' +
+    '  #erro { color: #9b1c1c; } [hidden] { display: none; }\n' +
+    '</style>\n' +
+    '</head>\n' +
+    '<body>\n' +
+    '<h1>Quanto você economizaria com energia solar?</h1>\n' +
+    '<form id="simular">\n' +
+    '  <label for="conta">Quanto você paga de luz por mês (R$)</label>\n' +
+    '  <input id="conta" name="conta" type="text" inputmode="decimal" autocomplete="off" placeholder="ex.: 1.234,56" required>\n' +
+    '  <label for="cidade">Cidade</label>\n' +
+    '  <select id="cidade" name="cidade" required>\n' +
+    '    <option value="">Escolha</option>\n' +
+    '    <option>Sorocaba</option><option>Votorantim</option><option>Itu</option><option>Salto</option>\n' +
+    '  </select>\n' +
+    '  <button type="submit">Ver quanto economizo</button>\n' +
+    '</form>\n' +
+    '<p id="erro" role="alert"></p>\n' +
+    '\n' +
+    '<section id="resultado" hidden>\n' +
+    '  <h2>Resultado</h2>\n' +
+    '  <dl>\n' +
+    '    <dt>Tamanho do sistema</dt><dd id="r-kwp"></dd>\n' +
+    '    <dt>Investimento aproximado</dt><dd id="r-investimento"></dd>\n' +
+    '    <dt>Sua conta depois</dt><dd id="r-depois"></dd>\n' +
+    '    <dt>Economia por ano</dt><dd id="r-economia"></dd>\n' +
+    '    <dt>O sistema se paga em</dt><dd id="r-retorno"></dd>\n' +
+    '  </dl>\n' +
+    '  <p>É uma estimativa. A proposta vem depois da visita técnica.</p>\n' +
+    '  <p id="aviso-nao-compensa" role="status" hidden><strong>Para essa conta, o sistema solar não compensa:</strong> o retorno estimado passa do prazo que a gente considera razoável. Por isso não pedimos o seu contato.</p>\n' +
+    '  <form id="pedir">\n' +
+    '    <h2>Quero a simulação detalhada</h2>\n' +
+    '    <label for="nome">Nome</label><input id="nome" name="nome" autocomplete="name">\n' +
+    '    <label for="whatsapp">WhatsApp com DDD</label><input id="whatsapp" name="whatsapp" inputmode="tel" autocomplete="tel">\n' +
+    '    <p class="privacidade">Usaremos seu nome, WhatsApp, cidade, valor da conta e resultado para atender ao pedido de simulação detalhada. Pedidos que não fecharem ficam guardados por até 12 meses; os que fecharem, enquanto houver relação comercial. Para pedir exclusão, responda ao vendedor que entrar em contato.</p>\n' +
+    '    <label class="aceite" for="aceite-privacidade">\n' +
+    '      <input id="aceite-privacidade" name="aceite_privacidade" type="checkbox" required>\n' +
+    '      <span>Li o aviso de privacidade e concordo com esse uso dos meus dados.</span>\n' +
+    '    </label>\n' +
+    '    <button type="submit">Pedir simulação detalhada</button>\n' +
+    '  </form>\n' +
+    '  <p id="pedido-msg" role="status"></p>\n' +
+    '</section>\n' +
+    '\n' +
+    '<script>\n' +
+    'const real = (v) => "R$ " + v.toLocaleString("pt-BR");\n' +
+    'let simulacaoId = null;\n' +
+    'const $ = (id) => document.getElementById(id);\n' +
+    '\n' +
+    'async function enviar(url, corpo) {\n' +
+    '  try {\n' +
+    '    const r = await fetch(url, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(corpo) });\n' +
+    '    return { status: r.status, corpo: await r.json() };\n' +
+    '  } catch {\n' +
+    '    return { status: 0, corpo: { mensagem: "Não foi possível concluir. Confira sua conexão e tente de novo." } };\n' +
+    '  }\n' +
+    '}\n' +
+    '\n' +
+    '$("simular").addEventListener("submit", async (e) => {\n' +
+    '  e.preventDefault();\n' +
+    '  $("erro").textContent = ""; $("resultado").hidden = true; $("pedido-msg").textContent = "";\n' +
+    '  const { status, corpo } = await enviar("/api/simular", { conta: $("conta").value, cidade: $("cidade").value });\n' +
+    '  if (status !== 200) { $("erro").textContent = corpo.mensagem || "Não foi possível simular."; return; }\n' +
+    '  simulacaoId = corpo.simulacao_id;\n' +
+    '  $("r-kwp").textContent = corpo.kwp.toLocaleString("pt-BR") + " kWp (" + corpo.paineis + " painéis)";\n' +
+    '  $("r-investimento").textContent = real(corpo.investimento);\n' +
+    '  $("r-depois").textContent = real(corpo.conta_depois) + " por mês";\n' +
+    '  $("r-economia").textContent = real(corpo.economia_ano1) + " no primeiro ano";\n' +
+    '  $("r-retorno").textContent = corpo.retorno ? corpo.retorno.anos + " anos e " + corpo.retorno.meses + " meses" : "mais de 50 anos";\n' +
+    '  $("pedir").hidden = corpo.nao_compensa;\n' +
+    '  $("aviso-nao-compensa").hidden = !corpo.nao_compensa;\n' +
+    '  $("resultado").hidden = false;\n' +
+    '});\n' +
+    '\n' +
+    '$("pedir").addEventListener("submit", async (e) => {\n' +
+    '  e.preventDefault();\n' +
+    '  const { corpo } = await enviar("/api/pedido", {\n' +
+    '    simulacao_id: simulacaoId,\n' +
+    '    nome: $("nome").value,\n' +
+    '    whatsapp: $("whatsapp").value,\n' +
+    '    aceite_privacidade: $("aceite-privacidade").checked,\n' +
+    '  });\n' +
+    '  $("pedido-msg").textContent = corpo.mensagem;\n' +
+    '});\n' +
+    '</script>\n' +
+    '</body>\n' +
+    '</html>\n'
+  
+      at TestContext.<anonymous> (/Users/ltodaro/dev/trabalhos-202/ravena-simulador/test/sem-fio-b.test.js:61:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1397:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:969:18)
+      at Test.postRun (node:internal/test_runner/test:1537:19)
+      at Test.run (node:internal/test_runner/test:1462:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '<!doctype html>\n<html lang="pt-BR">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1">\n<title>Simulador Ravena Solar</title>\n<style>\n  body { font: 16px/1.5 system-ui, sans-serif; max-width: 32rem; margin: 0 auto; padding: 1rem; color: #12263a; }\n  label { display: block; margin-top: 1rem; font-weight: 600; }\n  input, select, button { font: inherit; width: 100%; box-sizing: border-box; min-height: 44px; padding: .5rem; margin-top: .25rem; }\n  button { background: #f5a623; border: 0; color: #12263a; font-weight: 700; cursor: pointer; }\n  .privacidade { font-size: .925rem; }\n  .aceite { display: flex; align-items: flex-start; gap: .5rem; font-weight: 400; }\n  .aceite input { flex: 0 0 44px; width: 44px; min-height: 44px; margin: 0; }\n  dl { margin: 1rem 0; } dt { font-weight: 600; margin-top: .5rem; } dd { margin: 0; }\n  #erro { color: #9b1c1c; } [hidden] { display: none; }\n</style>\n</head>\n<body>\n<h1>Quanto você economizaria com energia solar?</h1>\n<form id="simular">\n  <label for="conta">Quanto você paga de luz por mês (R$)</label>\n  <input id="conta" name="conta" type="text" inputmode="decimal" autocomplete="off" placeholder="ex.: 1.234,56" required>\n  <label for="cidade">Cidade</label>\n  <select id="cidade" name="cidade" required>\n    <option value="">Escolha</option>\n    <option>Sorocaba</option><option>Votorantim</option><option>Itu</option><option>Salto</option>\n  </select>\n  <button type="submit">Ver quanto economizo</button>\n</form>\n<p id="erro" role="alert"></p>\n\n<section id="resultado" hidden>\n  <h2>Resultado</h2>\n  <dl>\n    <dt>Tamanho do sistema</dt><dd id="r-kwp"></dd>\n    <dt>Investimento aproximado</dt><dd id="r-investimento"></dd>\n    <dt>Sua conta depois</dt><dd id="r-depois"></dd>\n    <dt>Economia por ano</dt><dd id="r-economia"></dd>\n    <dt>O sistema se paga em</dt><dd id="r-retorno"></dd>\n  </dl>\n  <p>É uma estimativa. A proposta vem depois da visita técnica.</p>\n  <p id="aviso-nao-compensa" role="status" hidden><strong>Para essa conta, o sistema solar não compensa:</strong> o retorno estimado passa do prazo que a gente considera razoável. Por isso não pedimos o seu contato.</p>\n  <form id="pedir">\n    <h2>Quero a simulação detalhada</h2>\n    <label for="nome">Nome</label><input id="nome" name="nome" autocomplete="name">\n    <label for="whatsapp">WhatsApp com DDD</label><input id="whatsapp" name="whatsapp" inputmode="tel" autocomplete="tel">\n    <p class="privacidade">Usaremos seu nome, WhatsApp, cidade, valor da conta e resultado para atender ao pedido de simulação detalhada. Pedidos que não fecharem ficam guardados por até 12 meses; os que fecharem, enquanto houver relação comercial. Para pedir exclusão, responda ao vendedor que entrar em contato.</p>\n    <label class="aceite" for="aceite-privacidade">\n      <input id="aceite-privacidade" name="aceite_privacidade" type="checkbox" required>\n      <span>Li o aviso de privacidade e concordo com esse uso dos meus dados.</span>\n    </label>\n    <button type="submit">Pedir simulação detalhada</button>\n  </form>\n  <p id="pedido-msg" role="status"></p>\n</section>\n\n<script>\nconst real = (v) => "R$ " + v.toLocaleString("pt-BR");\nlet simulacaoId = null;\nconst $ = (id) => document.getElementById(id);\n\nasync function enviar(url, corpo) {\n  try {\n    const r = await fetch(url, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(corpo) });\n    return { status: r.status, corpo: await r.json() };\n  } catch {\n    return { status: 0, corpo: { mensagem: "Não foi possível concluir. Confira sua conexão e tente de novo." } };\n  }\n}\n\n$("simular").addEventListener("submit", async (e) => {\n  e.preventDefault();\n  $("erro").textContent = ""; $("resultado").hidden = true; $("pedido-msg").textContent = "";\n  const { status, corpo } = await enviar("/api/simular", { conta: $("conta").value, cidade: $("cidade").value });\n  if (status !== 200) { $("erro").textContent = corpo.mensagem || "Não foi possível simular."; return; }\n  simulacaoId = corpo.simulacao_id;\n  $("r-kwp").textContent = corpo.kwp.toLocaleString("pt-BR") + " kWp (" + corpo.paineis + " painéis)";\n  $("r-investimento").textContent = real(corpo.investimento);\n  $("r-depois").textContent = real(corpo.conta_depois) + " por mês";\n  $("r-economia").textContent = real(corpo.economia_ano1) + " no primeiro ano";\n  $("r-retorno").textContent = corpo.retorno ? corpo.retorno.anos + " anos e " + corpo.retorno.meses + " meses" : "mais de 50 anos";\n  $("pedir").hidden = corpo.nao_compensa;\n  $("aviso-nao-compensa").hidden = !corpo.nao_compensa;\n  $("resultado").hidden = false;\n});\n\n$("pedir").addEventListener("submit", async (e) => {\n  e.preventDefault();\n  const { corpo } = await enviar("/api/pedido", {\n    simulacao_id: simulacaoId,\n    nome: $("nome").value,\n    whatsapp: $("whatsapp").value,\n    aceite_privacidade: $("aceite-privacidade").checked,\n  });\n  $("pedido-msg").textContent = corpo.mensagem;\n});\n</script>\n</body>\n</html>\n',
+    expected: /<p id="aviso-sem-numero"[^>]*\bhidden\b[^>]*>[^<]*(Fio B|fio)[^<]*(iluminação)/i,
+    operator: 'match',
+    diff: 'simple'
+  }

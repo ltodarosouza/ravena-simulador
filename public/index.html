@@ -40,6 +40,7 @@
     <dt>O sistema se paga em</dt><dd id="r-retorno"></dd>
   </dl>
   <p>É uma estimativa. A proposta vem depois da visita técnica.</p>
+  <p id="aviso-sem-numero" role="status" hidden><strong>Atenção:</strong> esta conta ainda não inclui a cobrança do Fio B (a parte do fio que a distribuidora cobra sobre a energia que você injeta) nem a taxa de iluminação pública da sua cidade. Por isso a economia pode estar maior e o retorno menor do que o real. A proposta, depois da visita técnica, traz o valor certo.</p>
   <p id="aviso-nao-compensa" role="status" hidden><strong>Para essa conta, o sistema solar não compensa:</strong> o retorno estimado passa do prazo que a gente considera razoável. Por isso não pedimos o seu contato.</p>
   <form id="pedir">
     <h2>Quero a simulação detalhada</h2>
@@ -82,6 +83,7 @@ $("simular").addEventListener("submit", async (e) => {
   $("r-retorno").textContent = corpo.retorno ? corpo.retorno.anos + " anos e " + corpo.retorno.meses + " meses" : "mais de 50 anos";
   $("pedir").hidden = corpo.nao_compensa;
   $("aviso-nao-compensa").hidden = !corpo.nao_compensa;
+  $("aviso-sem-numero").hidden = !(corpo.sem_numero && corpo.sem_numero.length);
   $("resultado").hidden = false;
 });
 
