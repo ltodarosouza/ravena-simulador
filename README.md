@@ -15,9 +15,9 @@ A spec é o contrato: [`SPEC.md`](SPEC.md). O pedido do cliente: [`brief.md`](br
 | Fatia 5: painel do vendedor, estágios, retenção, exclusão | **Feita.** Carlos e Renata têm lista isolada por região, detalhe com os números vistos pela pessoa e mudança de estágio com histórico. A limpeza automática respeita 12 meses, 30 dias e preserva pedidos fechados. O dono atende pedidos de exclusão pelo WhatsApp, com confirmação explícita. |
 | Fatia 6: outras cidades e o resto | A conta já aceita as quatro cidades. O resto, não. |
 
-**Nada disto está publicado.** O simulador só roda na máquina de quem constrói.
+**Publicado em 2026-10-30:** https://ravena-simulador.vercel.app (Vercel, entrada em `api/index.js`). Hoje o site abre, o painel e a tela do dono pedem senha, mas a simulação responde "em atualização" porque faltam números no banco (abaixo). A limpeza de retenção **não roda na Vercel** (não há processo longo); falta um agendamento.
 
-O critério C1 (retorno de R$ 600 em Sorocaba não menor que 3 anos) está **pendente**: faltam quatro números de fonte pública (tarifa com impostos, Fio B em reais por kWh, iluminação pública por cidade, faixas de preço). Os números de `referencia/numeros.json` são **de teste** e só servem nos testes. Ver [`SPEC.md`](SPEC.md), seção 11.
+O critério C1 (retorno de R$ 600 em Sorocaba não menor que 3 anos) está **pendente**: faltam números. Já cadastrado: a tarifa (R$ 0,7588 por kWh, vigência 2026-10-23, ANEEL Despacho 3.612/2026, **sem impostos**, enquanto a spec pede tarifa com ICMS e PIS/COFINS: conflito aberto). Ainda sem número no banco: Fio B em reais por kWh (conta: percentual do ano da Lei 14.300 × tarifa do Fio B da resolução da ANEEL, que ainda não foi lida), iluminação pública das quatro cidades (lei municipal, não encontrada) e as faixas de preço, que já estão decididas abaixo mas não cadastradas. Os números de `referencia/numeros.json` são **de teste** e só servem nos testes. Ver [`SPEC.md`](SPEC.md), seção 11.
 
 ## Como rodar
 
@@ -43,6 +43,8 @@ O servidor só responde com números cadastrados na tabela `numeros_calculo`, co
 - **Acesso inicial dos vendedores.** A rota `/painel` recebe o acesso individual digitado na hora; os segredos de Carlos e Renata ficam somente no servidor. Lista, endereço direto e mudança de estágio consultam o banco em nome do vendedor. A interface mostra os seis resultados guardados no pedido e o histórico registra quem mudou e quando.
 - **Retenção automática.** Ao iniciar e depois uma vez por dia, o servidor remove pedidos não fechados com mais de 12 meses e simulações sem contato com mais de 30 dias. Pedidos fechados são preservados. O teste usa somente dados fictícios e prova a exceção retirando-a de propósito.
 - **Exclusão a pedido.** A pessoa pede pelo contato informado no aviso de privacidade. Na área do dono, o WhatsApp e a confirmação `EXCLUIR` são exigidos; o servidor confere novamente o acesso do dono e apaga, numa operação, o cadastro, os pedidos e os cálculos ligados. O agente escolheu esse mecanismo de construção para executar a decisão de exclusão que o Lucas já havia aprovado. O teste usa somente pessoas fictícias.
+- **Faixas de preço por kWp (premissa do Lucas, 2026-10-30, não é dado de fonte).** O agente propôs três opções dentro de R$ 2.300 a R$ 2.900 do brief; o Lucas escolheu: até 4 kWp, R$ 2.900; até 8 kWp, R$ 2.547; acima de 8 kWp, R$ 2.300. Um sistema de 6,4 kWp dá cerca de R$ 16.300, o ticket do brief. Ainda não cadastradas no banco.
+- **Sem número de teste no banco que o site usa.** O simulador é público: um número inventado pareceria oficial. Enquanto faltar número, ele diz que está em atualização.
 
 ## Dados pessoais que o sistema guarda
 

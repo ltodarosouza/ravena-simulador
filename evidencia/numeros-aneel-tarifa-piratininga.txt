@@ -1,0 +1,24 @@
+Busca de número público: tarifa residencial da CPFL Piratininga
+Feita em 2026-10-30 pelo agente, na base aberta da ANEEL (dadosabertos.aneel.gov.br, conjunto
+"tarifas-distribuidoras-energia-eletrica", arquivo tarifas-homologadas-distribuidoras-energia-eletrica,
+atualizado em 2026-10-30). Nada foi gravado no banco do simulador.
+
+Comando (a distribuidora aparece nesta base como "CPFL-PIRATINING", com o nome cortado):
+curl -G "https://dadosabertos.aneel.gov.br/api/3/action/datastore_search" \
+  --data-urlencode "resource_id=fcf2906c-7c32-4b9b-a637-054e7a5234f4" \
+  --data-urlencode 'filters={"SigAgente":"CPFL-PIRATINING","DscSubGrupo":"B1","DscClasse":"Residencial","DscSubClasse":"Residencial","DscModalidadeTarifaria":"Convencional","DatInicioVigencia":"2026-10-23"}'
+
+Linha que vale (Tarifa de Aplicação, sem detalhe), saída crua:
+{'DscBaseTarifaria': 'Tarifa de Aplicação', 'DscDetalhe': 'Não se aplica', 'NomPostoTarifario': 'Não se aplica', 'VlrTUSD': '430,40', 'VlrTE': '328,42', 'DscUnidadeTerciaria': 'MWh', 'DscREH': 'DESPACHO Nº 3.612, DE 16 DE OUTUBRO DE 2026'}
+Vigência: 2026-10-23 a 2027-10-22.
+
+Conta: TUSD 430,40 + TE 328,42 = 758,82 R$/MWh = 0,75882 R$/kWh, SEM impostos (ICMS, PIS e COFINS ficam de fora).
+A tarifa anterior (REH 3.543/2025, vigência até 2026-10-22) era TUSD 395,64 + TE 344,05 = 739,69 R$/MWh.
+
+Bandeira: o noticiário aponta bandeira verde em outubro de 2026 (adicional zero). A de novembro sai em 2026-10-30.
+Fonte primária da bandeira não foi aberta nesta busca.
+
+NÃO ENCONTRADO nesta busca:
+- Fio B em R$/kWh (é uma parcela dentro da TUSD, não vem nesta base).
+- Taxa de iluminação pública (COSIP) de Sorocaba, Votorantim, Itu e Salto (é lei municipal).
+- Decisão da spec sobre incluir ou não impostos na tarifa.
