@@ -28,6 +28,8 @@ TESTAR_NO_SUPABASE=1 npm test     # também roda o C3 no Supabase de verdade (cr
 npm start                         # precisa de SUPABASE_URL e SUPABASE_SECRET_KEY no .env.local
 ```
 
+Para ver as telas sem tocar no Supabase: `PORT=4310 node scripts/previa-local.js` sobe uma prévia com banco de teste em memória e pedidos fictícios (acessos de prévia no próprio arquivo).
+
 O servidor só calcula com números cadastrados na tabela `numeros_calculo`, com data de vigência e fonte. Sem número vigente de qualquer um deles ele avisa e não calcula, com uma exceção desde o C8 (2026-10-30): o Fio B em R$/kWh e a iluminação pública podem faltar; nesse caso valem zero e a resposta traz o aviso `sem_numero`, que a tela mostra à pessoa.
 
 ## Decisões
@@ -44,6 +46,7 @@ O servidor só calcula com números cadastrados na tabela `numeros_calculo`, com
 - **Retenção automática.** Ao iniciar e depois uma vez por dia, o servidor remove pedidos não fechados com mais de 12 meses e simulações sem contato com mais de 30 dias. Pedidos fechados são preservados. O teste usa somente dados fictícios e prova a exceção retirando-a de propósito.
 - **Exclusão a pedido.** A pessoa pede pelo contato informado no aviso de privacidade. Na área do dono, o WhatsApp e a confirmação `EXCLUIR` são exigidos; o servidor confere novamente o acesso do dono e apaga, numa operação, o cadastro, os pedidos e os cálculos ligados. O agente escolheu esse mecanismo de construção para executar a decisão de exclusão que o Lucas já havia aprovado. O teste usa somente pessoas fictícias.
 - **Faixas de preço por kWp (premissa do Lucas, 2026-10-30, não é dado de fonte).** O agente propôs três opções dentro de R$ 2.300 a R$ 2.900 do brief; o Lucas escolheu: até 4 kWp, R$ 2.900; até 8 kWp, R$ 2.547; acima de 8 kWp, R$ 2.300. Um sistema de 6,4 kWp dá cerca de R$ 16.300, o ticket do brief. Cadastradas no banco em 2026-10-30 (colado no SQL Editor do Supabase pelo Lucas).
+- **Visual igual ao da landing.** As três telas usam `public/ravena.css`, com os tokens e as regras do `DESIGN.md` da landing (cores, tipos, espaços, botão âmbar). O Tailwind e o DaisyUI vindos de CDN saíram: nada é carregado de outro site.
 - **Sem número de teste no banco que o site usa.** O simulador é público: um número inventado pareceria oficial. O que falta (Fio B e iluminação) não é preenchido com valor inventado: entra como zero e a tela avisa (C8).
 - **Erro a favor do cliente, de propósito e avisado (decisão do Lucas, 2026-10-30).** O brief pede que, se for para errar, o erro seja contra a Ravena, e que o simulador não prometa retorno menor que o da planilha (três a quatro anos). Sem o Fio B e sem a iluminação, a conta fica mais otimista: R$ 600 em Sorocaba dá 2 anos e 8 meses, abaixo desse piso. O Lucas escolheu mostrar a simulação assim, em vez de deixar o site sem resposta, porque esses dois números não têm fonte pública achada. O custo é aceito às claras: a tela mostra um aviso de que a economia pode estar maior e o retorno menor do que o real, e a spec (seção 3 e C8) registra a exceção. Quando o Fio B e a iluminação forem cadastrados, a conta volta a errar contra a Ravena e o aviso some. Verificado no site publicado, num navegador, a 1280 e a 390 px (sem rolagem horizontal).
 

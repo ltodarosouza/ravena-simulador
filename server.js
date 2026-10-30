@@ -10,7 +10,6 @@ const { estagioValido } = require("./lib/estagio");
 const MENSAGENS = {
   conta_invalida: "Digite o valor da conta em reais.",
   cidade_invalida: "Escolha uma das quatro cidades.",
-  fora_da_faixa: "Esse valor está fora do que o simulador atende.",
   nome_vazio: "Digite seu nome.",
   nome_com_cpf: "Digite só o seu nome. Não pedimos CPF.",
   nome_longo: "Digite só o seu nome, com até 100 letras.",
@@ -33,6 +32,8 @@ function criarServidor({ banco, numeros, hoje = () => new Date(), donoToken = ""
   const pagina = fs.readFileSync(path.join(__dirname, "public", "index.html"));
   const paginaDono = fs.readFileSync(path.join(__dirname, "public", "dono.html"));
   const paginaPainel = fs.readFileSync(path.join(__dirname, "public", "painel.html"));
+  const estilo = fs.readFileSync(path.join(__dirname, "public", "ravena.css"));
+  const logo = fs.readFileSync(path.join(__dirname, "public", "logo.svg"));
   const tokens = { ...acessos, dono: acessos.dono || donoToken };
 
   // Lê o corpo guardando no máximo o limite: o que passar é descartado, e a recusa vem no fim.
@@ -87,6 +88,14 @@ function criarServidor({ banco, numeros, hoje = () => new Date(), donoToken = ""
       if (req.method === "GET" && req.url === "/painel") {
         res.writeHead(200, { "content-type": "text/html; charset=utf-8" });
         return res.end(paginaPainel);
+      }
+      if (req.method === "GET" && req.url === "/ravena.css") {
+        res.writeHead(200, { "content-type": "text/css; charset=utf-8" });
+        return res.end(estilo);
+      }
+      if (req.method === "GET" && req.url === "/logo.svg") {
+        res.writeHead(200, { "content-type": "image/svg+xml" });
+        return res.end(logo);
       }
       if (req.url === "/api/dono/tarifa") {
         if (!tokens.dono) return json(res, 503, { erro: "acesso_dono_nao_configurado" });
@@ -156,6 +165,10 @@ function criarServidor({ banco, numeros, hoje = () => new Date(), donoToken = ""
         const agora = hoje();
         const dosNumeros = await numerosDe(agora);
         const sim = simular({ conta: lerConta(conta), cidade }, dosNumeros, agora);
+        if (sim.erro === "fora_da_faixa") {
+          const reais = (chave) => "R$ " + dosNumeros[chave].valor.toLocaleString("pt-BR");
+          return json(res, 422, { erro: sim.erro, mensagem: `O simulador atende contas de ${reais("conta_minima")} a ${reais("conta_maxima")} por mês.` });
+        }
         if (sim.erro) return json(res, 422, { erro: sim.erro, mensagem: MENSAGENS[sim.erro] });
         const id = await banco.guardarSimulacao(sim);
         return json(res, 200, { simulacao_id: id, ...sim.exibido });

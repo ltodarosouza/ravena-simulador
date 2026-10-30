@@ -1,62 +1,89 @@
 <!doctype html>
-<html lang="pt-BR" data-theme="light">
+<html lang="pt-BR">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Pedidos — Ravena Solar</title>
-<link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css">
-<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<link rel="stylesheet" href="/ravena.css">
 <style>
-  :root { --solar: #e9a319; --ink: #172033; --paper: #f7f6f2; }
-  * { box-sizing: border-box; }
-  body { margin: 0; min-width: 0; overflow-x: hidden; background: var(--paper); color: var(--ink); }
-  main { width: min(100% - 2rem, 44rem); margin: 0 auto; padding: 1.25rem 0 4rem; }
-  header { border-bottom: 3px solid var(--solar); margin-bottom: 1.25rem; padding-bottom: 1rem; }
-  h1 { font: 800 clamp(2rem, 9vw, 3.4rem)/.95 ui-sans-serif, system-ui, sans-serif; letter-spacing: -.05em; margin: .35rem 0; }
-  .campo { display: grid; gap: .4rem; margin: 1rem 0; }
-  .campo label { font-weight: 750; }
-  .input, .select, .btn { min-height: 44px; }
-  .btn-entrar { background: var(--ink); color: white; border-color: var(--ink); }
-  .pedidos { display: grid; gap: .8rem; padding: 0; }
-  .pedido { min-width: 0; border: 1px solid #d9d6cc; background: white; box-shadow: none; }
-  .pedido p, .pedido strong, .historico li { overflow-wrap: anywhere; }
-  .pedido-topo { display: flex; justify-content: space-between; gap: .75rem; align-items: start; }
-  .cidade { color: #73520b; font-weight: 800; }
-  .resultado { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .5rem; margin: 1rem 0; }
-  .resultado div { min-width: 0; border-top: 1px solid #e5e2d9; padding-top: .5rem; }
-  .resultado dt { color: #5d6170; font-size: .78rem; }
-  .resultado dd { margin: .1rem 0 0; font-weight: 750; overflow-wrap: anywhere; }
-  .acoes { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .5rem; margin-top: 1rem; }
-  .mensagem:empty { display: none; }
-  .historico { margin: .75rem 0 0; padding-left: 1.2rem; font-size: .9rem; }
-  @media (max-width: 420px) { .resultado, .acoes { grid-template-columns: 1fr; } .acoes .btn { width: 100%; } }
+  .filtros { display: flex; gap: var(--e1); overflow-x: auto; padding-block: 4px; margin-bottom: var(--e2); scrollbar-width: none; }
+  .filtro {
+    flex: none; min-height: 44px; padding: 8px 16px; display: inline-flex; align-items: center; gap: var(--e1);
+    font: inherit; font-size: 14px; font-weight: 600; color: var(--marinho); cursor: pointer;
+    background: var(--branco); border: 1px solid var(--linha); border-radius: 999px; transition: background-color .2s, color .2s;
+  }
+  .filtro:hover { border-color: var(--marinho); }
+  .filtro[aria-pressed="true"] { background: var(--marinho); color: var(--branco); }
+  .filtro span { font-variant-numeric: tabular-nums; opacity: .75; }
+
+  .pedidos { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--e2); }
+  .pedido { min-width: 0; padding: var(--e3); display: grid; gap: var(--e2); animation: surge .4s var(--saida) both; animation-delay: calc(var(--i) * 40ms); }
+  @keyframes surge { from { opacity: 0; transform: translateY(8px); } }
+  .pedido, .pedido p, .pedido strong, .historico li { overflow-wrap: anywhere; }
+  .pedido-topo { display: flex; justify-content: space-between; gap: var(--e2); align-items: flex-start; }
+  .pedido-topo h3 { font-size: 20px; }
+  .conta { text-align: right; flex: none; }
+  .conta strong { display: block; font-size: 20px; line-height: 1.3; font-variant-numeric: tabular-nums; }
+  .cidade { display: flex; flex-wrap: wrap; align-items: center; gap: var(--e1); margin-top: 4px; font-size: 14px; color: var(--tinta-suave); }
+  .estagio { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 14px; font-weight: 600; background: var(--sol); }
+  .estagio.fechou { background: var(--certo-fundo); color: var(--certo); }
+  .estagio.nao_vai { background: var(--papel); color: var(--tinta-suave); }
+  .whats { display: inline-flex; align-items: center; min-height: 44px; font-weight: 700; }
+  .resultado { margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--e2); padding: var(--e2); border-radius: 8px; background: var(--papel); }
+  .resultado div { min-width: 0; }
+  .resultado dt { color: var(--tinta-suave); font-size: 14px; }
+  .resultado dd { margin: 0; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .acoes { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: var(--e1); }
+  .acoes select { min-height: 44px; }
+  .acoes .btn { width: auto; min-height: 44px; }
+  .ver-historico { justify-self: start; min-height: 44px; padding: 8px 0; background: none; border: 0; font: inherit; font-size: 14px; font-weight: 600; color: var(--tinta-suave); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+  .historico { margin: 0; padding-left: var(--e3); font-size: 14px; color: var(--tinta-suave); display: grid; gap: 4px; }
+  .vazio { padding: var(--e4) var(--e3); text-align: center; display: grid; gap: var(--e1); }
+  .barra-lista { display: flex; align-items: baseline; justify-content: space-between; gap: var(--e2); margin-bottom: var(--e2); }
+  .barra-lista h2 { font-size: 20px; line-height: 1.3; letter-spacing: 0; }
+  #mensagem { margin-bottom: var(--e2); }
+  @media (min-width: 900px) { .pedidos { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; } }
+  @media (max-width: 420px) { .acoes { grid-template-columns: 1fr; } .acoes .btn { width: 100%; } }
 </style>
 </head>
 <body>
-<main>
-  <header>
-    <p class="font-semibold">Ravena Solar · atendimento</p>
+<div class="faixa">
+  <header class="pagina topo">
+    <img src="/logo.svg" alt="Ravena Solar">
+    <button class="btn btn-linha" id="sair" type="button" hidden>Sair</button>
+  </header>
+  <div class="pagina miolo">
     <h1>Pedidos da sua região</h1>
     <p>Veja o que a pessoa recebeu e registre o próximo passo.</p>
-  </header>
+  </div>
+</div>
 
-  <section id="entrada" aria-labelledby="titulo-acesso">
-    <h2 id="titulo-acesso" class="text-xl font-bold">Acesso individual</h2>
-    <div class="campo">
-      <label for="acesso">Seu acesso</label>
-      <input class="input input-bordered w-full" id="acesso" type="password" autocomplete="current-password">
-    </div>
-    <button class="btn btn-entrar btn-block" id="entrar" type="button">Abrir meus pedidos</button>
-  </section>
+<main class="area">
+  <div class="pagina">
+    <form id="entrada" class="cartao entrada" aria-labelledby="titulo-acesso">
+      <h2 id="titulo-acesso" style="font-size:20px;line-height:1.3;letter-spacing:0">Acesso individual</h2>
+      <div class="campo">
+        <label for="acesso">Seu acesso</label>
+        <input id="acesso" type="password" autocomplete="current-password" required>
+      </div>
+      <button class="btn" id="entrar" type="submit">Abrir meus pedidos</button>
+    </form>
 
-  <p id="mensagem" class="mensagem alert alert-soft mt-4" role="status"></p>
-  <section class="mt-6" aria-labelledby="titulo-pedidos">
-    <div class="flex items-end justify-between gap-4 mb-3">
-      <h2 id="titulo-pedidos" class="text-xl font-bold">Pedidos</h2>
-      <span id="quantidade" class="text-sm"></span>
-    </div>
-    <ul id="pedidos" class="pedidos list"></ul>
-  </section>
+    <p id="mensagem" class="mensagem" role="status"></p>
+
+    <section id="lista" aria-labelledby="titulo-pedidos" hidden>
+      <div class="barra-lista">
+        <h2 id="titulo-pedidos">Pedidos</h2>
+        <span id="quantidade" class="rotulo"></span>
+      </div>
+      <div id="filtros" class="filtros" role="group" aria-label="Filtrar por estágio"></div>
+      <ul id="pedidos" class="pedidos"></ul>
+      <div id="vazio" class="cartao vazio" hidden>
+        <h3 id="vazio-titulo"></h3>
+        <p class="apoio">Quando alguém da sua região pedir a simulação detalhada, o pedido aparece aqui.</p>
+      </div>
+    </section>
+  </div>
 </main>
 <script>
 const $ = (id) => document.getElementById(id);
@@ -64,10 +91,12 @@ const rotulos = {
   chegou: "Chegou", respondi: "Respondi", visita_marcada: "Visita marcada",
   proposta_enviada: "Proposta enviada", fechou: "Fechou", nao_vai: "Não vai",
 };
+let pedidos = [];
+let filtro = "todos";
 const autorizacao = () => ({ authorization: "Bearer " + $("acesso").value });
-const mensagem = (texto, erro = false) => {
-  $("mensagem").textContent = texto;
-  $("mensagem").className = `mensagem alert alert-soft mt-4 ${erro ? "alert-error" : "alert-success"}`;
+const mensagem = (conteudo, erro = false) => {
+  $("mensagem").textContent = conteudo;
+  $("mensagem").className = `mensagem ${erro ? "erro" : "certo"}`;
 };
 const texto = (tag, conteudo, classe) => {
   const elemento = document.createElement(tag);
@@ -105,27 +134,37 @@ async function detalhe(id, area) {
   lista.className = "historico";
   if (!historico.length) lista.append(texto("li", "Ainda não houve mudança de estágio."));
   for (const item of historico) {
-    lista.append(texto("li", `${rotulos[item.de]} → ${rotulos[item.para]} por ${item.alterado_por}`));
+    const quando = item.alterado_em ? ` em ${new Date(item.alterado_em).toLocaleDateString("pt-BR")}` : "";
+    lista.append(texto("li", `${rotulos[item.de]} → ${rotulos[item.para]} por ${item.alterado_por}${quando}`));
   }
   area.replaceChildren(lista);
 }
 
-function cartao(pedido) {
+function cartao(pedido, indice) {
   const item = document.createElement("li");
-  item.className = "pedido card card-border list-row";
-  const corpo = document.createElement("div");
-  corpo.className = "card-body p-4";
+  item.className = "pedido cartao";
+  item.style.setProperty("--i", Math.min(indice, 10));
+
   const topo = document.createElement("div");
   topo.className = "pedido-topo";
   const identidade = document.createElement("div");
-  identidade.append(texto("strong", pedido.nome), texto("p", pedido.cidade, "cidade"));
-  topo.append(identidade, texto("strong", `R$ ${Number(pedido.conta).toFixed(2).replace(".", ",")}`));
-  corpo.append(topo, texto("p", `WhatsApp: ${pedido.whatsapp}`), resultado(pedido));
+  const local = document.createElement("div");
+  local.className = "cidade";
+  local.append(texto("span", pedido.cidade), texto("span", rotulos[pedido.estagio], `estagio ${pedido.estagio}`));
+  identidade.append(texto("h3", pedido.nome), local);
+  const conta = document.createElement("div");
+  conta.className = "conta";
+  conta.append(texto("strong", reais(Number(pedido.conta))), texto("span", "de conta", "rotulo"));
+  topo.append(identidade, conta);
+
+  const whats = texto("a", `WhatsApp: ${pedido.whatsapp}`, "whats");
+  whats.href = `https://wa.me/55${encodeURIComponent(pedido.whatsapp)}`;
+  whats.target = "_blank";
+  whats.rel = "noopener";
 
   const acoes = document.createElement("div");
   acoes.className = "acoes";
   const seletor = document.createElement("select");
-  seletor.className = "select select-bordered w-full";
   seletor.setAttribute("aria-label", `Estágio de ${pedido.nome}`);
   for (const [valor, rotulo] of Object.entries(rotulos)) {
     const opcao = document.createElement("option");
@@ -137,6 +176,9 @@ function cartao(pedido) {
   const salvar = texto("button", "Salvar", "btn");
   salvar.type = "button";
   const areaHistorico = document.createElement("div");
+  const verHistorico = texto("button", "Ver histórico", "ver-historico");
+  verHistorico.type = "button";
+  verHistorico.addEventListener("click", () => detalhe(pedido.id, areaHistorico));
   salvar.addEventListener("click", async () => {
     salvar.disabled = true;
     const resposta = await fetch(`/api/painel/pedidos/${pedido.id}/estagio`, {
@@ -146,27 +188,72 @@ function cartao(pedido) {
     });
     salvar.disabled = false;
     if (!resposta.ok) return mensagem("Não foi possível salvar a mudança.", true);
+    pedido.estagio = seletor.value;
     mensagem("Estágio salvo.");
+    const selo = item.querySelector(".estagio");
+    selo.textContent = rotulos[pedido.estagio];
+    selo.className = `estagio ${pedido.estagio}`;
+    desenharFiltros();
     await detalhe(pedido.id, areaHistorico);
   });
   acoes.append(seletor, salvar);
-  corpo.append(acoes, areaHistorico);
-  item.append(corpo);
+  item.append(topo, whats, resultado(pedido), acoes, verHistorico, areaHistorico);
   return item;
+}
+
+function desenharFiltros() {
+  const conta = (estagio) => pedidos.filter((p) => p.estagio === estagio).length;
+  const opcoes = [["todos", "Todos", pedidos.length], ...Object.entries(rotulos).map(([v, r]) => [v, r, conta(v)]).filter(([v, , n]) => n > 0 || v === filtro)];
+  $("filtros").replaceChildren(...opcoes.map(([valor, rotulo, numero]) => {
+    const botao = texto("button", rotulo, "filtro");
+    botao.type = "button";
+    botao.setAttribute("aria-pressed", String(valor === filtro));
+    botao.append(texto("span", String(numero)));
+    botao.addEventListener("click", () => { filtro = valor; desenhar(); });
+    return botao;
+  }));
+}
+
+function desenhar() {
+  desenharFiltros();
+  const visiveis = pedidos.filter((p) => filtro === "todos" || p.estagio === filtro);
+  $("pedidos").replaceChildren(...visiveis.map(cartao));
+  $("vazio").hidden = visiveis.length > 0;
+  $("vazio-titulo").textContent = pedidos.length ? "Nenhum pedido nesse estágio." : "Nenhum pedido na sua região.";
+  $("quantidade").textContent = `${pedidos.length} pedido${pedidos.length === 1 ? "" : "s"}`;
 }
 
 async function carregar() {
   $("entrar").disabled = true;
-  const resposta = await fetch("/api/painel/pedidos", { headers: autorizacao() });
+  let resposta;
+  try {
+    resposta = await fetch("/api/painel/pedidos", { headers: autorizacao() });
+  } catch {
+    $("entrar").disabled = false;
+    return mensagem("Não foi possível concluir. Confira sua conexão e tente de novo.", true);
+  }
   $("entrar").disabled = false;
   if (!resposta.ok) return mensagem("Acesso recusado. Confira e tente de novo.", true);
-  const pedidos = await resposta.json();
-  $("pedidos").replaceChildren(...pedidos.map(cartao));
-  $("quantidade").textContent = `${pedidos.length} pedido${pedidos.length === 1 ? "" : "s"}`;
-  mensagem(pedidos.length ? "Pedidos carregados." : "Nenhum pedido novo na sua região.");
+  pedidos = await resposta.json();
+  filtro = "todos";
+  $("entrada").hidden = true;
+  $("lista").hidden = false;
+  $("sair").hidden = false;
+  $("mensagem").textContent = "";
+  desenhar();
 }
 
-$("entrar").addEventListener("click", carregar);
+$("entrada").addEventListener("submit", (e) => { e.preventDefault(); carregar(); });
+$("sair").addEventListener("click", () => {
+  $("acesso").value = "";
+  pedidos = [];
+  $("pedidos").replaceChildren();
+  $("lista").hidden = true;
+  $("sair").hidden = true;
+  $("entrada").hidden = false;
+  $("mensagem").textContent = "";
+  $("acesso").focus();
+});
 </script>
 </body>
 </html>

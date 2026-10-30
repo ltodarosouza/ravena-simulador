@@ -1,107 +1,172 @@
 <!doctype html>
-<html lang="pt-BR" data-theme="light">
+<html lang="pt-BR">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Área do dono — Ravena Solar</title>
-<link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css">
-<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<link rel="stylesheet" href="/ravena.css">
 <style>
-  :root { --solar: #e9a319; --ink: #172033; --paper: #f7f6f2; }
-  * { box-sizing: border-box; }
-  body { margin: 0; background: var(--paper); color: var(--ink); }
-  main { width: min(100% - 2rem, 42rem); margin: 0 auto; padding: 1.25rem 0 4rem; }
-  header { border-bottom: 3px solid var(--solar); margin-bottom: 1.25rem; padding-bottom: 1rem; }
-  h1 { font: 800 clamp(2rem, 9vw, 3.4rem)/.95 ui-sans-serif, system-ui, sans-serif; letter-spacing: -.05em; margin: .35rem 0; }
-  .painel { border: 1px solid #d9d6cc; background: white; box-shadow: none; }
-  .input, .btn { min-height: 44px; }
-  .btn-solar { background: var(--solar); border-color: var(--solar); color: var(--ink); }
-  .mensagem:empty { display: none; }
-  li { margin-bottom: .75rem; overflow-wrap: anywhere; }
+  .blocos { display: grid; gap: var(--e3); }
+  .bloco { padding: var(--e3); display: grid; gap: var(--e3); align-content: start; min-width: 0; }
+  .bloco h2 { font-size: 20px; line-height: 1.3; letter-spacing: 0; }
+  .vigente { padding: var(--e3); display: grid; gap: var(--e1); background: var(--marinho); color: var(--branco); border-radius: 16px; }
+  .vigente span { color: var(--sobre-marinho); font-size: 14px; font-weight: 600; }
+  .vigente strong { font-size: var(--titulo); line-height: 1.05; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+  .vigente p { color: var(--sobre-marinho); font-size: 14px; overflow-wrap: anywhere; }
+  .form { display: grid; gap: var(--e2); }
+  .form-dupla { display: grid; gap: var(--e2); }
+  #historico { list-style: none; margin: 0; padding: 0; display: grid; }
+  #historico li { padding-block: 12px; border-top: 1px solid var(--linha); display: grid; gap: 4px; overflow-wrap: anywhere; }
+  #historico li:first-child { border-top: 0; padding-top: 0; }
+  #historico strong { font-variant-numeric: tabular-nums; }
+  #historico span { font-size: 14px; color: var(--tinta-suave); }
+  .perigo { border-color: rgba(168, 40, 30, .35); }
+  .perigo h2 { color: var(--perigo); }
+  .alerta { padding: 12px 16px; border-radius: 8px; font-size: 14px; background: var(--perigo-fundo); color: var(--perigo); font-weight: 600; }
+  @media (min-width: 600px) { .form-dupla { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 900px) {
+    .blocos { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); align-items: start; }
+    .perigo { grid-column: 1 / -1; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: var(--e4); }
+  }
 </style>
 </head>
 <body>
-<main>
-  <header>
-    <p class="font-semibold">Ravena Solar · administração</p>
+<div class="faixa">
+  <header class="pagina topo">
+    <img src="/logo.svg" alt="Ravena Solar">
+    <button class="btn btn-linha" id="sair" type="button" hidden>Sair</button>
+  </header>
+  <div class="pagina miolo">
     <h1>Área do dono</h1>
     <p>O acesso vale para esta tela e não fica salvo no navegador.</p>
-  </header>
+  </div>
+</div>
 
-  <fieldset class="fieldset mb-5">
-    <legend class="fieldset-legend">Acesso do dono</legend>
-    <input class="input w-full" id="acesso" name="acesso" type="password" autocomplete="current-password" required>
-    <p class="label">Use o acesso individual configurado no servidor.</p>
-  </fieldset>
-
-  <section class="painel card card-border mb-5" aria-labelledby="titulo-tarifa">
-    <div class="card-body">
-      <h2 id="titulo-tarifa" class="card-title">Tarifa usada no cálculo</h2>
-      <form id="tarifa" class="grid gap-3">
-        <fieldset class="fieldset">
-          <legend class="fieldset-legend">Tarifa por kWh (R$)</legend>
-          <input class="input w-full" id="valor" name="valor" type="number" min="0.0001" step="0.0001" required>
-        </fieldset>
-        <fieldset class="fieldset">
-          <legend class="fieldset-legend">Válida desde</legend>
-          <input class="input w-full" id="vigencia" name="vigencia" type="date" required>
-        </fieldset>
-        <fieldset class="fieldset">
-          <legend class="fieldset-legend">Fonte</legend>
-          <input class="input w-full" id="fonte" name="fonte" type="text" required>
-        </fieldset>
-        <button class="btn btn-solar btn-block" type="submit">Salvar tarifa</button>
-      </form>
-      <p id="mensagem" class="mensagem alert alert-soft mt-3" role="status"></p>
-      <div class="divider">Histórico</div>
-      <button class="btn btn-block" id="carregar" type="button">Carregar histórico</button>
-      <ul id="historico" class="mt-3 pl-5"></ul>
-    </div>
-  </section>
-
-  <section class="painel card card-border" aria-labelledby="titulo-exclusao">
-    <div class="card-body">
-      <h2 id="titulo-exclusao" class="card-title">Pedido de exclusão</h2>
-      <div role="alert" class="alert alert-warning alert-soft">
-        Esta ação apaga o cadastro, os pedidos e as simulações ligadas à pessoa. Não pode ser desfeita.
+<main class="area">
+  <div class="pagina">
+    <form id="entrada" class="cartao entrada" aria-labelledby="titulo-acesso">
+      <h2 id="titulo-acesso" style="font-size:20px;line-height:1.3;letter-spacing:0">Acesso do dono</h2>
+      <div class="campo">
+        <label for="acesso">Seu acesso</label>
+        <input id="acesso" name="acesso" type="password" autocomplete="current-password" required>
+        <p class="dica">Use o acesso individual configurado no servidor.</p>
       </div>
-      <form id="exclusao" class="grid gap-3 mt-2">
-        <fieldset class="fieldset">
-          <legend class="fieldset-legend">WhatsApp da pessoa</legend>
-          <input class="input w-full" id="whatsapp-exclusao" name="whatsapp" type="tel" inputmode="tel" autocomplete="off" required>
-          <p class="label">Use o mesmo número informado no pedido, com DDD.</p>
-        </fieldset>
-        <fieldset class="fieldset">
-          <legend class="fieldset-legend">Confirmação</legend>
-          <input class="input w-full" id="confirmacao-exclusao" name="confirmacao" type="text" pattern="EXCLUIR" autocomplete="off" required>
-          <p class="label">Digite EXCLUIR em letras maiúsculas.</p>
-        </fieldset>
-        <button class="btn btn-error btn-block" type="submit">Apagar dados</button>
-      </form>
-      <p id="mensagem-exclusao" class="mensagem alert alert-soft mt-3" role="status"></p>
+      <button class="btn" id="entrar" type="submit">Entrar</button>
+      <p id="mensagem-entrada" class="mensagem" role="alert"></p>
+    </form>
+
+    <div id="trabalho" class="blocos" hidden>
+      <section class="cartao bloco" aria-labelledby="titulo-tarifa">
+        <h2 id="titulo-tarifa">Tarifa usada no cálculo</h2>
+        <div class="vigente" id="vigente" hidden>
+          <span>Em vigor</span>
+          <strong id="vigente-valor"></strong>
+          <p id="vigente-fonte"></p>
+        </div>
+        <form id="tarifa" class="form">
+          <div class="form-dupla">
+            <div class="campo"><label for="valor">Tarifa por kWh (R$)</label><input id="valor" name="valor" type="number" min="0.0001" step="0.00001" required></div>
+            <div class="campo"><label for="vigencia">Válida desde</label><input id="vigencia" name="vigencia" type="date" required></div>
+          </div>
+          <div class="campo"><label for="fonte">Fonte</label><input id="fonte" name="fonte" type="text" required></div>
+          <button class="btn" type="submit">Salvar tarifa</button>
+        </form>
+        <p id="mensagem" class="mensagem" role="status"></p>
+      </section>
+
+      <section class="cartao bloco" aria-labelledby="titulo-historico">
+        <h2 id="titulo-historico">Histórico da tarifa</h2>
+        <ul id="historico"></ul>
+        <p id="historico-vazio" class="apoio" hidden>Nenhuma tarifa salva por esta tela ainda.</p>
+      </section>
+
+      <section class="cartao bloco perigo" aria-labelledby="titulo-exclusao">
+        <div class="form">
+          <h2 id="titulo-exclusao">Pedido de exclusão</h2>
+          <div role="alert" class="alerta">Esta ação apaga o cadastro, os pedidos e as simulações ligadas à pessoa. Não pode ser desfeita.</div>
+        </div>
+        <form id="exclusao" class="form">
+          <div class="form-dupla">
+            <div class="campo">
+              <label for="whatsapp-exclusao">WhatsApp da pessoa</label>
+              <input id="whatsapp-exclusao" name="whatsapp" type="tel" inputmode="tel" autocomplete="off" required>
+              <p class="dica">Use o mesmo número informado no pedido, com DDD.</p>
+            </div>
+            <div class="campo">
+              <label for="confirmacao-exclusao">Confirmação</label>
+              <input id="confirmacao-exclusao" name="confirmacao" type="text" pattern="EXCLUIR" autocomplete="off" required>
+              <p class="dica">Digite EXCLUIR em letras maiúsculas.</p>
+            </div>
+          </div>
+          <button class="btn btn-perigo" type="submit">Apagar dados</button>
+          <p id="mensagem-exclusao" class="mensagem" role="status"></p>
+        </form>
+      </section>
     </div>
-  </section>
+  </div>
 </main>
 <script>
 const $ = (id) => document.getElementById(id);
 const autorizacao = () => ({ authorization: "Bearer " + $("acesso").value });
 const mostrar = (id, texto, erro = false) => {
   $(id).textContent = texto;
-  $(id).className = `mensagem alert alert-soft mt-3 ${erro ? "alert-error" : "alert-success"}`;
+  $(id).className = `mensagem ${erro ? "erro" : "certo"}`;
 };
+const tarifaBr = (valor) => "R$ " + Number(valor).toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 5 });
+const dataBr = (dia) => String(dia).slice(0, 10).split("-").reverse().join("/");
+
+function desenharHistorico(itens) {
+  $("historico").replaceChildren(...itens.map((item) => {
+    const li = document.createElement("li");
+    const valor = document.createElement("strong");
+    valor.textContent = `${tarifaBr(item.valor)} desde ${dataBr(item.vigencia)}`;
+    const fonte = document.createElement("span");
+    fonte.textContent = item.fonte;
+    li.append(valor, fonte);
+    return li;
+  }));
+  $("historico-vazio").hidden = itens.length > 0;
+  const atual = itens[0];
+  $("vigente").hidden = !atual;
+  if (atual) {
+    $("vigente-valor").textContent = `${tarifaBr(atual.valor)} por kWh`;
+    $("vigente-fonte").textContent = `Desde ${dataBr(atual.vigencia)} · ${atual.fonte}`;
+  }
+}
 
 async function carregar() {
   const resposta = await fetch("/api/dono/tarifa", { headers: autorizacao() });
   const corpo = await resposta.json();
-  if (!resposta.ok) { mostrar("mensagem", "Acesso recusado.", true); return; }
-  $("historico").replaceChildren(...corpo.map((item) => {
-    const li = document.createElement("li");
-    li.textContent = `R$ ${item.valor} desde ${item.vigencia} — ${item.fonte}`;
-    return li;
-  }));
+  if (!resposta.ok) { mostrar("mensagem-entrada", "Acesso recusado.", true); return false; }
+  desenharHistorico(corpo);
+  return true;
 }
 
-$("carregar").addEventListener("click", carregar);
+$("entrada").addEventListener("submit", async (evento) => {
+  evento.preventDefault();
+  $("entrar").disabled = true;
+  try {
+    if (await carregar()) {
+      $("entrada").hidden = true;
+      $("trabalho").hidden = false;
+      $("sair").hidden = false;
+      $("mensagem-entrada").textContent = "";
+    }
+  } catch {
+    mostrar("mensagem-entrada", "Não foi possível concluir. Confira sua conexão e tente de novo.", true);
+  }
+  $("entrar").disabled = false;
+});
+
+$("sair").addEventListener("click", () => {
+  $("acesso").value = "";
+  $("trabalho").hidden = true;
+  $("sair").hidden = true;
+  $("entrada").hidden = false;
+  $("historico").replaceChildren();
+  $("acesso").focus();
+});
+
 $("tarifa").addEventListener("submit", async (evento) => {
   evento.preventDefault();
   const resposta = await fetch("/api/dono/tarifa", {

@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 256" width="960" height="256">
+  <g>
+    <circle cx="132" cy="96" r="46" fill="#F2A03D"/>
+    <g stroke="#F2A03D" stroke-width="9" stroke-linecap="round">
+      <line x1="132" y1="22" x2="132" y2="36"/>
+      <line x1="184" y1="44" x2="194" y2="34"/>
+      <line x1="80" y1="44" x2="70" y2="34"/>
+      <line x1="206" y1="96" x2="220" y2="96"/>
+      <line x1="58" y1="96" x2="44" y2="96"/>
+    </g>
+    <path d="M52 196 L104 118 L212 118 L264 196 Z" fill="#123A55"/>
+    <g stroke="#FFFFFF" stroke-width="4" opacity="0.85">
+      <line x1="88" y1="118" x2="70" y2="196"/>
+      <line x1="122" y1="118" x2="114" y2="196"/>
+      <line x1="158" y1="118" x2="158" y2="196"/>
+      <line x1="194" y1="118" x2="202" y2="196"/>
+      <line x1="92" y1="157" x2="238" y2="157"/>
+    </g>
+  </g>
+  <text x="316" y="118" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="82" font-weight="700" letter-spacing="2" fill="#123A55">RAVENA</text>
+  <text x="320" y="182" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="46" font-weight="300" letter-spacing="16" fill="#E8721C">SOLAR</text>
+</svg>

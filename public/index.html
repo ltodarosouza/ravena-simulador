@@ -4,57 +4,156 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Simulador Ravena Solar</title>
+<meta name="description" content="Digite o valor da sua conta de luz e veja quanto você economizaria com energia solar em Sorocaba, Votorantim, Itu ou Salto.">
+<link rel="stylesheet" href="/ravena.css">
 <style>
-  body { font: 16px/1.5 system-ui, sans-serif; max-width: 32rem; margin: 0 auto; padding: 1rem; color: #12263a; }
-  label { display: block; margin-top: 1rem; font-weight: 600; }
-  input, select, button { font: inherit; width: 100%; box-sizing: border-box; min-height: 44px; padding: .5rem; margin-top: .25rem; }
-  button { background: #f5a623; border: 0; color: #12263a; font-weight: 700; cursor: pointer; }
-  .privacidade { font-size: .925rem; }
-  .aceite { display: flex; align-items: flex-start; gap: .5rem; font-weight: 400; }
-  .aceite input { flex: 0 0 44px; width: 44px; min-height: 44px; margin: 0; }
-  dl { margin: 1rem 0; } dt { font-weight: 600; margin-top: .5rem; } dd { margin: 0; }
-  #erro { color: #9b1c1c; } [hidden] { display: none; }
+  .hero { background: linear-gradient(180deg, var(--sol), var(--branco)); }
+  .hero-corpo { display: grid; gap: var(--e4); padding-block: var(--e3) var(--e4); }
+  .hero h1 { font-size: var(--hero); }
+  .marca-texto { background: linear-gradient(transparent 68%, var(--ambar) 68%, var(--ambar) 92%, transparent 92%); }
+  .lead { margin-top: var(--e3); max-width: 44ch; font-size: 20px; line-height: 1.4; color: var(--tinta-suave); }
+  #simular { padding: var(--e3); display: grid; gap: var(--e2); box-shadow: var(--sombra-alta); }
+  .com-prefixo { position: relative; }
+  .com-prefixo span { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); font-weight: 600; color: var(--tinta-suave); pointer-events: none; }
+  .com-prefixo input { padding-left: 48px; font-size: 20px; font-weight: 700; }
+  select { appearance: none; cursor: pointer; padding-right: 48px; background: var(--branco) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%23123A55' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m3 6 5 5 5-5'/%3E%3C/svg%3E") no-repeat right 16px center; }
+  #erro:empty { display: none; }
+
+  #resultado { padding-block: var(--e4); scroll-margin-top: var(--e2); }
+  #resultado:focus { outline: none; }
+  .veredito { max-width: 18em; }
+  .veredito s, .veredito span { white-space: nowrap; }
+  .veredito s { color: var(--laranja); text-decoration-thickness: 3px; text-decoration-color: var(--marinho); }
+  .comparacao { margin-top: var(--e4); display: grid; gap: var(--e2); }
+  .linha-barra { display: grid; grid-template-columns: 64px minmax(0, 1fr); align-items: center; gap: var(--e2); }
+  .trilho { display: flex; align-items: center; gap: var(--e1); min-width: 0; }
+  .barra { height: 32px; min-width: 8px; width: var(--fim); border-radius: 8px; transform-origin: left; flex: none; max-width: calc(100% - 88px); }
+  .barra.hoje { background: var(--laranja); }
+  .barra.depois { background: var(--marinho); }
+  .toca .barra { animation: cresce 1.2s var(--saida) both; }
+  .toca .barra.depois { animation-delay: .35s; }
+  @keyframes cresce { from { transform: scaleX(0); } }
+  .ganho { margin-top: var(--e4); padding-block: var(--e3); border-block: 1px solid var(--linha); display: grid; gap: var(--e1); }
+  .ganho strong { font-size: var(--titulo); line-height: 1.05; letter-spacing: -.02em; }
+  .ganho span { font-size: 20px; color: var(--tinta-suave); }
+
+  .sistema { margin-top: var(--e4); display: grid; gap: var(--e4); }
+  .telhado { display: flex; flex-wrap: wrap; gap: 6px; max-width: 448px; }
+  .telhado i { width: 40px; height: 56px; border-radius: 4px; border: 2px solid var(--branco); box-shadow: 0 0 0 1px var(--linha);
+    background: linear-gradient(135deg, #2A6E9C, #1A4C72 55%, #0F3350); }
+  .toca .telhado i { animation: encaixa .5s var(--saida) both; animation-delay: calc(var(--i) * 45ms + .4s); }
+  @keyframes encaixa { from { opacity: 0; transform: translateY(-16px) scale(.9); } }
+  .dados { margin: 0; display: grid; gap: var(--e3); }
+  .dados div { display: grid; gap: 4px; }
+  .dados dt { font-size: 14px; font-weight: 600; color: var(--tinta-suave); }
+  .dados dd { margin: 0; font-size: 20px; font-weight: 700; line-height: 1.3; }
+  .ressalva { margin-top: var(--e3); font-size: 14px; color: var(--tinta-suave); }
+  .aviso { margin-top: var(--e3); padding: var(--e2) var(--e3); border-radius: 16px; background: var(--sol); max-width: 70ch; }
+  .aviso.forte { background: var(--marinho); color: var(--branco); }
+
+  .pedido { margin-top: var(--e4); padding: var(--e3); border-radius: 16px; background: var(--marinho); color: var(--branco); display: grid; gap: var(--e3); }
+  .pedido h2 { color: var(--branco); }
+  .pedido p { color: var(--sobre-marinho); }
+  .pedido-campos { display: grid; gap: var(--e2); }
+  .pedido input[type="text"], .pedido input[type="tel"] { border-color: transparent; }
+  .privacidade { font-size: 14px; max-width: 70ch; }
+  .aceite { display: flex; align-items: flex-start; gap: 12px; cursor: pointer; font-size: 14px; }
+  .aceite input { flex: none; width: 24px; height: 24px; margin: 0; accent-color: var(--ambar); cursor: pointer; }
+  .pedido .mensagem { color: var(--perigo); background: var(--perigo-fundo); }
+  .recebido { margin-top: var(--e4); padding: var(--e3); border-radius: 16px; background: var(--sol); display: grid; gap: var(--e1); }
+  .recebido:focus { outline: none; }
+  .recebido.toca { animation: entra .6s var(--saida) both; }
+  @keyframes entra { from { opacity: 0; transform: translateY(16px); } }
+  .enviando { opacity: .7; }
+
+  @media (min-width: 900px) {
+    .hero-corpo { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); align-items: center; padding-block: var(--e4) var(--e5); }
+    .sistema { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; }
+    .pedido { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); padding: var(--e4); gap: var(--e4); align-items: start; }
+    .pedido > div:first-child { display: grid; gap: var(--e2); }
+    #resultado { padding-block: var(--e5); }
+  }
+  @media (min-width: 600px) { .pedido-campos.lado { grid-template-columns: 1fr 1fr; } }
 </style>
 </head>
 <body>
-<h1>Quanto você economizaria com energia solar?</h1>
-<form id="simular">
-  <label for="conta">Quanto você paga de luz por mês (R$)</label>
-  <input id="conta" name="conta" type="text" inputmode="decimal" autocomplete="off" placeholder="ex.: 1.234,56" required>
-  <label for="cidade">Cidade</label>
-  <select id="cidade" name="cidade" required>
-    <option value="">Escolha</option>
-    <option>Sorocaba</option><option>Votorantim</option><option>Itu</option><option>Salto</option>
-  </select>
-  <button type="submit">Ver quanto economizo</button>
-</form>
-<p id="erro" role="alert"></p>
+<div class="hero">
+  <header class="pagina topo"><img src="/logo.svg" alt="Ravena Solar"></header>
+  <div class="pagina hero-corpo">
+    <div>
+      <h1>Quanto você <span class="marca-texto">economizaria</span> com energia solar?</h1>
+      <p class="lead">Digite o valor da sua conta de luz. A gente mostra a conta nova, os painéis e em quanto tempo o sistema se paga.</p>
+    </div>
+    <form id="simular" class="cartao">
+      <div class="campo">
+        <label for="conta">Quanto você paga de luz por mês (R$)</label>
+        <div class="com-prefixo">
+          <span aria-hidden="true">R$</span>
+          <input id="conta" name="conta" type="text" inputmode="decimal" autocomplete="off" placeholder="ex.: 1.234,56" required>
+        </div>
+      </div>
+      <div class="campo">
+        <label for="cidade">Cidade</label>
+        <select id="cidade" name="cidade" required>
+          <option value="">Escolha</option>
+          <option>Sorocaba</option><option>Votorantim</option><option>Itu</option><option>Salto</option>
+        </select>
+      </div>
+      <button class="btn" id="botao-simular" type="submit">Ver quanto economizo</button>
+      <p id="erro" class="mensagem erro" role="alert"></p>
+    </form>
+  </div>
+</div>
 
-<section id="resultado" hidden>
-  <h2>Resultado</h2>
-  <dl>
-    <dt>Tamanho do sistema</dt><dd id="r-kwp"></dd>
-    <dt>Investimento aproximado</dt><dd id="r-investimento"></dd>
-    <dt>Sua conta depois</dt><dd id="r-depois"></dd>
-    <dt>Economia por ano</dt><dd id="r-economia"></dd>
-    <dt>O sistema se paga em</dt><dd id="r-retorno"></dd>
-  </dl>
-  <p>É uma estimativa. A proposta vem depois da visita técnica.</p>
-  <p id="aviso-sem-numero" role="status" hidden><strong>Atenção:</strong> esta conta ainda não inclui a cobrança do Fio B (a parte do fio que a distribuidora cobra sobre a energia que você injeta) nem a taxa de iluminação pública da sua cidade. Por isso a economia pode estar maior e o retorno menor do que o real. A proposta, depois da visita técnica, traz o valor certo.</p>
-  <p id="aviso-nao-compensa" role="status" hidden><strong>Para essa conta, o sistema solar não compensa:</strong> o retorno estimado passa do prazo que a gente considera razoável. Por isso não pedimos o seu contato.</p>
-  <form id="pedir">
-    <h2>Quero a simulação detalhada</h2>
-    <label for="nome">Nome</label><input id="nome" name="nome" autocomplete="name">
-    <label for="whatsapp">WhatsApp com DDD</label><input id="whatsapp" name="whatsapp" inputmode="tel" autocomplete="tel">
-    <p class="privacidade">Usaremos seu nome, WhatsApp, cidade, valor da conta e resultado para atender ao pedido de simulação detalhada. Pedidos que não fecharem ficam guardados por até 12 meses; os que fecharem, enquanto houver relação comercial. Para pedir exclusão, responda ao vendedor que entrar em contato.</p>
-    <label class="aceite" for="aceite-privacidade">
-      <input id="aceite-privacidade" name="aceite_privacidade" type="checkbox" required>
-      <span>Li o aviso de privacidade e concordo com esse uso dos meus dados.</span>
-    </label>
-    <button type="submit">Pedir simulação detalhada</button>
+<main>
+<section id="resultado" class="pagina" tabindex="-1" aria-labelledby="titulo-resultado" hidden>
+  <h2 id="titulo-resultado" class="veredito">Sua conta de <s id="r-hoje" class="numero"></s> cairia para <span id="r-depois" class="numero"></span> por mês.</h2>
+
+  <div class="comparacao" aria-hidden="true">
+    <div class="linha-barra"><span class="rotulo">Hoje</span><div class="trilho"><div class="barra hoje" id="barra-hoje"></div><strong id="b-hoje" class="numero"></strong></div></div>
+    <div class="linha-barra"><span class="rotulo">Depois</span><div class="trilho"><div class="barra depois" id="barra-depois"></div><strong id="b-depois" class="numero"></strong></div></div>
+  </div>
+
+  <p class="ganho"><strong id="r-economia" class="numero"></strong><span>a menos no primeiro ano</span></p>
+
+  <p id="aviso-sem-numero" class="aviso" role="status" hidden><strong>Atenção:</strong> esta conta ainda não inclui a cobrança do Fio B (a parte do fio que a distribuidora cobra sobre a energia que você injeta) nem a taxa de iluminação pública da sua cidade. Por isso a economia pode estar maior e o retorno menor do que o real. A proposta, depois da visita técnica, traz o valor certo.</p>
+  <p id="aviso-nao-compensa" class="aviso forte" role="status" hidden><strong>Para essa conta, o sistema solar não compensa:</strong> o retorno estimado passa do prazo que a gente considera razoável. Por isso não pedimos o seu contato.</p>
+
+  <div class="sistema">
+    <div class="telhado" id="telhado" aria-hidden="true"></div>
+    <dl class="dados">
+      <div><dt>Tamanho do sistema</dt><dd id="r-kwp" class="numero"></dd></div>
+      <div><dt>Investimento aproximado</dt><dd id="r-investimento" class="numero"></dd></div>
+      <div><dt>O sistema se paga em</dt><dd id="r-retorno" class="numero"></dd></div>
+    </dl>
+  </div>
+  <p class="ressalva">É uma estimativa. A proposta vem depois da visita técnica.</p>
+
+  <form id="pedir" class="pedido">
+    <div>
+      <h2>Quero a simulação detalhada</h2>
+      <p>Deixe seu nome e WhatsApp. Um vendedor da sua região continua a conversa com esses números.</p>
+    </div>
+    <div class="pedido-campos">
+      <div class="pedido-campos lado">
+        <div class="campo"><label for="nome">Nome</label><input id="nome" name="nome" type="text" autocomplete="name"></div>
+        <div class="campo"><label for="whatsapp">WhatsApp com DDD</label><input id="whatsapp" name="whatsapp" type="tel" inputmode="tel" autocomplete="tel"></div>
+      </div>
+      <p class="privacidade">Usaremos seu nome, WhatsApp, cidade, valor da conta e resultado para atender ao pedido de simulação detalhada. Pedidos que não fecharem ficam guardados por até 12 meses; os que fecharem, enquanto houver relação comercial. Para pedir exclusão, responda ao vendedor que entrar em contato.</p>
+      <label class="aceite" for="aceite-privacidade">
+        <input id="aceite-privacidade" name="aceite_privacidade" type="checkbox" required>
+        <span>Li o aviso de privacidade e concordo com esse uso dos meus dados.</span>
+      </label>
+      <button class="btn" id="botao-pedir" type="submit">Pedir simulação detalhada</button>
+      <p id="pedido-msg" class="mensagem" role="alert"></p>
+    </div>
   </form>
-  <p id="pedido-msg" role="status"></p>
+  <div id="recebido" class="recebido" tabindex="-1" hidden>
+    <h3>Pedido recebido.</h3>
+    <p>Um vendedor da sua região vai falar com você pelo WhatsApp.</p>
+  </div>
 </section>
+</main>
 
 <script>
 const real = (v) => "R$ " + v.toLocaleString("pt-BR");
@@ -70,32 +169,79 @@ async function enviar(url, corpo) {
   }
 }
 
+// O número da economia conta até o valor certo. Sem movimento, aparece pronto.
+function contar(alvo, fim) {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) { alvo.textContent = real(fim); return; }
+  const inicio = performance.now(), duracao = 1200;
+  const passo = (agora) => {
+    const t = Math.min((agora - inicio) / duracao, 1);
+    alvo.textContent = real(Math.round(fim * (1 - Math.pow(1 - t, 4))));
+    if (t < 1) requestAnimationFrame(passo);
+  };
+  requestAnimationFrame(passo);
+}
+
+function desenharPaineis(quantos) {
+  const pecas = [];
+  for (let i = 0; i < quantos; i++) {
+    const peca = document.createElement("i");
+    peca.style.setProperty("--i", i);
+    pecas.push(peca);
+  }
+  $("telhado").replaceChildren(...pecas);
+}
+
 $("simular").addEventListener("submit", async (e) => {
   e.preventDefault();
   $("erro").textContent = ""; $("resultado").hidden = true; $("pedido-msg").textContent = "";
+  $("botao-simular").disabled = true;
   const { status, corpo } = await enviar("/api/simular", { conta: $("conta").value, cidade: $("cidade").value });
+  $("botao-simular").disabled = false;
   if (status !== 200) { $("erro").textContent = corpo.mensagem || "Não foi possível simular."; return; }
   simulacaoId = corpo.simulacao_id;
-  $("r-kwp").textContent = corpo.kwp.toLocaleString("pt-BR") + " kWp (" + corpo.paineis + " painéis)";
+  // a economia do ano é (conta - conta depois) x 12, então a conta de hoje sai dela
+  const hoje = Math.round(corpo.conta_depois + corpo.economia_ano1 / 12);
+  const maior = Math.max(hoje, corpo.conta_depois, 1);
+  $("r-hoje").textContent = real(hoje); $("b-hoje").textContent = real(hoje);
+  $("r-depois").textContent = real(corpo.conta_depois); $("b-depois").textContent = real(corpo.conta_depois);
+  $("barra-hoje").style.setProperty("--fim", `calc((100% - 88px) * ${hoje / maior})`);
+  $("barra-depois").style.setProperty("--fim", `calc((100% - 88px) * ${corpo.conta_depois / maior})`);
+  $("r-kwp").textContent = corpo.paineis + " painéis (" + corpo.kwp.toLocaleString("pt-BR") + " kWp)";
   $("r-investimento").textContent = real(corpo.investimento);
-  $("r-depois").textContent = real(corpo.conta_depois) + " por mês";
-  $("r-economia").textContent = real(corpo.economia_ano1) + " no primeiro ano";
   $("r-retorno").textContent = corpo.retorno ? corpo.retorno.anos + " anos e " + corpo.retorno.meses + " meses" : "mais de 50 anos";
+  desenharPaineis(corpo.paineis);
   $("pedir").hidden = corpo.nao_compensa;
   $("aviso-nao-compensa").hidden = !corpo.nao_compensa;
   $("aviso-sem-numero").hidden = !(corpo.sem_numero && corpo.sem_numero.length);
+  $("recebido").hidden = true;
+  $("resultado").classList.remove("toca");
   $("resultado").hidden = false;
+  void $("resultado").offsetWidth;
+  $("resultado").classList.add("toca");
+  contar($("r-economia"), corpo.economia_ano1);
+  $("resultado").focus({ preventScroll: true });
+  $("resultado").scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
 });
 
 $("pedir").addEventListener("submit", async (e) => {
   e.preventDefault();
-  const { corpo } = await enviar("/api/pedido", {
+  $("pedido-msg").textContent = "";
+  $("botao-pedir").disabled = true;
+  const { status, corpo } = await enviar("/api/pedido", {
     simulacao_id: simulacaoId,
     nome: $("nome").value,
     whatsapp: $("whatsapp").value,
     aceite_privacidade: $("aceite-privacidade").checked,
   });
-  $("pedido-msg").textContent = corpo.mensagem;
+  $("botao-pedir").disabled = false;
+  if (status === 201) {
+    $("pedir").hidden = true;
+    $("recebido").hidden = false;
+    $("recebido").classList.add("toca");
+    $("recebido").focus();
+    return;
+  }
+  $("pedido-msg").textContent = corpo.mensagem || "Não foi possível concluir. Tente de novo.";
 });
 </script>
 </body>
